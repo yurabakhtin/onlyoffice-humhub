@@ -5,6 +5,7 @@
 - Fix: Editors will now use portal language if user language is null
 - Fix: `author` and `created` fields are now passed correctly
 - Fix: `firstname` and `lastname` fields are deprecated, using `name` instead
+- Fix: Allow editing only for Office Open XML formats
 
 - Enh: Better way to pass editors config
 

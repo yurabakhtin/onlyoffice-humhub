@@ -29,11 +29,16 @@ class Events
 
         /* @var $module \humhub\modules\onlydocuments\Module */
         $module = Yii::$app->getModule('onlydocuments');
+        $file = $event->sender->file;
 
         if ($module->getDocumentType($event->sender->file) !== null) {
-            if ($collection->type == FileHandlerCollection::TYPE_EDIT) {
+            $canEdit = $collection->type == FileHandlerCollection::TYPE_EDIT && $module->canEdit($file);
+            $canView = $collection->type == FileHandlerCollection::TYPE_VIEW && $module->canView($file);
+
+            if ($canEdit) {
                 $collection->register(new filehandler\EditFileHandler());
-            } elseif ($collection->type === FileHandlerCollection::TYPE_VIEW) {
+            }
+            if ($canView) {
                 $collection->register(new filehandler\ViewFileHandler());
             }
         }

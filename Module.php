@@ -52,6 +52,10 @@ class Module extends \humhub\components\Module
      */
     public $textExtensions = ['docx', 'doc', 'odt', 'rtf', 'txt', 'html', 'htm', 'mht', 'pdf', 'djvu', 'fb2', 'epub', 'xps'];
 
+    /**
+     * @var string[] allowed for editing extensions
+     */
+    public $editableExtensions = ['xlsx', 'ppsx', 'pptx', 'docx' ];
     
     
     
@@ -82,6 +86,17 @@ class Module extends \humhub\components\Module
         }
 
         return null;
+    }
+
+    public function canEdit($file)
+    {
+        $fileExtension = FileHelper::getExtension($file);
+        return in_array($fileExtension, $this->editableExtensions);
+    }
+
+    public function canView($file)
+    {
+        return !empty($this->getDocumentType($file));
     }
 
     /**
