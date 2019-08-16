@@ -70,8 +70,6 @@ class EditorWidget extends JsWidget
     public function getData()
     {
         $module = Yii::$app->getModule('onlydocuments');
-        $user = Yii::$app->user->getIdentity();
-        $key = $this->generateDocumentKey();
 
         return [
             'config' => $this->getConfig(),
