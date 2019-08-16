@@ -10,6 +10,7 @@
 
 - Enh: Better way to pass editors config
 - Enh: JWT support
+- Enh: Files properly marked as updated now
 
 
 ## 1.0.2

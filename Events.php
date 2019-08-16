@@ -31,7 +31,7 @@ class Events
         $module = Yii::$app->getModule('onlydocuments');
         $file = $event->sender->file;
 
-        if ($module->getDocumentType($event->sender->file) !== null) {
+        if ($module->getDocumentType($file) !== null) {
             $canEdit = $collection->type == FileHandlerCollection::TYPE_EDIT && $module->canEdit($file);
             $canView = $collection->type == FileHandlerCollection::TYPE_VIEW && $module->canView($file);
 

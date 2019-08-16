@@ -13,6 +13,7 @@ use yii\web\HttpException;
 use yii\helpers\Url;
 use humhub\modules\file\models\File;
 use humhub\modules\file\libs\FileHelper;
+use humhub\modules\user\models\User;
 use humhub\components\Controller;
 use \Firebase\JWT\JWT;
 
@@ -107,6 +108,12 @@ class BackendController extends Controller
 
         //Yii::warning('Tracking request for file ' . $this->file->guid . ' - data: ' . print_r($data, 1), 'onlydocuments');
 
+        $user = null;
+        if (!empty($data['users'])) {
+            $users = $data['users'];
+            $user = User::findOne(['guid' => $users[0]]);
+        }
+
         $status = $_trackerStatus[$data["status"]];
         switch ($status) {
             case "MustSave":
@@ -119,7 +126,14 @@ class BackendController extends Controller
                     $this->file->getStore()->setContent($newData);
 
                     if ($status != 'ForceSave') {
-                        $this->file->updateAttributes(['onlydocuments_key' => new \yii\db\Expression('NULL')]);
+                        $newAttr = [
+                            'onlydocuments_key' => new \yii\db\Expression('NULL'),
+                            'updated_at' => date("Y-m-d H:i:s"),
+                            'size' => strlen($newData),
+                        ];
+                        if (!empty($user)) $newAttr['updated_by'] = $user->getId();
+
+                        $this->file->updateAttributes($newAttr);
                         //Yii::warning('Dosaved', 'onlydocuments');
                     } else {
                         //Yii::warning('ForceSaved', 'onlydocuments');
