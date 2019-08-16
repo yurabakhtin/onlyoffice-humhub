@@ -73,20 +73,7 @@ class EditorWidget extends JsWidget
         $key = $this->generateDocumentKey();
 
         return [
-            'file-name' => Html::encode($this->file->fileName),
-            'file-extension' => Html::encode(strtolower(FileHelper::getExtension($this->file))),
-            'file-key' => $key,
-            'created-by' => Html::encode('Creator BY'),
-            'created-at' => Html::encode('Creator AT'),
-            'document-type' => $this->documentType,
-            'user-guid' => ($user) ? Html::encode($user->guid) : '',
-            'user-first-name' => ($user) ? Html::encode($user->profile->firstname) : 'Anonymous',
-            'user-last-name' => ($user) ? Html::encode($user->profile->lastname) : 'User',
-            'user-language' => ($user) ? $user->language : 'en',
-            'backend-track-url' => Url::to(['/onlydocuments/backend/track', 'key' => $key], true),
-            'backend-download-url' => Url::to(['/onlydocuments/backend/download', 'key' => $key], true),
-            'edit-mode' => $this->mode,
-            'file-info-url' => Url::to(['/onlydocuments/open/get-info', 'guid' => $this->file->guid]),
+            'config' => $this->getConfig(),
             'module-configured' => (empty($module->getServerUrl()) ? '0' : '1'),
         ];
     }
@@ -130,4 +117,49 @@ class EditorWidget extends JsWidget
         return $key;
     }
 
+    protected function getConfig()
+    {
+        $module = Yii::$app->getModule('onlydocuments');
+        $user = Yii::$app->user->getIdentity();
+        $key = $this->generateDocumentKey($this->file);
+
+        $config = [
+            'type' => 'desktop',
+            'documentType' => $this->documentType,
+            'document' => [
+                'title' => Html::encode($this->file->fileName),
+                'url' => Url::to(['/onlydocuments/backend/download', 'key' => $key], true),
+                'fileType' => Html::encode(strtolower(FileHelper::getExtension($this->file))),
+                'key' => $key,
+                'info' => [
+                    'author' => Html::encode($this->file->createdBy->displayname),
+                    'created' => Html::encode(Yii::$app->formatter->asDatetime($this->file->created_at, 'short')),
+                ],
+                'permissions' => [
+                    'edit' => $this->mode == 'edit',
+                    'download' => true,
+                ]
+            ],
+            'editorConfig' => [
+                'mode' => $this->mode,
+                'lang' => ($user) && !empty($user->language) ? $user->language : Yii::$app->language,
+                'callbackUrl' => Url::to(['/onlydocuments/backend/track', 'key' => $key], true),
+                'user' => [
+                    'id' => ($user) ? Html::encode($user->guid) : '',
+                    'name' => ($user) ? Html::encode($user->displayname) : 'Anonymous User',
+                ],
+                'embedded' => [
+                    'toolbarDocked' => 'top',
+                ],
+                'customization' => [
+                    'about' => false,
+                    'feedback' => false,
+                    'autosave' => true,
+                    'forcesave' => true,
+                ]
+            ]
+        ];
+
+        return $config;
+    }
 }

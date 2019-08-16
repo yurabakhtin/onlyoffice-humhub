@@ -82,54 +82,17 @@ humhub.module('onlydocuments', function (module, require, $) {
             }
         }
         
-        this.docEditor = new DocsAPI.DocEditor('iframeContainer', {
-            width: "100%",
-            height: "100%",
+        var config = this.options.config;
+        config.width = "100%";
+        config.height = "100%";
+        config.events = {
+            //'onReady': onReady,
+            //'onDocumentStateChange': onDocumentStateChange,
+            //'onRequestEditRights': onRequestEditRights,
+            //'onError': onError,
+        };
 
-            type: "desktop", // embedded 
-            documentType: this.options.documentType,
-            document: {
-                title: this.options.fileName,
-                url: this.options.backendDownloadUrl,
-                fileType: this.options.fileExtension,
-                key: this.options.fileKey,
-                info: {
-                    author: this.options.createdBy,
-                    created: this.options.createdAt,
-                },
-                permissions: {
-                    edit: (this.options.editMode == 'edit'),
-                    download: true,
-                }
-            },
-            editorConfig: {
-                mode: this.options.editMode,
-                lang: this.options.userLanguage,
-                callbackUrl: this.options.backendTrackUrl,
-                user: {
-                    id: this.options.userGuid,
-                    firstname: this.options.userFirstName,
-                    lastname: this.options.userLastName,
-                },
-
-                embedded: {
-                    toolbarDocked: "top",
-                },
-
-                customization: {
-                    about: false,
-                    feedback: false,
-                    autosave: true,
-                    forcesave: true,
-                },
-            },
-            events: {
-                //'onReady': onReady,
-                //'onDocumentStateChange': onDocumentStateChange,
-                //'onRequestEditRights': onRequestEditRights,
-                //'onError': onError,
-            }
-        });
+        this.docEditor = new DocsAPI.DocEditor('iframeContainer', config);
     }
 
     var Share = function (node, options) {
