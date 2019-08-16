@@ -14,6 +14,7 @@ use yii\helpers\Url;
 use humhub\modules\file\models\File;
 use humhub\modules\file\libs\FileHelper;
 use humhub\components\Controller;
+use \Firebase\JWT\JWT;
 
 class BackendController extends Controller
 {
@@ -77,6 +78,31 @@ class BackendController extends Controller
             Yii::error('Got bad tracking response from documentserver!', 'onlydocuments');
             $result["error"] = "Bad Response";
             return $result;
+        }
+
+        $module = Yii::$app->getModule('onlydocuments');
+        if ($module->isJwtEnabled()) {
+            $token = null;
+            if (!empty($data["token"])) {
+                $token = $data["token"];
+            } else if (!empty($_SERVER['HTTP_AUTHORIZATION'])) {
+                $token = substr($_SERVER['HTTP_AUTHORIZATION'], strlen('Bearer '));
+            }
+
+            if (empty($token)) {
+                Yii::error('Expected JWT', 'onlydocuments');
+                $result["error"] = "Bad Response";
+                return $result;
+            }
+
+            try {
+                $ds = JWT::decode($token, $module->getJwtSecret(), array('HS256'));
+                $data = (array) $ds->payload;
+            } catch (\Exception $ex) {
+                Yii::error('Invalid JWT signature', 'onlydocuments');
+                $result["error"] = "Bad Response";
+                return $result;
+            }
         }
 
         //Yii::warning('Tracking request for file ' . $this->file->guid . ' - data: ' . print_r($data, 1), 'onlydocuments');

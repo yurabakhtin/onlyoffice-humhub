@@ -13,6 +13,7 @@ use yii\helpers\Url;
 use yii\helpers\Json;
 use humhub\modules\file\libs\FileHelper;
 use humhub\libs\CURLHelper;
+use \Firebase\JWT\JWT;
 
 /**
  * File Module
@@ -58,7 +59,15 @@ class Module extends \humhub\components\Module
     public $editableExtensions = ['xlsx', 'ppsx', 'pptx', 'docx' ];
     
     
-    
+
+    public function isJwtEnabled() {
+        return !empty($this->getJwtSecret());
+    }
+
+    public function getJwtSecret() {
+        return $this->settings->get('jwtSecret');
+    }
+
     public function getServerUrl()
     {
         return $this->settings->get('serverUrl');
@@ -120,7 +129,16 @@ class Module extends \humhub\components\Module
                 'timeout' => 10
             ]);
             $http->setMethod('POST');
+            $headers = $http->getRequest()->getHeaders();
+
+            if ($this->isJwtEnabled()) {
+                $data['token'] = JWT::encode($data, $this->getJwtSecret());
+                $headers->addHeaderLine('Authorization', 'Bearer ' . JWT::encode(['payload' => $data], $this->getJwtSecret()));
+            }
+
             $http->setRawBody(Json::encode($data));
+            $headers->addHeaderLine('Accept', 'application/json');
+
             $response = $http->send();
             $json = $response->getBody();
         } catch (\Exception $ex) {

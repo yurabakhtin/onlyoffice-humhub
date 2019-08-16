@@ -6,8 +6,11 @@
 - Fix: `author` and `created` fields are now passed correctly
 - Fix: `firstname` and `lastname` fields are deprecated, using `name` instead
 - Fix: Allow editing only for Office Open XML formats
+- Fix: Issue with `/` at the end of Document Service url
 
 - Enh: Better way to pass editors config
+- Enh: JWT support
+
 
 ## 1.0.2
 --------------------

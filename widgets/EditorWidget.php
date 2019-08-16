@@ -15,6 +15,7 @@ use yii\helpers\Url;
 use humhub\libs\Html;
 use humhub\modules\file\libs\FileHelper;
 use humhub\widgets\JsWidget;
+use \Firebase\JWT\JWT;
 
 /**
  * Description of EditorWidget
@@ -159,6 +160,11 @@ class EditorWidget extends JsWidget
                 ]
             ]
         ];
+
+        if ($module->isJwtEnabled()) {
+            $token = JWT::encode($config, $module->getJwtSecret());
+            $config['token'] = $token;
+        }
 
         return $config;
     }
