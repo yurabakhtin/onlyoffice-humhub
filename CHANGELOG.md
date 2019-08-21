@@ -11,6 +11,7 @@
 - Enh: Better way to pass editors config
 - Enh: JWT support
 - Enh: Files properly marked as updated now
+- Enh: Option to convert `.doc .odt .xls. ods .ppt .odp .txt .csv` files to Office Open XML
 
 
 ## 1.0.2

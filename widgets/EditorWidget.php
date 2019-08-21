@@ -73,6 +73,8 @@ class EditorWidget extends JsWidget
 
         return [
             'config' => $this->getConfig(),
+            'edit-mode' => $this->mode,
+            'file-info-url' => Url::to(['/onlydocuments/open/get-info', 'guid' => $this->file->guid]),
             'module-configured' => (empty($module->getServerUrl()) ? '0' : '1'),
         ];
     }
@@ -100,27 +102,11 @@ class EditorWidget extends JsWidget
         ]);
     }
 
-    /**
-     * Generate unique document key
-     * 
-     * @return string
-     */
-    protected function generateDocumentKey()
-    {
-        if (!empty($this->file->onlydocuments_key)) {
-            return $this->file->onlydocuments_key;
-        }
-
-        $key = substr(strtolower(md5(Yii::$app->security->generateRandomString(20))), 0, 20);
-        $this->file->updateAttributes(['onlydocuments_key' => $key]);
-        return $key;
-    }
-
     protected function getConfig()
     {
         $module = Yii::$app->getModule('onlydocuments');
         $user = Yii::$app->user->getIdentity();
-        $key = $this->generateDocumentKey($this->file);
+        $key = $module->generateDocumentKey($this->file);
 
         $config = [
             'type' => 'desktop',

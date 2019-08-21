@@ -35,7 +35,7 @@ humhub.module('onlydocuments', function (module, require, $) {
         this.modal.$.on('hidden.bs.modal', function(evt) {
             that.modal.clear();
         });
-        
+
     };
 
 
@@ -47,20 +47,9 @@ humhub.module('onlydocuments', function (module, require, $) {
 
 
     Editor.prototype.close = function (evt) {
-        var that = this;
 
         if (this.options.editMode == 'edit') {
-            client.post({url: this.options.fileInfoUrl}).then(function (response) {
-                event.trigger('humhub:file:modified', [response.file]);
-                that.modal.clear();
-                that.modal.close();
-                evt.finish();
-            }).catch(function (e) {
-                module.log.error(e);
-                that.modal.clear();
-                that.modal.close();
-                evt.finish();
-            });
+            refreshFileInfo(this, evt);
         } else {
             this.modal.clear();
             this.modal.close();
@@ -94,6 +83,75 @@ humhub.module('onlydocuments', function (module, require, $) {
 
         this.docEditor = new DocsAPI.DocEditor('iframeContainer', config);
     }
+
+    var Convert = function (node, options) {
+        Widget.call(this, node, options);
+    };
+
+    object.inherits(Convert, Widget);
+
+    Convert.prototype.init = function () {
+
+        var that = this;
+        var msg = that.$.find('#oConvertMessage');
+
+        function _onError(error) {
+            msg.text(that.options.errorMessage + ' ' + error);
+            loader.reset(that.$.find('.modal-footer'));
+        }
+
+        function _callAjax() {
+            jQuery.ajax({
+                type : "POST",
+                url : that.options.convertPost,
+                cache: false,
+                success: function(data) {
+                    if (data.error) {
+                        _onError(data.error);
+                        return;
+                    }
+
+                    if (data.percent != null) {
+                        msg.text(data.percent + "%");
+                    }
+
+                    if (!data.endConvert) {
+                        setTimeout(_callAjax, 1000);
+                    } else {
+                        msg.text(that.options.doneMessage);
+                        loader.reset(that.$.find('.modal-footer'));
+                    }
+                },
+                error: _onError
+            });
+        }
+
+        loader.set(that.$.find('.modal-footer'));
+		_callAjax();
+    };
+
+    Convert.prototype.getDefaultOptions = function () {
+        return {};
+    };
+
+    Convert.prototype.close = function (evt) {
+        refreshFileInfo(this, evt);
+    };
+
+    function refreshFileInfo(that, evt) {
+        client.post({url: that.options.fileInfoUrl}).then(function (response) {
+            event.trigger('humhub:file:modified', [response.file]);
+            that.modal.clear();
+            that.modal.close();
+            evt.finish();
+        }).catch(function (e) {
+            module.log.error(e);
+            that.modal.clear();
+            that.modal.close();
+            evt.finish();
+        });
+    }
+
 
     var Share = function (node, options) {
         Widget.call(this, node, options);
@@ -217,6 +275,7 @@ humhub.module('onlydocuments', function (module, require, $) {
         init: init,
         createSubmit: createSubmit,
         Editor: Editor,
+        Convert: Convert,
         Share: Share,
     });
 
