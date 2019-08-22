@@ -1,22 +1,30 @@
 # HumHub ONLYOFFICE integration plugin
 
-This plugin enables users to edit office documents from [HumHub](https://www.humhub.com/) using ONLYOFFICE Document Server. Currently the following document formats can be opened and edited with this plugin: DOCX, XLSX, PPTX.
+This plugin enables users to edit office documents from [HumHub](https://www.humhub.com/) using ONLYOFFICE Document Server.
+
+## Features
+* Currently the following document formats can be opened and edited with this plugin: DOCX, XLSX, PPTX.
+* The following formats are available for view only: ODT, ODS, ODP, DOC, XLS, PPT, TXT, PDF.
+* The plugin will create a new *Edit/View*  menu option for Office documents.
+* This allows multiple users to collaborate in real time and to save back those changes to HumHub.
+* The following formats can be converted to Office Open XML: ODT, ODS, ODP, DOC, XLS, PPT, TXT, CSV.
 
 
 ## Installing ONLYOFFICE Document Server
 
-You will need an instance of ONLYOFFICE Document Server that is resolvable and connectable both from HumHub and any end clients. If that is not the case, use the official ONLYOFFICE Document Server documetnations page: [Document Server for Linux](http://helpcenter.onlyoffice.com/server/linux/document/linux-installation.aspx). ONLYOFFICE Document Server must also be able to POST to HumHub directly.
+You will need an instance of ONLYOFFICE Document Server that is resolvable and connectable both from HumHub and any end clients. If that is not the case, use the official ONLYOFFICE Document Server documentations page: [Document Server for Linux](http://helpcenter.onlyoffice.com/server/linux/document/linux-installation.aspx). ONLYOFFICE Document Server must also be able to POST to HumHub directly.
 
 The easiest way to start an instance of ONLYOFFICE Document Server is to use [Docker](https://github.com/onlyoffice/Docker-DocumentServer).
 
 
-## Installing ONLYOFFICE Document Server
-
-
 ## Installing HumHub ONLYOFFICE integration plugin
+
+Either install it from HumHub Marketplace or simply clone the repository inside one of the folder specified by `moduleAutoloadPaths` parameter. Please see [HumHub Documentation](http://docs.humhub.org/dev-environment.html#external-modules-directory) for more information.
 
 
 ## Configuring HumHub CONLYOFFICE integration plugin
+
+Navigate to `Administration` -> `Modules` find the plugin under Installed tab and click `Configure`.
 
 
 ## How it works
