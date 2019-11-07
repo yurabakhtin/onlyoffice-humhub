@@ -17,7 +17,7 @@ class ConvertFileHandler extends BaseFileHandler
     public function getLinkAttributes()
     {
         return [
-            'label' => Yii::t('FileModule.base', 'Convert document'),
+            'label' => Yii::t('OnlydocumentsModule.base', 'Convert document'),
             'data-action-url' => Url::to(['/onlydocuments/convert', 'guid' => $this->file->guid]),
             'data-action-click' => 'ui.modal.load',
             'data-modal-id' => 'onlydocuments-modal',

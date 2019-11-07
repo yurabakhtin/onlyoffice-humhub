@@ -28,7 +28,7 @@ class CreateFileHandler extends BaseFileHandler
     public function getLinkAttributes()
     {
         return [
-            'label' => Yii::t('FileModule.base', 'Create document <small>(Text, Spreadsheet, Presentation)</small>'),
+            'label' => Yii::t('OnlydocumentsModule.base', 'Create document <small>(Text, Spreadsheet, Presentation)</small>'),
             'data-action-url' => Url::to(['/onlydocuments/create']),
             'data-action-click' => 'ui.modal.load',
             'data-modal-id' => 'onlydocuments-modal',

@@ -36,7 +36,7 @@ class BackendController extends Controller
         $this->file = File::findOne(['onlydocuments_key' => $key]);
 
         if ($this->file == null) {
-            throw new HttpException(404, Yii::t('FileModule.base', 'Could not find requested file!'));
+            throw new HttpException(404, Yii::t('OnlydocumentsModule.base', 'Could not find requested file!'));
         }
 
         return parent::beforeAction($action);

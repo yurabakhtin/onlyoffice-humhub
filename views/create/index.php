@@ -4,7 +4,7 @@ use humhub\modules\onlydocuments\Module;
 use yii\helpers\Url;
 
 $modal = \humhub\widgets\ModalDialog::begin([
-            'header' => Yii::t('SpaceModule.views_space_invite', '<strong>Create</strong> document')
+            'header' => Yii::t('OnlydocumentsModule.base', '<strong>Create</strong> document')
         ])
 ?>
 <style>
