@@ -21,7 +21,7 @@ return [
     '<strong>DocumentServer</strong> not accessible.' => '<strong>DocumentServer</strong> ei yhteyttä.',
     '<strong>DocumentServer</strong> not configured yet.' => '<strong>DocumentServer</strong> ei määritetty.',
     '<strong>DocumentServer</strong> successfully connected! - Installed version: {version}' => '<strong>DocumentServer</strong> yhdistetty! - Versio: {version}',
-    '<strong>OnlyOffice - DocumentServer</strong> module configuration' => '<strong>OnlyOffice - DocumentServer</strong> laajennuksen määritys',
+    '<strong>ONLYOFFICE - DocumentServer</strong> module configuration' => '<strong>OnlyOffice - DocumentServer</strong> laajennuksen määritys',
     '<strong>Share</strong> document' => '<strong>Jaa</strong> tiedosto',
     'Close' => 'Sulje',
     'Copy to clipboard' => 'Kopioi leikepöydälle',

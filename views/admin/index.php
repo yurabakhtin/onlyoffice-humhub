@@ -6,7 +6,7 @@ use yii\helpers\Html;
 
 <div class="panel panel-default">
 
-    <div class="panel-heading"><?= Yii::t('OnlydocumentsModule.base', '<strong>OnlyOffice - DocumentServer</strong> module configuration'); ?></div>
+    <div class="panel-heading"><?= Yii::t('OnlydocumentsModule.base', '<strong>ONLYOFFICE - DocumentServer</strong> module configuration'); ?></div>
 
     <div class="panel-body">
 
