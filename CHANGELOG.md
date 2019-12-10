@@ -2,6 +2,7 @@
 
 ## 2.0.0
 --------------------
+- Add: `de`, `fi`, `fr`, `hr`, `hu`, `it`, `ja`, `nl`, `pl`, `pt_br`, `vi` translations
 - Fix: Editors will now use portal language if user language is null
 - Fix: `author` and `created` fields are now passed correctly
 - Fix: `firstname` and `lastname` fields are deprecated, using `name` instead
