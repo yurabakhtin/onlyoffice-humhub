@@ -133,7 +133,7 @@ class EditorWidget extends JsWidget
                     'name' => ($user) ? Html::encode($user->displayname) : 'Anonymous User',
                 ],
                 'customization' => [
-                    'forcesave' => true,
+                    //'forcesave' => true,
                 ]
             ]
         ];
