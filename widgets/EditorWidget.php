@@ -122,7 +122,6 @@ class EditorWidget extends JsWidget
                 ],
                 'permissions' => [
                     'edit' => $this->mode == 'edit',
-                    'download' => true,
                 ]
             ],
             'editorConfig' => [
@@ -133,13 +132,7 @@ class EditorWidget extends JsWidget
                     'id' => ($user) ? Html::encode($user->guid) : '',
                     'name' => ($user) ? Html::encode($user->displayname) : 'Anonymous User',
                 ],
-                'embedded' => [
-                    'toolbarDocked' => 'top',
-                ],
                 'customization' => [
-                    'about' => false,
-                    'feedback' => false,
-                    'autosave' => true,
                     'forcesave' => true,
                 ]
             ]
