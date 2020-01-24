@@ -3,11 +3,11 @@
 use humhub\modules\file\handler\FileHandlerCollection;
 
 return [
-    'id' => 'onlydocuments',
-    'class' => 'humhub\modules\onlydocuments\Module',
-    'namespace' => 'humhub\modules\onlydocuments',
+    'id' => 'onlyoffice',
+    'class' => 'humhub\modules\onlyoffice\Module',
+    'namespace' => 'humhub\modules\onlyoffice',
     'events' => [
-        [FileHandlerCollection::className(), FileHandlerCollection::EVENT_INIT, ['humhub\modules\onlydocuments\Events', 'onFileHandlerCollection']],
+        [FileHandlerCollection::className(), FileHandlerCollection::EVENT_INIT, ['humhub\modules\onlyoffice\Events', 'onFileHandlerCollection']],
     ]
 ];
 ?>
