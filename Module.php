@@ -13,6 +13,7 @@ use yii\helpers\Url;
 use yii\helpers\Json;
 use humhub\modules\file\libs\FileHelper;
 use humhub\libs\CURLHelper;
+use \Firebase\JWT\JWT;
 
 /**
  * File Module
@@ -52,9 +53,33 @@ class Module extends \humhub\components\Module
      */
     public $textExtensions = ['docx', 'doc', 'odt', 'rtf', 'txt', 'html', 'htm', 'mht', 'pdf', 'djvu', 'fb2', 'epub', 'xps'];
 
+    /**
+     * @var string[] allowed for editing extensions
+     */
+    public $editableExtensions = ['xlsx', 'ppsx', 'pptx', 'docx' ];
+    public $convertableExtensions = ['doc','odt','xls','ods','ppt','odp','txt','csv'];
+
     
+    public $convertsTo = [
+        'doc' => 'docx',
+        'odt' => 'docx',
+        'txt' => 'docx',
+        'xls' => 'xlsx',
+        'ods' => 'xlsx',
+        'csv' => 'xlsx',
+        'ppt' => 'pptx',
+        'odp' => 'pptx',
+    ];
     
-    
+
+    public function isJwtEnabled() {
+        return !empty($this->getJwtSecret());
+    }
+
+    public function getJwtSecret() {
+        return $this->settings->get('jwtSecret');
+    }
+
     public function getServerUrl()
     {
         return $this->settings->get('serverUrl');
@@ -84,6 +109,23 @@ class Module extends \humhub\components\Module
         return null;
     }
 
+    public function canEdit($file)
+    {
+        $fileExtension = FileHelper::getExtension($file);
+        return in_array($fileExtension, $this->editableExtensions);
+    }
+
+    public function canConvert($file)
+    {
+        $fileExtension = FileHelper::getExtension($file);
+        return in_array($fileExtension, $this->convertableExtensions);
+    }
+
+    public function canView($file)
+    {
+        return !empty($this->getDocumentType($file));
+    }
+
     /**
      * @inheritdoc
      */
@@ -92,6 +134,22 @@ class Module extends \humhub\components\Module
         return Url::to([
                     '/onlydocuments/admin'
         ]);
+    }
+
+    /**
+     * Generate unique document key
+     *
+     * @return string
+     */
+    public function generateDocumentKey($file)
+    {
+        if (!empty($file->onlydocuments_key)) {
+            return $file->onlydocuments_key;
+        }
+
+        $key = substr(strtolower(md5(Yii::$app->security->generateRandomString(20))), 0, 20);
+        $file->updateAttributes(['onlydocuments_key' => $key]);
+        return $key;
     }
 
     public function commandService($data)
@@ -105,7 +163,16 @@ class Module extends \humhub\components\Module
                 'timeout' => 10
             ]);
             $http->setMethod('POST');
+            $headers = $http->getRequest()->getHeaders();
+
+            if ($this->isJwtEnabled()) {
+                $data['token'] = JWT::encode($data, $this->getJwtSecret());
+                $headers->addHeaderLine('Authorization', 'Bearer ' . JWT::encode(['payload' => $data], $this->getJwtSecret()));
+            }
+
             $http->setRawBody(Json::encode($data));
+            $headers->addHeaderLine('Accept', 'application/json');
+
             $response = $http->send();
             $json = $response->getBody();
         } catch (\Exception $ex) {
@@ -118,6 +185,55 @@ class Module extends \humhub\components\Module
         } catch (\yii\base\InvalidParamException $ex) {
             Yii::error('Could not get document server response! ' . $ex->getMessage());
             return [];
+        }
+    }
+
+    public function convertService($file, $ts)
+    {
+        $url = $this->getServerUrl() . '/ConvertService.ashx';
+        $key = $this->generateDocumentKey($file);
+
+        $ext = FileHelper::getExtension($file);
+        $data = [
+            'async' => true,
+            'embeddedfonts' => true,
+            'filetype' => $ext,
+            'outputtype' => $this->convertsTo[$ext],
+            'key' => $key . $ts,
+            'url' => Url::to(['/onlydocuments/backend/download', 'key' => $key], true),
+        ];
+
+        try {
+            $http = new \Zend\Http\Client($url, [
+                'adapter' => '\Zend\Http\Client\Adapter\Curl',
+                'curloptions' => CURLHelper::getOptions(),
+                'timeout' => 10
+            ]);
+            $http->setMethod('POST');
+            $headers = $http->getRequest()->getHeaders();
+
+            if ($this->isJwtEnabled()) {
+                $data['token'] = JWT::encode($data, $this->getJwtSecret());
+                $headers->addHeaderLine('Authorization', 'Bearer ' . JWT::encode(['payload' => $data], $this->getJwtSecret()));
+            }
+
+            $http->setRawBody(Json::encode($data));
+            $headers->addHeaderLine('Accept', 'application/json');
+
+            $response = $http->send();
+            $json = $response->getBody();
+        } catch (\Exception $ex) {
+            $error = 'Could not get document server response! ' . $ex->getMessage();
+            Yii::error($error);
+            return [ 'error' => $error ];
+        }
+
+        try {
+            return Json::decode($json);
+        } catch (\yii\base\InvalidParamException $ex) {
+            $error = 'Could not get document server response! ' . $ex->getMessage();
+            Yii::error($error);
+            return [ 'error' => $error ];
         }
     }
 

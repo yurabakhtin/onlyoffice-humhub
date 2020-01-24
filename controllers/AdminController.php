@@ -28,21 +28,14 @@ class AdminController extends Controller
             $this->view->saved();
         }
 
-        $version = $this->getDocumentServerVersion();
-        
-        return $this->render('index', ['model' => $model, 'version' => $version]);
+        $response = $this->getDocumentServerVersion();
+        return $this->render('index', ['model' => $model, 'view' => $response]);
     }
 
     private function getDocumentServerVersion()
     {
         $module = Yii::$app->getModule('onlydocuments');
-        $response = $module->commandService(['c' => 'version']);
-        
-        if (isset($response['version'])) {
-            return $response['version'];
-        }
-        
-        return null;
+        return $module->commandService(['c' => 'version']);
     }
 
 }

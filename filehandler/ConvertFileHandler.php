@@ -1,11 +1,5 @@
 <?php
 
-/**
- * @link https://www.humhub.org/
- * @copyright Copyright (c) 2017 HumHub GmbH & Co. KG
- * @license https://www.humhub.com/licences
- */
-
 namespace humhub\modules\onlydocuments\filehandler;
 
 use Yii;
@@ -14,12 +8,7 @@ use humhub\modules\onlydocuments\Module;
 use humhub\modules\file\handler\BaseFileHandler;
 use yii\helpers\Url;
 
-/**
- * Description of ViewHandler
- *
- * @author Luke
- */
-class CreateFileHandler extends BaseFileHandler
+class ConvertFileHandler extends BaseFileHandler
 {
 
     /**
@@ -28,8 +17,8 @@ class CreateFileHandler extends BaseFileHandler
     public function getLinkAttributes()
     {
         return [
-            'label' => Yii::t('OnlydocumentsModule.base', 'Create document <small>(Text, Spreadsheet, Presentation)</small>'),
-            'data-action-url' => Url::to(['/onlydocuments/create']),
+            'label' => Yii::t('OnlydocumentsModule.base', 'Convert document'),
+            'data-action-url' => Url::to(['/onlydocuments/convert', 'guid' => $this->file->guid]),
             'data-action-click' => 'ui.modal.load',
             'data-modal-id' => 'onlydocuments-modal',
             'data-modal-close' => ''

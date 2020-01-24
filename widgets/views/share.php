@@ -23,7 +23,7 @@ if (class_exists('humhub\assets\ClipboardJsAsset')) {
     </div>
     <div class="form-group viewLinkInput" style="margin-top:6px">
         <input type="text" class="form-control" value="<?= $viewLink; ?>">
-        <p class="help-block pull-right"><a href="#" onClick="clipboard.copy($('.viewLinkInput').find('input').val())"><i class="fa fa-clipboard" aria-hidden="true"></i> <?= Yii::t('OnlydocumentsModule.base', 'Copy to clipboard'); ?></a></p>
+        <p class="help-block pull-right"><a href="#" onClick="clipboard.writeText($('.viewLinkInput').find('input').val())"><i class="fa fa-clipboard" aria-hidden="true"></i> <?= Yii::t('OnlydocumentsModule.base', 'Copy to clipboard'); ?></a></p>
     </div>
 
     <div class="checkbox" style="margin-left:-10px;padding-top:12px">
@@ -33,7 +33,7 @@ if (class_exists('humhub\assets\ClipboardJsAsset')) {
     </div>
     <div class="form-group editLinkInput"  style="margin-top:6px">
         <input type="text" class="form-control" value="<?= $editLink; ?>">
-        <p class="help-block  pull-right"><a href="#" onClick="clipboard.copy($('.editLinkInput').find('input').val())"><i class="fa fa-clipboard" aria-hidden="true"></i> <?= Yii::t('OnlydocumentsModule.base', 'Copy to clipboard'); ?></a></p>
+        <p class="help-block  pull-right"><a href="#" onClick="clipboard.writeText($('.editLinkInput').find('input').val())"><i class="fa fa-clipboard" aria-hidden="true"></i> <?= Yii::t('OnlydocumentsModule.base', 'Copy to clipboard'); ?></a></p>
     </div>
 
 </div>
