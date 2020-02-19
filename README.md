@@ -1,31 +1,39 @@
 # HumHub ONLYOFFICE integration plugin
 
-This plugin enables users to edit office documents from [HumHub](https://www.humhub.com/) using ONLYOFFICE Document Server.
+This plugin enables users to edit office documents from [HumHub](https://www.humhub.com/) using ONLYOFFICE Document Server - [Community or Integration Edition](#onlyoffice-document-server-editions).
 
 ## Features
-* Currently the following document formats can be opened and edited with this plugin: DOCX, XLSX, PPTX.
-* The following formats are available for view only: ODT, ODS, ODP, DOC, XLS, PPT, TXT, PDF.
-* The plugin will create a new *Edit/View*  menu option for Office documents.
-* This allows multiple users to collaborate in real time and to save back those changes to HumHub.
-* The following formats can be converted to Office Open XML: ODT, ODS, ODP, DOC, XLS, PPT, TXT, CSV.
 
+The plugin allows to:
+
+* Create and edit text documents, spreadsheets, and presentations.
+* Share documents with other users.
+* Co-edit documents in real-time: use two co-editing modes (Fast and Strict), Track Changes, comments, and built-in chat.
+
+Supported formats:
+
+* For viewing and editing: docx, xlsx, pptx.
+* For converting to OOXML formats (docx, xlsx, pptx): doc, docm, dot, dotx, epub, htm, html, odp, odt, pot, potm, potx, pps, ppsm, ppsx, ppt, pptm, rtf, xls, xlsm, xlsx, xlt, xltm, xltx.
 
 ## Installing ONLYOFFICE Document Server
 
-You will need an instance of ONLYOFFICE Document Server that is resolvable and connectable both from HumHub and any end clients. If that is not the case, use the official ONLYOFFICE Document Server documentations page: [Document Server for Linux](http://helpcenter.onlyoffice.com/server/linux/document/linux-installation.aspx). ONLYOFFICE Document Server must also be able to POST to HumHub directly.
+You will need an instance of ONLYOFFICE Document Server that is resolvable and connectable both from HumHub and any end clients. ONLYOFFICE Document Server must also be able to POST to HumHub directly.
 
-The easiest way to start an instance of ONLYOFFICE Document Server is to use [Docker](https://github.com/onlyoffice/Docker-DocumentServer).
+You can install free Community version of ONLYOFFICE Document Server or scalable enterprise-level Integration Edition.
 
+To install free Community version, use [Docker](https://github.com/onlyoffice/Docker-DocumentServer) (recommended) or follow [these instructions](https://helpcenter.onlyoffice.com/server/linux/document/linux-installation.aspx) for Debian, Ubuntu, or derivatives.  
+
+To install Integration Edition, follow instructions [here](https://helpcenter.onlyoffice.com/server/integration-edition/index.aspx).
+
+Community Edition vs Integration Edition comparison can be found [here](#onlyoffice-document-server-editions).
 
 ## Installing HumHub ONLYOFFICE integration plugin
 
 Either install it from HumHub Marketplace or simply clone the repository inside one of the folder specified by `moduleAutoloadPaths` parameter. Please see [HumHub Documentation](http://docs.humhub.org/dev-environment.html#external-modules-directory) for more information.
 
-
 ## Configuring HumHub CONLYOFFICE integration plugin
 
 Navigate to `Administration` -> `Modules` find the plugin under Installed tab and click `Configure`.
-
 
 ## How it works
 
@@ -62,8 +70,7 @@ The ONLYOFFICE integration follows the API documented [here](https://api.onlyoff
 
 * HumHub downloads the new version of the document, replacing the old one.
 
-
-## ONLYOFFICE Document Server editions 
+## ONLYOFFICE Document Server editions
 
 ONLYOFFICE offers different versions of its online document editors that can be deployed on your own servers.
 
