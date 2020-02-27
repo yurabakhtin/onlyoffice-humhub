@@ -12,8 +12,9 @@ The plugin allows to:
 
 Supported formats:
 
-* For viewing and editing: docx, xlsx, pptx.
-* For converting to OOXML formats (docx, xlsx, pptx): doc, docm, dot, dotx, epub, htm, html, odp, odt, pot, potm, potx, pps, ppsm, ppsx, ppt, pptm, rtf, xls, xlsm, xlsx, xlt, xltm, xltx.
+* For viewing and editing:  DOCX, XLSX, PPTX.
+* For viewing only: ODT, ODS, ODP, DOC, XLS, PPT, TXT, PDF.
+* For conversion to Office Open XML: ODT, ODS, ODP, DOC, XLS, PPT, TXT, CSV.
 
 ## Installing ONLYOFFICE Document Server
 
