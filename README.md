@@ -89,13 +89,13 @@ The table below will help you make the right choice.
 | Simultaneous connections | up to 20 maximum  | As in chosen pricing plan |
 | Number of users | up to 20 recommended | As in chosen pricing plan |
 | License | GNU AGPL v.3 | Proprietary |
-| **Support** | **Community Edition** | **Integration Edition** | 
+| **Support** | **Community Edition** | **Integration Edition** |
 | Documentation | [Help Center](https://helpcenter.onlyoffice.com/server/docker/opensource/index.aspx) | [Help Center](https://helpcenter.onlyoffice.com/server/integration-edition/index.aspx) |
 | Standard support | [GitHub](https://github.com/ONLYOFFICE/DocumentServer/issues) or paid | One year support included |
 | Premium support | [Buy Now](https://www.onlyoffice.com/support.aspx?utm_source=github&utm_medium=cpc&utm_campaign=GitHubHumHub) | [Buy Now](https://www.onlyoffice.com/support.aspx?utm_source=github&utm_medium=cpc&utm_campaign=GitHubHumHub) |
-| **Services** | **Community Edition** | **Integration Edition** | 
-| Conversion Service                | + | + | 
-| Document Builder Service          | + | + | 
+| **Services** | **Community Edition** | **Integration Edition** |
+| Conversion Service                | + | + |
+| Document Builder Service          | + | + |
 | **Interface** | **Community Edition** | **Integration Edition** |
 | Tabbed interface                       | + | + |
 | White Label                            | - | - |
@@ -113,8 +113,8 @@ The table below will help you make the right choice.
 | **Document Editor features** | **Community Edition** | **Integration Edition** |
 | Font and paragraph formatting   | + | + |
 | Object insertion                | + | + |
-| Adding Content control          | - | + | 
-| Editing Content control         | + | + | 
+| Adding Content control          | - | + |
+| Editing Content control         | + | + |
 | Layout tools                    | + | + |
 | Table of contents               | + | + |
 | Navigation panel                | + | + |
