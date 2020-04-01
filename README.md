@@ -12,8 +12,9 @@ The plugin allows to:
 
 Supported formats:
 
-* For viewing and editing: docx, xlsx, pptx.
-* For converting to OOXML formats (docx, xlsx, pptx): doc, docm, dot, dotx, epub, htm, html, odp, odt, pot, potm, potx, pps, ppsm, ppsx, ppt, pptm, rtf, xls, xlsm, xlsx, xlt, xltm, xltx.
+* For viewing and editing:  DOCX, XLSX, PPTX.
+* For viewing only: ODT, ODS, ODP, DOC, XLS, PPT, TXT, PDF.
+* For conversion to Office Open XML: ODT, ODS, ODP, DOC, XLS, PPT, TXT, CSV.
 
 ## Installing ONLYOFFICE Document Server
 
@@ -88,13 +89,13 @@ The table below will help you make the right choice.
 | Simultaneous connections | up to 20 maximum  | As in chosen pricing plan |
 | Number of users | up to 20 recommended | As in chosen pricing plan |
 | License | GNU AGPL v.3 | Proprietary |
-| **Support** | **Community Edition** | **Integration Edition** | 
+| **Support** | **Community Edition** | **Integration Edition** |
 | Documentation | [Help Center](https://helpcenter.onlyoffice.com/server/docker/opensource/index.aspx) | [Help Center](https://helpcenter.onlyoffice.com/server/integration-edition/index.aspx) |
 | Standard support | [GitHub](https://github.com/ONLYOFFICE/DocumentServer/issues) or paid | One year support included |
 | Premium support | [Buy Now](https://www.onlyoffice.com/support.aspx?utm_source=github&utm_medium=cpc&utm_campaign=GitHubHumHub) | [Buy Now](https://www.onlyoffice.com/support.aspx?utm_source=github&utm_medium=cpc&utm_campaign=GitHubHumHub) |
-| **Services** | **Community Edition** | **Integration Edition** | 
-| Conversion Service                | + | + | 
-| Document Builder Service          | + | + | 
+| **Services** | **Community Edition** | **Integration Edition** |
+| Conversion Service                | + | + |
+| Document Builder Service          | + | + |
 | **Interface** | **Community Edition** | **Integration Edition** |
 | Tabbed interface                       | + | + |
 | White Label                            | - | - |
@@ -112,17 +113,18 @@ The table below will help you make the right choice.
 | **Document Editor features** | **Community Edition** | **Integration Edition** |
 | Font and paragraph formatting   | + | + |
 | Object insertion                | + | + |
-| Content control                 | + | + |
+| Adding Content control          | - | + |
+| Editing Content control         | + | + |
 | Layout tools                    | + | + |
 | Table of contents               | + | + |
 | Navigation panel                | + | + |
-| Mail Merge                      | + | + |
+| Comparing Documents             | - | +* |
 | **Spreadsheet Editor features** | **Community Edition** | **Integration Edition** |
 | Font and paragraph formatting   | + | + |
 | Object insertion                | + | + |
 | Functions, formulas, equations  | + | + |
 | Table templates                 | + | + |
-| Pivot tables                    | +* | +* |
+| Pivot tables                    | +** | +** |
 | **Presentation Editor features** | **Community Edition** | **Integration Edition** |
 | Font and paragraph formatting   | + | + |
 | Object insertion                | + | + |
@@ -131,4 +133,6 @@ The table below will help you make the right choice.
 | Notes                           | + | + |
 | | [Get it now](https://www.onlyoffice.com/download.aspx?utm_source=github&utm_medium=cpc&utm_campaign=GitHubHumHub)  | [Start Free Trial](https://www.onlyoffice.com/connectors-request.aspx?utm_source=github&utm_medium=cpc&utm_campaign=GitHubHumHub)  |
 
-*Changing style and deleting (Full support coming soon)
+\* It's possible to add documents for comparison from your local drive and from URL. Adding files for comparison from storage is not available yet.
+
+\** Changing style and deleting (Full support coming soon)
