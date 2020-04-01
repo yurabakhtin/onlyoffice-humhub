@@ -1,5 +1,16 @@
 # Change Log
 
+## 2.1.0
+## Added
+- Build script to split readme to according sections (#6)
+## Changed
+- Logo and screenshots for marketplace
+- Updated empty files (v15)
+## Fixed
+- Fixed marketplace id
+- Fixed HumHub minimum version (#5)
+
+
 ## 2.0.0
 ## Added
 - JWT support
