@@ -6,7 +6,11 @@ class m200401_101409_file_oo_key extends Migration
 {
     public function up()
     {
-        $this->addColumn('file', 'onlyoffice_key', $this->char(20));
+        try {
+            $this->addColumn('file', 'onlyoffice_key', $this->char(20));
+        } catch (\Exception $ex) {
+
+        }
     }
 
     public function down()
