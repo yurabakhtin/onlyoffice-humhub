@@ -7,7 +7,7 @@
     ],
     "version": "2.0.0",
     "humhub": {
-        "minVersion": "2.0"
+        "minVersion": "1.3"
     },
     "homepage": "https://www.onlyoffice.com",
     "authors": [
