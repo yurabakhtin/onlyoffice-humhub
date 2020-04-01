@@ -1,7 +1,7 @@
 <div class="modal-dialog animated fadeIn" style="width:96%">
-    <div class="modal-content onlyDocumentsModal" style="background-color:transparent;">
+    <div class="modal-content onlyofficeModal" style="background-color:transparent;">
         <?=
-        \humhub\modules\onlydocuments\widgets\EditorWidget::widget([
+        \humhub\modules\onlyoffice\widgets\EditorWidget::widget([
             'file' => $file,
             'mode' => $mode
         ]);
@@ -18,6 +18,6 @@
     setSize();
 
     function setSize() {
-        $('.onlyDocumentsModal').css('height', window.innerHeight - 110 + 'px');
+        $('.onlyofficeModal').css('height', window.innerHeight - 110 + 'px');
     }
 </script>

@@ -2,11 +2,11 @@
 
 use yii\db\Migration;
 
-class m170613_101409_file_oo_key extends Migration
+class m200401_101409_file_oo_key extends Migration
 {
     public function up()
     {
-        $this->addColumn('file', 'onlydocuments_key', $this->char(20));
+        $this->addColumn('file', 'onlyoffice_key', $this->char(20));
     }
 
     public function down()

@@ -6,7 +6,7 @@
  * @license https://www.humhub.com/licences
  */
 
-namespace humhub\modules\onlydocuments\widgets;
+namespace humhub\modules\onlyoffice\widgets;
 
 use Yii;
 use yii\web\HttpException;
@@ -38,7 +38,7 @@ class EditorWidget extends JsWidget
     /**
      * @inheritdoc
      */
-    public $jsWidget = 'onlydocuments.Editor';
+    public $jsWidget = 'onlyoffice.Editor';
 
     /**
      * @inheritdoc
@@ -55,7 +55,7 @@ class EditorWidget extends JsWidget
      */
     public function init()
     {
-        $module = Yii::$app->getModule('onlydocuments');
+        $module = Yii::$app->getModule('onlyoffice');
         $this->documentType = $module->getDocumentType($this->file);
         if ($this->documentType === null) {
             throw new HttpException('400', 'Requested file type is not supported!');
@@ -69,12 +69,12 @@ class EditorWidget extends JsWidget
      */
     public function getData()
     {
-        $module = Yii::$app->getModule('onlydocuments');
+        $module = Yii::$app->getModule('onlyoffice');
 
         return [
             'config' => $this->getConfig(),
             'edit-mode' => $this->mode,
-            'file-info-url' => Url::to(['/onlydocuments/open/get-info', 'guid' => $this->file->guid]),
+            'file-info-url' => Url::to(['/onlyoffice/open/get-info', 'guid' => $this->file->guid]),
             'module-configured' => (empty($module->getServerUrl()) ? '0' : '1'),
         ];
     }
@@ -104,7 +104,7 @@ class EditorWidget extends JsWidget
 
     protected function getConfig()
     {
-        $module = Yii::$app->getModule('onlydocuments');
+        $module = Yii::$app->getModule('onlyoffice');
         $user = Yii::$app->user->getIdentity();
         $key = $module->generateDocumentKey($this->file);
 
@@ -113,7 +113,7 @@ class EditorWidget extends JsWidget
             'documentType' => $this->documentType,
             'document' => [
                 'title' => Html::encode($this->file->fileName),
-                'url' => Url::to(['/onlydocuments/backend/download', 'key' => $key], true),
+                'url' => Url::to(['/onlyoffice/backend/download', 'key' => $key], true),
                 'fileType' => Html::encode(strtolower(FileHelper::getExtension($this->file))),
                 'key' => $key,
                 'info' => [
@@ -127,7 +127,7 @@ class EditorWidget extends JsWidget
             'editorConfig' => [
                 'mode' => $this->mode,
                 'lang' => ($user) && !empty($user->language) ? $user->language : Yii::$app->language,
-                'callbackUrl' => Url::to(['/onlydocuments/backend/track', 'key' => $key], true),
+                'callbackUrl' => Url::to(['/onlyoffice/backend/track', 'key' => $key], true),
                 'user' => [
                     'id' => ($user) ? Html::encode($user->guid) : '',
                     'name' => ($user) ? Html::encode($user->displayname) : 'Anonymous User',

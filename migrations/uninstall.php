@@ -1,11 +1,12 @@
 <?php
 use yii\db\Migration;
-class uninstall extends Migration
+class uninstall extends Migratio
+n
 {
     public function up()
     {
-        $this->dropTable('onlydocuments_share');
-        $this->dropColumn('file', 'onlydocuments_key');
+        $this->dropTable('onlyoffice_share');
+        $this->dropColumn('file', 'onlyoffice_key');
     }
     public function down()
     {

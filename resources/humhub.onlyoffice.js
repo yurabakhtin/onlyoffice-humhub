@@ -1,4 +1,4 @@
-humhub.module('onlydocuments', function (module, require, $) {
+humhub.module('onlyoffice', function (module, require, $) {
 
     var client = require('client');
     var modal = require('ui.modal');
@@ -23,13 +23,13 @@ humhub.module('onlydocuments', function (module, require, $) {
     Editor.prototype.init = function () {
         
         if (this.options.moduleConfigured != 1) {
-            module.log.error('No OnlyOffice server configured! - Check OnlyDocuments module configuration!', true);
+            module.log.error('No OnlyOffice server configured! - Check onlyoffice module configuration!', true);
             return
         }
         
         this.initEditor();
         
-        this.modal = modal.get('#onlydocuments-modal');
+        this.modal = modal.get('#onlyoffice-modal');
         
         var that = this;
         this.modal.$.on('hidden.bs.modal', function(evt) {
@@ -40,7 +40,7 @@ humhub.module('onlydocuments', function (module, require, $) {
 
 
     Editor.prototype.share = function (evt) {
-        m = modal.get('#onlydocuments-share-modal');
+        m = modal.get('#onlyoffice-share-modal');
         m.load(evt.url);
         m.show();
     }
@@ -258,7 +258,7 @@ humhub.module('onlydocuments', function (module, require, $) {
         client.submit(evt).then(function (response) {
             event.trigger('humhub:file:created', [response.file]);
 
-            m = modal.get('#onlydocuments-modal');
+            m = modal.get('#onlyoffice-modal');
             if (response.openFlag) {
                 m.load(response.openUrl);
                 m.show();

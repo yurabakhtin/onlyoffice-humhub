@@ -1,13 +1,13 @@
 <?php
 
-namespace humhub\modules\onlydocuments\models;
+namespace humhub\modules\onlyoffice\models;
 
 use Yii;
 use yii\helpers\Url;
 use humhub\modules\file\models\File;
 
 /**
- * This is the model class for table "onlydocuments_share".
+ * This is the model class for table "onlyoffice_share".
  *
  * @property integer $id
  * @property integer $file_id
@@ -24,7 +24,7 @@ class Share extends \yii\db\ActiveRecord
      */
     public static function tableName()
     {
-        return 'onlydocuments_share';
+        return 'onlyoffice_share';
     }
 
     /**
@@ -45,7 +45,7 @@ class Share extends \yii\db\ActiveRecord
             $share = self::generateShareLink($file, $mode);
         }
 
-        return Url::to(['/onlydocuments/open', 'share' => $share->secret], true);
+        return Url::to(['/onlyoffice/open', 'share' => $share->secret], true);
     }
 
     public static function generateShareLink($file, $mode)

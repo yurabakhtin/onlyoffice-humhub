@@ -6,11 +6,11 @@
  * @license https://www.humhub.com/licences
  */
 
-namespace humhub\modules\onlydocuments\models;
+namespace humhub\modules\onlyoffice\models;
 
 use Yii;
 use yii\base\Model;
-use humhub\modules\onlydocuments\Module;
+use humhub\modules\onlyoffice\Module;
 use humhub\modules\file\models\File;
 
 /**
@@ -36,15 +36,15 @@ class CreateDocument extends Model
     public function attributeLabels()
     {
         return [
-            'openFlag' => Yii::t('OnlydocumentsModule.base', 'Open the new document in the next step')
+            'openFlag' => Yii::t('OnlyofficeModule.base', 'Open the new document in the next step')
         ];
     }
 
     public function save()
     {
 
-        /* @var $module \humhub\modules\onlydocuments\Module */
-        $module = Yii::$app->getModule('onlydocuments');
+        /* @var $module \humhub\modules\onlyoffice\Module */
+        $module = Yii::$app->getModule('onlyoffice');
 
 
         if (empty($this->documentType)) {

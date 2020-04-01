@@ -6,13 +6,13 @@
  * @license https://www.humhub.com/licences
  */
 
-namespace humhub\modules\onlydocuments\controllers;
+namespace humhub\modules\onlyoffice\controllers;
 
 use Yii;
 use yii\web\HttpException;
 use yii\helpers\Url;
 use humhub\modules\file\libs\FileHelper;
-use humhub\modules\onlydocuments\Module;
+use humhub\modules\onlyoffice\Module;
 
 class CreateController extends \humhub\components\Controller
 {
@@ -25,7 +25,7 @@ class CreateController extends \humhub\components\Controller
     public function actionDocument()
     {
 
-        $model = new \humhub\modules\onlydocuments\models\CreateDocument();
+        $model = new \humhub\modules\onlyoffice\models\CreateDocument();
         $model->documentType = Yii::$app->request->get('type');
 
         $ext = '';
@@ -48,7 +48,7 @@ class CreateController extends \humhub\components\Controller
                             'success' => true,
                             'file' => FileHelper::getFileInfos($file),
                             'openFlag' => (boolean) $model->openFlag,
-                            'openUrl' => Url::to(['/onlydocuments/open', 'guid' => $file->guid, 'mode' => Module::OPEN_MODE_EDIT])
+                            'openUrl' => Url::to(['/onlyoffice/open', 'guid' => $file->guid, 'mode' => Module::OPEN_MODE_EDIT])
                 ]);
             } else {
                 return $this->asJson([

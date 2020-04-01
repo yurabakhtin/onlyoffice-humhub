@@ -1,14 +1,14 @@
 <?php
 
-namespace humhub\modules\onlydocuments\widgets;
+namespace humhub\modules\onlyoffice\widgets;
 
 use Yii;
 use yii\web\HttpException;
 use yii\helpers\Url;
 use humhub\modules\file\libs\FileHelper;
 use humhub\modules\file\models\File;
-use humhub\modules\onlydocuments\models\Share;
-use humhub\modules\onlydocuments\Module;
+use humhub\modules\onlyoffice\models\Share;
+use humhub\modules\onlyoffice\Module;
 use humhub\widgets\JsWidget;
 
 class ConvertWidget extends JsWidget
@@ -24,7 +24,7 @@ class ConvertWidget extends JsWidget
     /**
      * @inheritdoc
      */
-    public $jsWidget = 'onlydocuments.Convert';
+    public $jsWidget = 'onlyoffice.Convert';
 
     /**
      * @inheritdoc
@@ -39,7 +39,7 @@ class ConvertWidget extends JsWidget
     {
         parent::init();
 
-        $module = Yii::$app->getModule('onlydocuments');
+        $module = Yii::$app->getModule('onlyoffice');
         $this->newName = substr($this->file->fileName, 0, strpos($this->file->fileName, '.') + 1) . $module->convertsTo[strtolower(FileHelper::getExtension($this->file))];
     }
 
@@ -49,10 +49,10 @@ class ConvertWidget extends JsWidget
     public function getData()
     {
         return [
-            'convert-post' => Url::to(['/onlydocuments/convert/convert', 'guid' => $this->file->guid, 'ts' => time(), 'newName' => $this->newName]),
-            'file-info-url' => Url::to(['/onlydocuments/open/get-info', 'guid' => $this->file->guid]),
-            'done-message' => Yii::t('OnlydocumentsModule.base', 'Done!'),
-            'error-message' => Yii::t('OnlydocumentsModule.base', 'Error:'),
+            'convert-post' => Url::to(['/onlyoffice/convert/convert', 'guid' => $this->file->guid, 'ts' => time(), 'newName' => $this->newName]),
+            'file-info-url' => Url::to(['/onlyoffice/open/get-info', 'guid' => $this->file->guid]),
+            'done-message' => Yii::t('OnlyofficeModule.base', 'Done!'),
+            'error-message' => Yii::t('OnlyofficeModule.base', 'Error:'),
         ];
     }
 

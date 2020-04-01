@@ -6,7 +6,7 @@
  * @license https://www.humhub.com/licences
  */
 
-namespace humhub\modules\onlydocuments\controllers;
+namespace humhub\modules\onlyoffice\controllers;
 
 use Yii;
 use yii\web\HttpException;
@@ -33,10 +33,10 @@ class BackendController extends Controller
         $this->enableCsrfValidation = false;
 
         $key = Yii::$app->request->get('key');
-        $this->file = File::findOne(['onlydocuments_key' => $key]);
+        $this->file = File::findOne(['onlyoffice_key' => $key]);
 
         if ($this->file == null) {
-            throw new HttpException(404, Yii::t('OnlydocumentsModule.base', 'Could not find requested file!'));
+            throw new HttpException(404, Yii::t('OnlyofficeModule.base', 'Could not find requested file!'));
         }
 
         return parent::beforeAction($action);
@@ -47,7 +47,7 @@ class BackendController extends Controller
      */
     public function actionDownload()
     {
-        //Yii::warning("Downloading file guid: " . $this->file->guid, 'onlydocuments');
+        //Yii::warning("Downloading file guid: " . $this->file->guid, 'onlyoffice');
         return Yii::$app->response->sendFile($this->file->store->get(), $this->file->file_name);
     }
 
@@ -76,7 +76,7 @@ class BackendController extends Controller
                 throw new \Exception('Could not parse json');
             }
 
-            $module = Yii::$app->getModule('onlydocuments');
+            $module = Yii::$app->getModule('onlyoffice');
             if ($module->isJwtEnabled()) {
                 $token = null;
                 if (!empty($data["token"])) {
@@ -97,7 +97,7 @@ class BackendController extends Controller
                 }
             }
 
-            //Yii::warning('Tracking request for file ' . $this->file->guid . ' - data: ' . print_r($data, 1), 'onlydocuments');
+            //Yii::warning('Tracking request for file ' . $this->file->guid . ' - data: ' . print_r($data, 1), 'onlyoffice');
 
             $user = null;
             if (!empty($data['users'])) {
@@ -118,16 +118,16 @@ class BackendController extends Controller
 
                         if ($status != 'ForceSave') {
                             $newAttr = [
-                                'onlydocuments_key' => new \yii\db\Expression('NULL'),
+                                'onlyoffice_key' => new \yii\db\Expression('NULL'),
                                 'updated_at' => date("Y-m-d H:i:s"),
                                 'size' => strlen($newData),
                             ];
                             if (!empty($user)) $newAttr['updated_by'] = $user->getId();
 
                             $this->file->updateAttributes($newAttr);
-                            //Yii::warning('Dosaved', 'onlydocuments');
+                            //Yii::warning('Dosaved', 'onlyoffice');
                         } else {
-                            //Yii::warning('ForceSaved', 'onlydocuments');
+                            //Yii::warning('ForceSaved', 'onlyoffice');
                         }
                     } else {
                         throw new \Exception('Could not save onlyoffice document: ' . $data["url"]);
@@ -137,7 +137,7 @@ class BackendController extends Controller
             }
 
         } catch (\Exception $e) {
-            Yii::error($e->getMessage(), 'onlydocuments');
+            Yii::error($e->getMessage(), 'onlyoffice');
             $msg = $e->getMessage();
         }
 
@@ -149,7 +149,7 @@ class BackendController extends Controller
             $result['message'] = $msg;
         }
 
-        //Yii::warning("Return: " . print_r($result, 1), 'onlydocuments');
+        //Yii::warning("Return: " . print_r($result, 1), 'onlyoffice');
         return $result;
     }
 
