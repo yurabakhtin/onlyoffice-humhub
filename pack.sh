@@ -15,7 +15,7 @@ rm ./pack.sh
 
 mkdir docs
 
-mv ./LICENCE.md ./docs/LICENCES.md
+mv ./LICENCE.md ./docs/LICENCE.md
 mv ./AUTHORS.md ./docs/AUTHORS.md
 mv ./CHANGELOG.md ./docs/CHANGELOG.md
 
