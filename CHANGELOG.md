@@ -1,5 +1,13 @@
 # Change Log
 
+## 2.1.1
+## Changed
+- Improved migration failures (#12)
+
+## Fixed
+- Fixed module id (#12)
+
+
 ## 2.1.0
 ## Added
 - Build script to split readme to according sections (#6)
