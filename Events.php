@@ -6,7 +6,7 @@
  * @license https://www.humhub.com/licences
  */
 
-namespace humhub\modules\onlydocuments;
+namespace humhub\modules\onlyoffice;
 
 use Yii;
 use humhub\modules\file\handler\FileHandlerCollection;
@@ -27,8 +27,8 @@ class Events
             return;
         }
 
-        /* @var $module \humhub\modules\onlydocuments\Module */
-        $module = Yii::$app->getModule('onlydocuments');
+        /* @var $module \humhub\modules\onlyoffice\Module */
+        $module = Yii::$app->getModule('onlyoffice');
         $file = $event->sender->file;
 
         if ($module->getDocumentType($file) !== null) {

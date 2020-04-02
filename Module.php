@@ -6,7 +6,7 @@
  * @license https://www.humhub.com/licences
  */
 
-namespace humhub\modules\onlydocuments;
+namespace humhub\modules\onlyoffice;
 
 use Yii;
 use yii\helpers\Url;
@@ -132,7 +132,7 @@ class Module extends \humhub\components\Module
     public function getConfigUrl()
     {
         return Url::to([
-                    '/onlydocuments/admin'
+                    '/onlyoffice/admin'
         ]);
     }
 
@@ -143,12 +143,12 @@ class Module extends \humhub\components\Module
      */
     public function generateDocumentKey($file)
     {
-        if (!empty($file->onlydocuments_key)) {
-            return $file->onlydocuments_key;
+        if (!empty($file->onlyoffice_key)) {
+            return $file->onlyoffice_key;
         }
 
         $key = substr(strtolower(md5(Yii::$app->security->generateRandomString(20))), 0, 20);
-        $file->updateAttributes(['onlydocuments_key' => $key]);
+        $file->updateAttributes(['onlyoffice_key' => $key]);
         return $key;
     }
 
@@ -200,7 +200,7 @@ class Module extends \humhub\components\Module
             'filetype' => $ext,
             'outputtype' => $this->convertsTo[$ext],
             'key' => $key . $ts,
-            'url' => Url::to(['/onlydocuments/backend/download', 'key' => $key], true),
+            'url' => Url::to(['/onlyoffice/backend/download', 'key' => $key], true),
         ];
 
         try {

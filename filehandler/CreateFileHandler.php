@@ -6,11 +6,11 @@
  * @license https://www.humhub.com/licences
  */
 
-namespace humhub\modules\onlydocuments\filehandler;
+namespace humhub\modules\onlyoffice\filehandler;
 
 use Yii;
 use humhub\libs\Html;
-use humhub\modules\onlydocuments\Module;
+use humhub\modules\onlyoffice\Module;
 use humhub\modules\file\handler\BaseFileHandler;
 use yii\helpers\Url;
 
@@ -28,10 +28,10 @@ class CreateFileHandler extends BaseFileHandler
     public function getLinkAttributes()
     {
         return [
-            'label' => Yii::t('OnlydocumentsModule.base', 'Create document <small>(Text, Spreadsheet, Presentation)</small>'),
-            'data-action-url' => Url::to(['/onlydocuments/create']),
+            'label' => Yii::t('OnlyofficeModule.base', 'Create document <small>(Text, Spreadsheet, Presentation)</small>'),
+            'data-action-url' => Url::to(['/onlyoffice/create']),
             'data-action-click' => 'ui.modal.load',
-            'data-modal-id' => 'onlydocuments-modal',
+            'data-modal-id' => 'onlyoffice-modal',
             'data-modal-close' => ''
         ];
     }

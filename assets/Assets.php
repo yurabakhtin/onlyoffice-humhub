@@ -6,7 +6,7 @@
  * @license https://www.humhub.com/licences
  */
 
-namespace humhub\modules\onlydocuments\assets;
+namespace humhub\modules\onlyoffice\assets;
 
 use Yii;
 use yii\web\AssetBundle;
@@ -26,8 +26,8 @@ class Assets extends AssetBundle
     {
 
         $this->js = [
-            Yii::$app->getModule('onlydocuments')->getServerApiUrl(),
-            'humhub.onlydocuments.js'
+            Yii::$app->getModule('onlyoffice')->getServerApiUrl(),
+            'humhub.onlyoffice.js'
         ];
 
 
