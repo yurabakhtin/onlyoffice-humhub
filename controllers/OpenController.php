@@ -6,13 +6,13 @@
  * @license https://www.humhub.com/licences
  */
 
-namespace humhub\modules\onlydocuments\controllers;
+namespace humhub\modules\onlyoffice\controllers;
 
 use Yii;
 use yii\web\HttpException;
 use yii\helpers\Url;
 use humhub\modules\file\libs\FileHelper;
-use humhub\modules\onlydocuments\components\BaseFileController;
+use humhub\modules\onlyoffice\components\BaseFileController;
 
 class OpenController extends BaseFileController
 {
@@ -60,12 +60,12 @@ class OpenController extends BaseFileController
         }
 
         if ($this->shareSecret) {
-            $openUrl = Url::to(['/onlydocuments/open', 'share' => $this->shareSecret]);
+            $openUrl = Url::to(['/onlyoffice/open', 'share' => $this->shareSecret]);
         } else {
-            $openUrl = Url::to(['/onlydocuments/open', 'guid' => $this->file->guid, 'mode' => $this->mode]);
+            $openUrl = Url::to(['/onlyoffice/open', 'guid' => $this->file->guid, 'mode' => $this->mode]);
         }
 
-        $jsCode = 'var modalOO = humhub.require("ui.modal"); modalOO.get("#onlydocuments-modal").load("' . $openUrl . '");';
+        $jsCode = 'var modalOO = humhub.require("ui.modal"); modalOO.get("#onlyoffice-modal").load("' . $openUrl . '");';
         Yii::$app->session->setFlash('executeJavascript', $jsCode);
 
         return $this->redirect($url);

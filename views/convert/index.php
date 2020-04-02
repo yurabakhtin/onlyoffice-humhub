@@ -1,6 +1,6 @@
 <?=
 
-\humhub\modules\onlydocuments\widgets\ConvertWidget::widget([
+\humhub\modules\onlyoffice\widgets\ConvertWidget::widget([
     'file' => $file,
 ]);
 ?>

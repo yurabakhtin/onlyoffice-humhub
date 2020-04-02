@@ -1,10 +1,10 @@
 <?php
 
-use humhub\modules\onlydocuments\Module;
+use humhub\modules\onlyoffice\Module;
 use yii\helpers\Url;
 
 $modal = \humhub\widgets\ModalDialog::begin([
-            'header' => Yii::t('OnlydocumentsModule.base', '<strong>Create</strong> document')
+            'header' => Yii::t('OnlyofficeModule.base', '<strong>Create</strong> document')
         ])
 ?>
 <style>

@@ -1,11 +1,21 @@
 # Change Log
 
+## 2.1.1
+## Changed
+- Improved migration failures (#12)
+
+## Fixed
+- Fixed module id (#12)
+
+
 ## 2.1.0
 ## Added
 - Build script to split readme to according sections (#6)
+
 ## Changed
 - Logo and screenshots for marketplace
 - Updated empty files (v15)
+
 ## Fixed
 - Fixed marketplace id
 - Fixed HumHub minimum version (#5)

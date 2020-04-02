@@ -1,14 +1,14 @@
 <?php
 
-use humhub\modules\onlydocuments\Module;
+use humhub\modules\onlyoffice\Module;
 use yii\helpers\Url;
 use humhub\widgets\ActiveForm;
 use humhub\libs\Html;
 
-\humhub\modules\onlydocuments\assets\Assets::register($this);
+\humhub\modules\onlyoffice\assets\Assets::register($this);
 
 $modal = \humhub\widgets\ModalDialog::begin([
-            'header' => Yii::t('OnlydocumentsModule.base', '<strong>Create</strong> document')
+            'header' => Yii::t('OnlyofficeModule.base', '<strong>Create</strong> document')
         ])
 ?>
 
@@ -20,7 +20,7 @@ $modal = \humhub\widgets\ModalDialog::begin([
 </div>
 
 <div class="modal-footer">
-    <?= Html::submitButton('Save', ['data-action-click' => 'onlydocuments.createSubmit', 'data-ui-loader' => '', 'class' => 'btn btn-primary']); ?>
+    <?= Html::submitButton('Save', ['data-action-click' => 'onlyoffice.createSubmit', 'data-ui-loader' => '', 'class' => 'btn btn-primary']); ?>
 </div>
 
 <?php ActiveForm::end(); ?>

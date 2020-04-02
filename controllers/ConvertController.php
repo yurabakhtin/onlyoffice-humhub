@@ -1,14 +1,14 @@
 <?php
 
-namespace humhub\modules\onlydocuments\controllers;
+namespace humhub\modules\onlyoffice\controllers;
 
 use Yii;
 use yii\web\HttpException;
 use yii\helpers\Url;
 use humhub\modules\file\models\File;
 use humhub\modules\file\libs\FileHelper;
-use humhub\modules\onlydocuments\Module;
-use humhub\modules\onlydocuments\components\BaseFileController;
+use humhub\modules\onlyoffice\Module;
+use humhub\modules\onlyoffice\components\BaseFileController;
 
 class ConvertController extends BaseFileController
 {
@@ -17,7 +17,7 @@ class ConvertController extends BaseFileController
     {
         parent::init();
 
-        $module = Yii::$app->getModule('onlydocuments');
+        $module = Yii::$app->getModule('onlyoffice');
 
         if (!$module->canConvert($this->file)) {
             throw new HttpException('400', 'Could not convert this file');
@@ -32,7 +32,7 @@ class ConvertController extends BaseFileController
     public function actionConvert($guid, $ts, $newName)
     {
         Yii::$app->response->format = 'json';
-        $module = Yii::$app->getModule('onlydocuments');
+        $module = Yii::$app->getModule('onlyoffice');
 
         $json = $module->convertService($this->file, $ts);
 
@@ -48,7 +48,7 @@ class ConvertController extends BaseFileController
 
         $this->file->store->setContent($content);
         $this->file->updateAttributes([
-            'onlydocuments_key' => new \yii\db\Expression('NULL'),
+            'onlyoffice_key' => new \yii\db\Expression('NULL'),
             'size' => strlen($content),
             'file_name' => $newName
         ]);
