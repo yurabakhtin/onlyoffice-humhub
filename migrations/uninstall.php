@@ -1,7 +1,6 @@
 <?php
 use yii\db\Migration;
-class uninstall extends Migratio
-n
+class uninstall extends Migration
 {
     public function up()
     {

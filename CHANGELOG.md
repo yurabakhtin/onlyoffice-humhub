@@ -1,5 +1,10 @@
 # Change Log
 
+## 2.1.2
+## Fixed
+- Fixed an issue that prevented plugin from removing (#14)
+
+
 ## 2.1.1
 ## Changed
 - Improved migration failures (#12)
