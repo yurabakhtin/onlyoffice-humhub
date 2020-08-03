@@ -16,6 +16,11 @@ use humhub\modules\onlyoffice\components\BaseFileController;
 
 class OpenController extends BaseFileController
 {
+    /**
+     * @inheritdoc
+     * Allow access to this controller without any authentication (guest access)
+     */
+    public $access = \humhub\components\access\ControllerAccess::class;
 
     /**
      * Opens the document in modal
