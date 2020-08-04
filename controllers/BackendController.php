@@ -10,15 +10,18 @@ namespace humhub\modules\onlyoffice\controllers;
 
 use Yii;
 use yii\web\HttpException;
-use yii\helpers\Url;
 use humhub\modules\file\models\File;
-use humhub\modules\file\libs\FileHelper;
 use humhub\modules\user\models\User;
 use humhub\components\Controller;
 use \Firebase\JWT\JWT;
 
 class BackendController extends Controller
 {
+    /**
+     * @inheritdoc
+     * Allow server to server configuration without any authentication
+     */
+    public $access = \humhub\components\access\ControllerAccess::class;
 
     /**
      * @var File
@@ -91,7 +94,7 @@ class BackendController extends Controller
 
                 try {
                     $ds = JWT::decode($token, $module->getJwtSecret(), array('HS256'));
-                    $data = (array) $ds->payload;
+                    $data = (array)$ds->payload;
                 } catch (\Exception $ex) {
                     throw new \Exception('Invalid JWT signature');
                 }
@@ -133,7 +136,7 @@ class BackendController extends Controller
                         throw new \Exception('Could not save onlyoffice document: ' . $data["url"]);
                     }
 
-                break;
+                    break;
             }
 
         } catch (\Exception $e) {
