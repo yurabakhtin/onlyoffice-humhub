@@ -1,5 +1,9 @@
 # Change Log
 
+## 2.1.3
+## Fixed
+- HumHub 1.6 compatibility (#17, #19)
+
 ## 2.1.2
 ## Fixed
 - Fixed an issue that prevented plugin from removing (#14)
