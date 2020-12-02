@@ -1,5 +1,9 @@
 # Change Log
 
+## 2.1.4
+## Fixed
+- Missing `<?php` tag
+
 ## 2.1.3
 ## Fixed
 - HumHub 1.6 compatibility (#17, #19)
