@@ -51,6 +51,7 @@ humhub.module('onlyoffice', function (module, require, $) {
         if (this.options.editMode == 'edit') {
             refreshFileInfo(this, evt);
         } else {
+            this.docEditor.destroyEditor();
             this.modal.clear();
             this.modal.close();
             evt.finish();
@@ -141,10 +142,12 @@ humhub.module('onlyoffice', function (module, require, $) {
     function refreshFileInfo(that, evt) {
         client.post({url: that.options.fileInfoUrl}).then(function (response) {
             event.trigger('humhub:file:modified', [response.file]);
+            that.docEditor.destroyEditor();
             that.modal.clear();
             that.modal.close();
             evt.finish();
         }).catch(function (e) {
+            that.docEditor.destroyEditor();
             module.log.error(e);
             that.modal.clear();
             that.modal.close();
