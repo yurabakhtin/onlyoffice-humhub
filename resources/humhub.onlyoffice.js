@@ -21,18 +21,18 @@ humhub.module('onlyoffice', function (module, require, $) {
     };
 
     Editor.prototype.init = function () {
-        
+
         if (this.options.moduleConfigured != 1) {
             module.log.error('No OnlyOffice server configured! - Check onlyoffice module configuration!', true);
             return
         }
-        
+
         this.initEditor();
-        
+
         this.modal = modal.get('#onlyoffice-modal');
-        
+
         var that = this;
-        this.modal.$.on('hidden.bs.modal', function(evt) {
+        this.modal.$.on('hidden.bs.modal', function (evt) {
             that.modal.clear();
         });
 
@@ -61,13 +61,13 @@ humhub.module('onlyoffice', function (module, require, $) {
             this.modal.close();
             evt.finish();
         }
-        
+
     }
 
     Editor.prototype.initEditor = function () {
-        if(!window.DocsAPI) {
+        if (!window.DocsAPI) {
             ooJSLoadRetries++;
-            if(ooJSLoadRetries < 100) {
+            if (ooJSLoadRetries < 100) {
                 setTimeout($.proxy(this.initEditor, this), 100);
                 return;
             } else {
@@ -75,7 +75,7 @@ humhub.module('onlyoffice', function (module, require, $) {
                 return;
             }
         }
-        
+
         var config = this.options.config;
         config.width = "100%";
         config.height = "100%";
@@ -108,10 +108,10 @@ humhub.module('onlyoffice', function (module, require, $) {
 
         function _callAjax() {
             jQuery.ajax({
-                type : "POST",
-                url : that.options.convertPost,
+                type: "POST",
+                url: that.options.convertPost,
                 cache: false,
-                success: function(data) {
+                success: function (data) {
                     if (data.error) {
                         _onError(data.error);
                         return;
@@ -133,7 +133,7 @@ humhub.module('onlyoffice', function (module, require, $) {
         }
 
         loader.set(that.$.find('.modal-footer'));
-		_callAjax();
+        _callAjax();
     };
 
     Convert.prototype.getDefaultOptions = function () {
@@ -150,7 +150,7 @@ humhub.module('onlyoffice', function (module, require, $) {
     };
 
     function refreshFileInfo(that, evt) {
-        client.post({url: that.options.fileInfoUrl}).then(function (response) {
+        client.post({ url: that.options.fileInfoUrl }).then(function (response) {
             event.trigger('humhub:file:modified', [response.file]);
             that.docEditor.destroyEditor();
             that.modal.clear();
@@ -201,7 +201,7 @@ humhub.module('onlyoffice', function (module, require, $) {
                     url: that.options.shareGetLink,
                     cache: false,
                     type: 'POST',
-                    data: {'shareMode': 'view'},
+                    data: { 'shareMode': 'view' },
                     dataType: 'json',
                     success: function (json) {
                         $('.viewLinkInput').show();
@@ -215,7 +215,7 @@ humhub.module('onlyoffice', function (module, require, $) {
                     url: that.options.shareRemoveLink,
                     cache: false,
                     type: 'POST',
-                    data: {'shareMode': 'view'},
+                    data: { 'shareMode': 'view' },
                     dataType: 'json',
                     success: function (jsoin) {
                         $('.viewLinkInput').hide();
@@ -232,7 +232,7 @@ humhub.module('onlyoffice', function (module, require, $) {
                     url: that.options.shareGetLink,
                     cache: false,
                     type: 'POST',
-                    data: {'shareMode': 'edit'},
+                    data: { 'shareMode': 'edit' },
                     dataType: 'json',
                     success: function (json) {
                         $('.editLinkInput').show();
@@ -246,7 +246,7 @@ humhub.module('onlyoffice', function (module, require, $) {
                     url: that.options.shareRemoveLink,
                     cache: false,
                     type: 'POST',
-                    data: {'shareMode': 'edit'},
+                    data: { 'shareMode': 'edit' },
                     dataType: 'json',
                     success: function (jsoin) {
                         $('.editLinkInput').hide();
@@ -269,7 +269,7 @@ humhub.module('onlyoffice', function (module, require, $) {
 
 
 
-    var init = function (pjax) {};
+    var init = function (pjax) { };
 
     var createSubmit = function (evt) {
         client.submit(evt).then(function (response) {
