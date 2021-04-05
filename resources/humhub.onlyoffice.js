@@ -49,13 +49,18 @@ humhub.module('onlyoffice', function (module, require, $) {
     Editor.prototype.close = function (evt) {
 
         if (this.options.editMode == 'edit') {
-            refreshFileInfo(this, evt);
+            if (this.docEditor.requestClose) {
+                onRequestCloseObj = this;
+                this.docEditor.requestClose();
+            } else {
+                refreshFileInfo(this, evt);
+            }
         } else {
+            this.docEditor.destroyEditor();
             this.modal.clear();
             this.modal.close();
             evt.finish();
         }
-        
         
     }
 
@@ -75,6 +80,7 @@ humhub.module('onlyoffice', function (module, require, $) {
         config.width = "100%";
         config.height = "100%";
         config.events = {
+            'onRequestClose': onRequestClose,
             //'onReady': onReady,
             //'onDocumentStateChange': onDocumentStateChange,
             //'onRequestEditRights': onRequestEditRights,
@@ -138,17 +144,28 @@ humhub.module('onlyoffice', function (module, require, $) {
         refreshFileInfo(this, evt);
     };
 
+    var onRequestCloseObj = null;
+    function onRequestClose() {
+        refreshFileInfo(onRequestCloseObj, null);
+    };
+
     function refreshFileInfo(that, evt) {
         client.post({url: that.options.fileInfoUrl}).then(function (response) {
             event.trigger('humhub:file:modified', [response.file]);
+            that.docEditor.destroyEditor();
             that.modal.clear();
             that.modal.close();
-            evt.finish();
+            if (evt && evt.finish) {
+                evt.finish();
+            }
         }).catch(function (e) {
             module.log.error(e);
+            that.docEditor.destroyEditor();
             that.modal.clear();
             that.modal.close();
-            evt.finish();
+            if (evt && evt.finish) {
+                evt.finish();
+            }
         });
     }
 
