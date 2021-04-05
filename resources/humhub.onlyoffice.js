@@ -50,16 +50,14 @@ humhub.module('onlyoffice', function (module, require, $) {
 
         if (this.options.editMode == 'edit') {
             if (this.docEditor.requestClose) {
-                onRequestCloseObj = this;
+                onRequestCloseObj = { that: this, evt: null };
                 this.docEditor.requestClose();
+                evt.finish();
             } else {
                 refreshFileInfo(this, evt);
             }
         } else {
-            this.docEditor.destroyEditor();
-            this.modal.clear();
-            this.modal.close();
-            evt.finish();
+            closeModal(this, evt);
         }
 
     }
@@ -146,29 +144,27 @@ humhub.module('onlyoffice', function (module, require, $) {
 
     var onRequestCloseObj = null;
     function onRequestClose() {
-        refreshFileInfo(onRequestCloseObj, null);
+        refreshFileInfo(onRequestCloseObj.that, onRequestCloseObj.evt);
     };
 
     function refreshFileInfo(that, evt) {
         client.post({ url: that.options.fileInfoUrl }).then(function (response) {
             event.trigger('humhub:file:modified', [response.file]);
-            that.docEditor.destroyEditor();
-            that.modal.clear();
-            that.modal.close();
-            if (evt && evt.finish) {
-                evt.finish();
-            }
+            closeModal(that, evt);
         }).catch(function (e) {
             module.log.error(e);
-            that.docEditor.destroyEditor();
-            that.modal.clear();
-            that.modal.close();
-            if (evt && evt.finish) {
-                evt.finish();
-            }
+            closeModal(that, evt);
         });
     }
 
+    function closeModal(that, evt) {
+        that.docEditor.destroyEditor();
+        that.modal.clear();
+        that.modal.close();
+        if (evt && evt.finish) {
+            evt.finish();
+        }
+    }
 
     var Share = function (node, options) {
         Widget.call(this, node, options);
