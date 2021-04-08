@@ -108,12 +108,19 @@ class EditorWidget extends JsWidget
         $user = Yii::$app->user->getIdentity();
         $key = $module->generateDocumentKey($this->file);
 
+        $url = Url::to(['/onlyoffice/backend/download', 'key' => $key], true);
+        $callbackUrl = Url::to(['/onlyoffice/backend/track', 'key' => $key], true);
+        if (!empty($module->getStorageUrl())) {
+            $url = $module->getStorageUrl() . Url::to(['/onlyoffice/backend/download', 'key' => $key], false);
+            $callbackUrl = $module->getStorageUrl() . Url::to(['/onlyoffice/backend/track', 'key' => $key], false);
+        }
+
         $config = [
             'type' => 'desktop',
             'documentType' => $this->documentType,
             'document' => [
                 'title' => Html::encode($this->file->fileName),
-                'url' => Url::to(['/onlyoffice/backend/download', 'key' => $key], true),
+                'url' => $url,
                 'fileType' => Html::encode(strtolower(FileHelper::getExtension($this->file))),
                 'key' => $key,
                 'info' => [
@@ -127,7 +134,7 @@ class EditorWidget extends JsWidget
             'editorConfig' => [
                 'mode' => $this->mode,
                 'lang' => ($user) && !empty($user->language) ? $user->language : Yii::$app->language,
-                'callbackUrl' => Url::to(['/onlyoffice/backend/track', 'key' => $key], true),
+                'callbackUrl' => $callbackUrl,
                 'user' => [
                     'id' => ($user) ? Html::encode($user->guid) : '',
                     'name' => ($user) ? Html::encode($user->displayname) : 'Anonymous User',

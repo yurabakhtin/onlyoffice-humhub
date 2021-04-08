@@ -13,6 +13,7 @@ class ConfigureForm extends \yii\base\Model
 
     public $serverUrl;
     public $jwtSecret;
+    public $storageUrl;
 
     /**
      * @inheritdoc
@@ -22,6 +23,7 @@ class ConfigureForm extends \yii\base\Model
         return [
             ['serverUrl', 'string'],
             ['jwtSecret', 'string'],
+            ['storageUrl', 'string'],
         ];
     }
 
@@ -33,6 +35,7 @@ class ConfigureForm extends \yii\base\Model
         return [
             'serverUrl' => Yii::t('OnlyofficeModule.base', 'Hostname'),
             'jwtSecret' => Yii::t('OnlyofficeModule.base', 'JWT Secret'),
+            'storageUrl' => Yii::t('OnlyofficeModule.base', 'Server address for internal requests from the Document Editing Service'),
         ];
     }
     
@@ -44,6 +47,7 @@ class ConfigureForm extends \yii\base\Model
         return [
             'serverUrl' => Yii::t('OnlyofficeModule.base', 'e.g. http://documentserver'),
             'jwtSecret' => Yii::t('OnlyofficeModule.base', 'JWT Secret key (leave blank to disable)'),
+            'storageUrl' => Yii::t('OnlyofficeModule.base', 'e.g. http://storage'),
         ];
     }
 
@@ -59,6 +63,7 @@ class ConfigureForm extends \yii\base\Model
     {
         Yii::$app->getModule('onlyoffice')->settings->set('serverUrl', rtrim($this->serverUrl, '/'));
         Yii::$app->getModule('onlyoffice')->settings->set('jwtSecret', $this->jwtSecret);
+        Yii::$app->getModule('onlyoffice')->settings->set('storageUrl', rtrim($this->storageUrl, '/'));
 
         return true;
     }
