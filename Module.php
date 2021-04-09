@@ -96,6 +96,11 @@ class Module extends \humhub\components\Module
         return $url;
     }
 
+    public function getStorageUrl()
+    {
+        return $this->settings->get('storageUrl');
+    }
+
     /**
      * 
      * @return type
