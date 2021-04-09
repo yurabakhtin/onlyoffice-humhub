@@ -30,6 +30,14 @@ use yii\helpers\Html;
         </div>
 
         <div class="form-group">
+            <?= $form->field($model, 'internalServerUrl'); ?>
+        </div>
+
+        <div class="form-group">
+            <?= $form->field($model, 'storageUrl'); ?>
+        </div>
+
+        <div class="form-group">
             <?= Html::submitButton('Submit', ['class' => 'btn btn-primary', 'data-ui-loader' => '']) ?>
         </div>
 
