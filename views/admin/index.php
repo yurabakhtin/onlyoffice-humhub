@@ -30,6 +30,10 @@ use yii\helpers\Html;
         </div>
 
         <div class="form-group">
+            <?= $form->field($model, 'internalServerUrl'); ?>
+        </div>
+
+        <div class="form-group">
             <?= $form->field($model, 'storageUrl'); ?>
         </div>
 

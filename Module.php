@@ -85,6 +85,17 @@ class Module extends \humhub\components\Module
         return $this->settings->get('serverUrl');
     }
 
+    public function getInternalServerUrl()
+    {
+        $url = $this->settings->get('internalServerUrl');
+
+        if (empty($url)) {
+            $url = $this->getServerUrl();
+        }
+
+        return $url;
+    }
+
     public function getStorageUrl()
     {
         return $this->settings->get('storageUrl');
@@ -159,7 +170,7 @@ class Module extends \humhub\components\Module
 
     public function commandService($data)
     {
-        $url = $this->getServerUrl() . '/coauthoring/CommandService.ashx';
+        $url = $this->getInternalServerUrl() . '/coauthoring/CommandService.ashx';
 
         try {
             $http = new \Zend\Http\Client($url, [
@@ -195,7 +206,7 @@ class Module extends \humhub\components\Module
 
     public function convertService($file, $ts)
     {
-        $url = $this->getServerUrl() . '/ConvertService.ashx';
+        $url = $this->getInternalServerUrl() . '/ConvertService.ashx';
         $key = $this->generateDocumentKey($file);
 
         $ext = FileHelper::getExtension($file);
