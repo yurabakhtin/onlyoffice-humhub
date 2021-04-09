@@ -51,6 +51,11 @@ class EditorWidget extends JsWidget
     protected $documentType = null;
 
     /**
+     * Mobile regex from https://github.com/ONLYOFFICE/CommunityServer/blob/v9.1.1/web/studio/ASC.Web.Studio/web.appsettings.config#L35
+     */
+    const USER_AGENT_MOBILE = "/android|avantgo|playbook|blackberry|blazer|compal|elaine|fennec|hiptop|iemobile|ip(hone|od|ad)|iris|kindle|lge |maemo|midp|mmp|opera m(ob|in)i|palm( os)?|phone|p(ixi|re)\\/|plucker|pocket|psp|symbian|treo|up\\.(browser|link)|vodafone|wap|windows (ce|phone)|xda|xiino/i";
+
+    /**
      * @inheritdoc
      */
     public function init()
@@ -144,6 +149,11 @@ class EditorWidget extends JsWidget
                 ]
             ]
         ];
+
+        $userAgent = Yii::$app->request->getUserAgent();
+        if (preg_match($this::USER_AGENT_MOBILE, $userAgent)) {
+            $config['type'] = 'mobile';
+        }
 
         if ($module->isJwtEnabled()) {
             $token = JWT::encode($config, $module->getJwtSecret());
