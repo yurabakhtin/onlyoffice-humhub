@@ -47,4 +47,6 @@ return [
     'JWT Secret key (leave blank to disable)' => 'JWT geheimer Schlüssel (zum Deaktivieren leer lassen)',
     'Share' => 'Freigeben',
     'View document' => 'Dokument anzeigen',
+    'Document Editing Service address for internal requests from the server' => 'Serviceadresse der Dokumentbearbeitung für interne Anforderungen vom Server',
+    'Server address for internal requests from the Document Editing Service' => 'Serveradresse für interne Anforderungen vom Dokumentbearbeitung-Service',
 ];

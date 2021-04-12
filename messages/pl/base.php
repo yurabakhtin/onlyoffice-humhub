@@ -47,4 +47,6 @@ return [
     'JWT Secret key (leave blank to disable)' => 'JWT Secret key (pozostaw puste, aby wyłączyć)',
     'Share' => 'Udostępnij',
     'View document' => 'Wyświetl dokument',
+    'Document Editing Service address for internal requests from the server' => 'Adres Usługi Edycji Dokumentów dla zapytań wewnętrznych',
+    'Server address for internal requests from the Document Editing Service' => 'Adres serwera dla zapytań wewnętrznych z Usługi Edycji Dokumentów',
 ];

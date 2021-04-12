@@ -47,4 +47,6 @@ return [
     'JWT Secret key (leave blank to disable)' => 'Chave secreta JWT (deixe em branco para desativar)',
     'Share' => 'Compartilhar',
     'View document' => 'Visualizar documento',
+    'Document Editing Service address for internal requests from the server' => 'Endereço do Serviço de Edição de Documentos para pedidos internos do servidor',
+    'Server address for internal requests from the Document Editing Service' => 'Endereço do servidor para pedidos internos do Serviço de Edição de Documentos',
 ];
