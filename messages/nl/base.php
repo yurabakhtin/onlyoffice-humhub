@@ -47,4 +47,6 @@ return [
     'JWT Secret key (leave blank to disable)' => 'JWT Geheime sleutel (leeg laten om niet te te gebruiken)',
     'Share' => 'Delen',
     'View document' => 'Bekijk Document',
+    'Document Editing Service address for internal requests from the server' => 'Adres van de Documentbewerkingsdienst voor interne verzoeken van de server',
+    'Server address for internal requests from the Document Editing Service' => 'Serveradres voor interne verzoeken van de Documentbewerkingsdienst',
 ];

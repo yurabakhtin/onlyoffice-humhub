@@ -47,4 +47,6 @@ return [
     'View document' => 'Xem tài liệu',
     'You can simply share this document using a direct link. The user does not need an valid user account on the platform.' => 'Bạn có thể chia sẻ tài liệu này bằng cách sử dụng một liên kết trực tiếp. Người dùng không cần phải có một tài khoản người dùng hợp lệ trên nền tảng này.',
     'e.g. http://documentserver' => 'ví dụ: http://documentserver',
+    'Document Editing Service address for internal requests from the server' => 'Địa chỉ Dịch Vụ Chỉnh Sửa Tài Liệu cho các yêu cầu nội bộ từ máy chủ',
+    'Server address for internal requests from the Document Editing Service' => 'Địa chỉ máy chủ cho các yêu cầu nội bộ từ Dịch Vụ Chỉnh Sửa Tài Liệu',
 ];

@@ -47,4 +47,6 @@ return [
     'JWT Secret key (leave blank to disable)' => 'JWT Salainen avain (tyhjä: pois käytöstä)',
     'Share' => 'Jaa',
     'View document' => 'Tarkasta tiedosto',
+    'Document Editing Service address for internal requests from the server' => 'Asiakirjan muokkauspalvelun osoite palvelimen sisäisille pyynnöille',
+    'Server address for internal requests from the Document Editing Service' => 'Palvelimen osoite asiakirjan muokkauspalvelun sisäisille pyynnöille',
 ];
