@@ -24,6 +24,32 @@ class CreateDocument extends Model
     public $documentType;
     public $fileName;
     public $openFlag = true;
+    private $localPath = [
+        "az" => "az-Latn-AZ",
+        "bg" => "bg-BG",
+        "cs" => "cs-CZ",
+        "de" => "de-DE",
+        "el" => "el-GR",
+        "en-US" => "en-US",
+        "en_GB" => "en-GB",
+        "es" => "es-ES",
+        "fr" => "fr-FR",
+        "it" => "it-IT",
+        "ja" => "ja-JP",
+        "ko" => "ko-KR",
+        "lv" => "lv-LV",
+        "nl" => "nl-NL",
+        "pl" => "pl-PL",
+        "pt_BR" => "pt-BR",
+        "pt" => "pt-PT",
+        "ru" => "ru-RU",
+        "sk" => "sk-SK",
+        "sv" => "sv-SE",
+        "uk" => "uk-UA",
+        "vi" => "vi-VN",
+        "zh-CN" => "zh-CN",
+        "zh-TW" => "zh-CN"
+    ];
 
     public function rules()
     {
@@ -42,11 +68,6 @@ class CreateDocument extends Model
 
     public function save()
     {
-
-        /* @var $module \humhub\modules\onlyoffice\Module */
-        $module = Yii::$app->getModule('onlyoffice');
-
-
         if (empty($this->documentType)) {
             throw new Exception("Document type cannot be empty");
         }
@@ -54,15 +75,15 @@ class CreateDocument extends Model
         if ($this->validate()) {
 
             if ($this->documentType == Module::DOCUMENT_TYPE_TEXT) {
-                $source = $module->getAssetPath() . '/new.docx';
+                $source = $this->templatePath() . '/new.docx';
                 $newFile = $this->fileName . '.docx';
                 $mime = 'application/vnd.openxmlformats-officedocument.wordprocessingml.document';
             } elseif ($this->documentType == Module::DOCUMENT_TYPE_PRESENTATION) {
-                $source = $module->getAssetPath() . '/new.pptx';
+                $source = $this->templatePath() . '/new.pptx';
                 $newFile = $this->fileName . '.pptx';
                 $mime = 'application/vnd.openxmlformats-officedocument.presentationml.presentation';
             } elseif ($this->documentType == Module::DOCUMENT_TYPE_SPREADSHEET) {
-                $source = $module->getAssetPath() . '/new.xlsx';
+                $source = $this->templatePath() . '/new.xlsx';
                 $newFile = $this->fileName . '.xlsx';
                 $mime = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet';
             }
@@ -78,6 +99,18 @@ class CreateDocument extends Model
         }
 
         return false;
+    }
+
+    private function templatePath() {
+        $module = Yii::$app->getModule('onlyoffice');
+        $user = Yii::$app->user->getIdentity();
+
+        $lang = ($user) && !empty($user->language) ? $user->language : Yii::$app->language;
+        if (!array_key_exists($lang, $this->localPath)) {
+            $lang = 'en-US';
+        }
+
+        return $module->getAssetPath() . '/templates/' . $this->localPath[$lang];
     }
 
 }
