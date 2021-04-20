@@ -2,6 +2,7 @@
 
 ## Added
 - advanced server settings for specifying internal addresses
+- Empty file templates added in multiple new languages
 
 ## 2.1.4
 ## Fixed
