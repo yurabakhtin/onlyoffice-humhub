@@ -21,7 +21,7 @@ class Events
     public static function onFileHandlerCollection($event)
     {
         if (!Yii::$app->user->can(CanUseOnlyOffice::class)) {
-            //return;
+            return;
         }
 
         /* @var $collection FileHandlerCollection */
