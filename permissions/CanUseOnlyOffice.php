@@ -38,4 +38,9 @@ class CanUseOnlyOffice extends BasePermission
         return Yii::t('OnlyofficeModule.base', 'Allows the user to use OnlyOffice.');
     }
 
+    /**
+     * @inheritdoc
+     */
+    protected $defaultState = self::STATE_ALLOW;
+
 }
