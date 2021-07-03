@@ -8,6 +8,8 @@
 
 namespace humhub\modules\onlyoffice\controllers;
 
+use humhub\components\access\ControllerAccess;
+use humhub\modules\onlyoffice\permissions\CanUseOnlyOffice;
 use Yii;
 use yii\web\HttpException;
 use yii\helpers\Url;
@@ -16,6 +18,16 @@ use humhub\modules\onlyoffice\Module;
 
 class CreateController extends \humhub\components\Controller
 {
+
+    /**
+     * @inheritdoc
+     */
+    public function getAccessRules()
+    {
+        return [
+            [ControllerAccess::RULE_PERMISSION => [CanUseOnlyOffice::class]],
+        ];
+    }
 
     public function actionIndex()
     {

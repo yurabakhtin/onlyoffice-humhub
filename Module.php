@@ -253,4 +253,18 @@ class Module extends \humhub\components\Module
         }
     }
 
+    /**
+     * @inheritdoc
+     */
+    public function getPermissions($contentContainer = null)
+    {
+        if (!$contentContainer) {
+            return [
+                new permissions\CanUseOnlyOffice(),
+            ];
+        }
+
+        return [];
+    }
+
 }

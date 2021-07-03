@@ -8,8 +8,9 @@
 
 namespace humhub\modules\onlyoffice;
 
-use Yii;
 use humhub\modules\file\handler\FileHandlerCollection;
+use humhub\modules\onlyoffice\permissions\CanUseOnlyOffice;
+use Yii;
 
 /**
  * @author luke
@@ -19,6 +20,10 @@ class Events
 
     public static function onFileHandlerCollection($event)
     {
+        if (!Yii::$app->user->can(CanUseOnlyOffice::class)) {
+            return;
+        }
+
         /* @var $collection FileHandlerCollection */
         $collection = $event->sender;
 
