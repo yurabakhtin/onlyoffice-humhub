@@ -49,4 +49,6 @@ return [
     'View document' => 'Wyświetl dokument',
     'Document Editing Service address for internal requests from the server' => 'Adres Usługi Edycji Dokumentów dla zapytań wewnętrznych',
     'Server address for internal requests from the Document Editing Service' => 'Adres serwera dla zapytań wewnętrznych z Usługi Edycji Dokumentów',
+    'Can use ONLYOFFICE' => 'Może korzystać z ONLYOFFICE',
+    'Allows the user to use ONLYOFFICE.' => 'Zezwala użytkownikowi na korzystanie z ONLYOFFICE.',
 ];
