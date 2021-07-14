@@ -15,6 +15,7 @@ use humhub\modules\file\models\File;
 use humhub\modules\onlyoffice\Module;
 use humhub\components\Controller;
 use humhub\modules\onlyoffice\models\Share;
+use humhub\modules\content\components\ContentActiveRecord;
 
 /**
  * Description of BaseFileController
@@ -82,7 +83,7 @@ class BaseFileController extends Controller
     /**
      * Returns the URL for the file content - to redirect to
      * 
-     * @return type
+     * @return string
      */
     protected function determineContentFileUrl()
     {
@@ -93,8 +94,9 @@ class BaseFileController extends Controller
 
         $underlyingObject = $this->file->getPolymorphicRelation();
 
-        if ($underlyingObject !== null && method_exists($underlyingObject, 'getUrl')) {
-            return $underlyingObject->getUrl();
+        if ($underlyingObject !== null && $underlyingObject instanceof ContentActiveRecord && $underlyingObject->content->canView()) {
+            /** @var ContentActiveRecord $underlyingObject */
+            return $underlyingObject->content->getUrl();
         }
         
         return Url::home();
