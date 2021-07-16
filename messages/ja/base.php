@@ -49,4 +49,6 @@ return [
     'e.g. http://documentserver' => '例えば、http://documentserver',
     'Document Editing Service address for internal requests from the server' => '内部利用向けドキュメント編集サービスアドレス',
     'Server address for internal requests from the Document Editing Service' => '内部利用向けドキュメント編集サービスアドレス',
+    'Can use ONLYOFFICE' => 'ONLYOFFICEを使用できる',
+    'Allows the user to use ONLYOFFICE.' => 'ユーザーがONLYOFFICEを使用できるようにします。',
 ];

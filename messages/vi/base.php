@@ -49,4 +49,6 @@ return [
     'e.g. http://documentserver' => 'ví dụ: http://documentserver',
     'Document Editing Service address for internal requests from the server' => 'Địa chỉ Dịch Vụ Chỉnh Sửa Tài Liệu cho các yêu cầu nội bộ từ máy chủ',
     'Server address for internal requests from the Document Editing Service' => 'Địa chỉ máy chủ cho các yêu cầu nội bộ từ Dịch Vụ Chỉnh Sửa Tài Liệu',
+    'Can use ONLYOFFICE' => 'Có thể sử dụng ONLYOFFICE',
+    'Allows the user to use ONLYOFFICE.' => 'Cho phép người dùng sử dụng ONLYOFFICE.',
 ];

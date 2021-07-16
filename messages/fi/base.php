@@ -49,4 +49,6 @@ return [
     'View document' => 'Tarkasta tiedosto',
     'Document Editing Service address for internal requests from the server' => 'Asiakirjan muokkauspalvelun osoite palvelimen sisäisille pyynnöille',
     'Server address for internal requests from the Document Editing Service' => 'Palvelimen osoite asiakirjan muokkauspalvelun sisäisille pyynnöille',
+    'Can use ONLYOFFICE' => 'Voi käyttää ONLYOFFICEA',
+    'Allows the user to use ONLYOFFICE.' => 'Sallii käyttäjän käyttää ONLYOFFICEA.',
 ];

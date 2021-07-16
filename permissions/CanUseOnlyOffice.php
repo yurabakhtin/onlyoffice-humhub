@@ -27,7 +27,7 @@ class CanUseOnlyOffice extends BasePermission
      */
     public function getTitle()
     {
-        return Yii::t('OnlyofficeModule.base', 'Can use OnlyOffice');
+        return Yii::t('OnlyofficeModule.base', 'Can use ONLYOFFICE');
     }
 
     /**
@@ -35,7 +35,7 @@ class CanUseOnlyOffice extends BasePermission
      */
     public function getDescription()
     {
-        return Yii::t('OnlyofficeModule.base', 'Allows the user to use OnlyOffice.');
+        return Yii::t('OnlyofficeModule.base', 'Allows the user to use ONLYOFFICE.');
     }
 
     /**
