@@ -47,4 +47,8 @@ return [
     'View document' => '文書を表示する',
     'You can simply share this document using a direct link. The user does not need an valid user account on the platform.' => '直接リンクを使用して文書共有できます。受信側はプラットホームで有効なユーザーアカウントを持っている必要ではありません。',
     'e.g. http://documentserver' => '例えば、http://documentserver',
+    'Document Editing Service address for internal requests from the server' => '内部利用向けドキュメント編集サービスアドレス',
+    'Server address for internal requests from the Document Editing Service' => '内部利用向けドキュメント編集サービスアドレス',
+    'Can use ONLYOFFICE' => 'ONLYOFFICEを使用できる',
+    'Allows the user to use ONLYOFFICE.' => 'ユーザーがONLYOFFICEを使用できるようにします。',
 ];

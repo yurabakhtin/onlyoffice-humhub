@@ -47,4 +47,8 @@ return [
     'Share' => 'Podijeli',
     'View document' => 'Pogledaj dokument',
     'e.g. http://documentserver' => 'Npr. http://documentserver',
+    'Document Editing Service address for internal requests from the server' => 'Adresa pružatelja usluge uređivanja dokumenata za interne zahtjeve od strane poslužitelja',
+    'Server address for internal requests from the Document Editing Service' => 'Adresa poslužitelja za interne zahtjeve od strane pružatelja usluge uređivanja dokumenata',
+    'Can use ONLYOFFICE' => 'Može koristiti ONLYOFFICE',
+    'Allows the user to use ONLYOFFICE.' => 'Omogućuje korisniku da upotrebljava ONLYOFFICE.',
 ];

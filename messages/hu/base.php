@@ -47,4 +47,8 @@ return [
     'JWT Secret key (leave blank to disable)' => 'JWT Titok kulcs (hagyd üresen a kikapcsoláshoz)',
     'Share' => 'Megosztás',
     'View document' => 'Dokumentum megnézése',
+    'Document Editing Service address for internal requests from the server' => 'Dokumentumszerkesztő szolgáltatás elérési címe szerveroldali belső lekérésekhez',
+    'Server address for internal requests from the Document Editing Service' => 'Szerver elérési címe a Dokumentumszerkesztő szolgáltatástól érkező belső lekérésekhez',
+    'Can use ONLYOFFICE' => 'ONLYOFFICE használható',
+    'Allows the user to use ONLYOFFICE.' => 'Lehetővé teszi, hogy a felhasználó használja az ONLYOFFICE-t.',
 ];

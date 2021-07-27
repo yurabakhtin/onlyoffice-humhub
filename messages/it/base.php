@@ -47,4 +47,8 @@ return [
     'JWT Secret key (leave blank to disable)' => 'Chiave segreta JWT (lasciare vuoto per disabilitare)',
     'Share' => 'Condividi',
     'View document' => 'Vedere il documento',
+    'Document Editing Service address for internal requests from the server' => 'Indirizzo del Document Editing Service per le richieste interne del server',
+    'Server address for internal requests from the Document Editing Service' => 'Indirizzo del server per le richieste interne del Document Editing Service',
+    'Can use ONLYOFFICE' => 'Può usare ONLYOFFICE',
+    'Allows the user to use ONLYOFFICE.' => 'Permette all'utente di usare ONLYOFFICE.',
 ];
