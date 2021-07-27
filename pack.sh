@@ -10,6 +10,7 @@ mkdir -p ./deploy/onlyoffice
 cd /tmp/humhub-deploy/
 
 rm -rf ./.git/
+rm -rf ./resources/templates/.git/
 rm ./.gitignore
 rm ./pack.sh
 
