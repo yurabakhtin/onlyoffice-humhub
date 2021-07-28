@@ -37,8 +37,8 @@ class ConfigureForm extends \yii\base\Model
         return [
             'serverUrl' => Yii::t('OnlyofficeModule.base', 'Hostname'),
             'jwtSecret' => Yii::t('OnlyofficeModule.base', 'JWT Secret'),
-            'internalServerUrl' => Yii::t('OnlyofficeModule.base', 'Document Editing Service address for internal requests from the server'),
-            'storageUrl' => Yii::t('OnlyofficeModule.base', 'Server address for internal requests from the Document Editing Service'),
+            'internalServerUrl' => Yii::t('OnlyofficeModule.base', 'ONLYOFFICE Docs address for internal requests from the server'),
+            'storageUrl' => Yii::t('OnlyofficeModule.base', 'Server address for internal requests from ONLYOFFICE Docs'),
         ];
     }
     
