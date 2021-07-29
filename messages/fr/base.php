@@ -50,5 +50,5 @@ return [
     'Document Editing Service address for internal requests from the server' => 'Adresse du service d’édition de document pour les demandes internes du serveur',
     'Server address for internal requests from the Document Editing Service' => 'Adresse du serveur pour les demandes internes du service d’édition de document',
     'Can use ONLYOFFICE' => 'Peut utiliser ONLYOFFICE',
-    'Allows the user to use ONLYOFFICE.' => 'Permet à l'utilisateur d'utiliser ONLYOFFICE.',
+    'Allows the user to use ONLYOFFICE.' => 'Permet à l\'utilisateur d\'utiliser ONLYOFFICE.',
 ];

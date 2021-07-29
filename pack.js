@@ -6,7 +6,7 @@ var regex = /^([#]+) (.*)/gm;
 
 var mappings = {
     "README.md": ["# HumHub ONLYOFFICE integration plugin", "## Features"],
-    "INSTALLATION.md": ["## Installing ONLYOFFICE Document Server", "## Installing HumHub ONLYOFFICE integration plugin", "## Configuring HumHub CONLYOFFICE integration plugin"],
+    "INSTALLATION.md": ["## Installing ONLYOFFICE Docs", "## Installing HumHub ONLYOFFICE integration plugin", "## Configuring HumHub CONLYOFFICE integration plugin"],
     "DEVELOPER.md": ["## How it works"],
     "MANUAL.md": []
 }
