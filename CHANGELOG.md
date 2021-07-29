@@ -1,5 +1,9 @@
 # Change Log
 
+## 2.2.1
+## Fixed
+- Fixed French and Italian translations
+
 ## 2.2.0
 ## Added
 - advanced server settings for specifying internal addresses

@@ -50,5 +50,5 @@ return [
     'ONLYOFFICE Docs address for internal requests from the server' => 'Adresse du ONLYOFFICE Docs pour les demandes internes du serveur',
     'Server address for internal requests from ONLYOFFICE Docs' => 'Adresse du serveur pour les demandes internes du ONLYOFFICE Docs',
     'Can use ONLYOFFICE' => 'Peut utiliser ONLYOFFICE',
-    'Allows the user to use ONLYOFFICE.' => 'Permet à l'utilisateur d'utiliser ONLYOFFICE.',
+    'Allows the user to use ONLYOFFICE.' => 'Permet à l\'utilisateur d\'utiliser ONLYOFFICE.',
 ];
