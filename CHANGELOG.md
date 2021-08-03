@@ -1,5 +1,8 @@
 # Change Log
 
+## 2.1.5
+- Enh #5216: Rename button to "Open"
+
 ## 2.1.4
 ## Fixed
 - Missing `<?php` tag
