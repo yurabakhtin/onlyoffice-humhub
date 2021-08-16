@@ -34,9 +34,9 @@ class Module extends \humhub\components\Module
     /**
      * Only document types
      */
-    const DOCUMENT_TYPE_TEXT = 'text';
-    const DOCUMENT_TYPE_PRESENTATION = 'presentation';
-    const DOCUMENT_TYPE_SPREADSHEET = 'spreadsheet';
+    const DOCUMENT_TYPE_TEXT = 'word';
+    const DOCUMENT_TYPE_PRESENTATION = 'slide';
+    const DOCUMENT_TYPE_SPREADSHEET = 'cell';
 
     /**
      * @var string[] allowed spreadsheet extensions 
