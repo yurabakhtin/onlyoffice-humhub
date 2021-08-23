@@ -1,5 +1,9 @@
 # Change Log
 
+## 2.2.2
+## Fixed
+- Fixed JWT
+
 ## 2.2.1
 ## Fixed
 - Fixed French and Italian translations
