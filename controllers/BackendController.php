@@ -84,8 +84,11 @@ class BackendController extends Controller
                 $token = null;
                 if (!empty($data["token"])) {
                     $token = $data["token"];
-                } else if (!empty($_SERVER['HTTP_AUTHORIZATION'])) {
-                    $token = substr($_SERVER['HTTP_AUTHORIZATION'], strlen('Bearer '));
+                } else {
+                    $header = Yii::$app->request->headers->get('Authorization');
+                    if (!empty($header)) {
+                        $token = substr($header, strlen('Bearer '));
+                    }
                 }
 
                 if (empty($token)) {
@@ -94,7 +97,7 @@ class BackendController extends Controller
 
                 try {
                     $ds = JWT::decode($token, $module->getJwtSecret(), array('HS256'));
-                    $data = (array)$ds->payload;
+                    $data = isset($ds->payload) ? (array)$ds->payload : (array)$ds;
                 } catch (\Exception $ex) {
                     throw new \Exception('Invalid JWT signature');
                 }
