@@ -1,5 +1,8 @@
 # Change Log
 
+## Changed
+- document server v6.0 and earlier is no longer supported
+
 ## 2.2.2
 ## Fixed
 - Fixed JWT
