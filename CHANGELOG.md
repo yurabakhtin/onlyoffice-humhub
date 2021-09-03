@@ -2,6 +2,7 @@
 
 ## Changed
 - document server v6.0 and earlier is no longer supported
+- Fixed opening file when maintenance mode
 
 ## 2.2.2
 ## Fixed
