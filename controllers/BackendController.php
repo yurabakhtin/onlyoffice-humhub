@@ -13,6 +13,7 @@ use yii\web\HttpException;
 use humhub\modules\file\models\File;
 use humhub\modules\user\models\User;
 use humhub\components\Controller;
+use \humhub\components\Module;
 use \Firebase\JWT\JWT;
 
 class BackendController extends Controller
@@ -29,14 +30,35 @@ class BackendController extends Controller
     public $file;
 
     /**
+     * @var Module
+     */
+    public $module;
+
+    /**
      * @inheritdoc
      */
     public function beforeAction($action)
     {
+        $this->module = Yii::$app->getModule('onlyoffice');
         $this->enableCsrfValidation = false;
 
-        $key = Yii::$app->request->get('key');
+        $hash = Yii::$app->request->get('doc');
+        list ($hashData, $error) = $this->module->readHash($hash);
+        if (!empty($error)) {
+            throw new HttpException(404, 'Backend action with empty or invalid hash');
+        }
+
+        $key = $hashData->key;
+        $userGuid = isset($hashData->userGuid) ? $hashData->userGuid : null;
+
         $this->file = File::findOne(['onlyoffice_key' => $key]);
+
+        if (Yii::$app->settings->get('maintenanceMode')) {
+            $user = User::findOne(['guid' => $userGuid]);
+            if (!empty($user) && $user->isSystemAdmin()) {
+                Yii::$app->user->login($user);
+            }
+        }
 
         if ($this->file == null) {
             throw new HttpException(404, Yii::t('OnlyofficeModule.base', 'Could not find requested file!'));
@@ -79,8 +101,7 @@ class BackendController extends Controller
                 throw new \Exception('Could not parse json');
             }
 
-            $module = Yii::$app->getModule('onlyoffice');
-            if ($module->isJwtEnabled()) {
+            if ($this->module->isJwtEnabled()) {
                 $token = null;
                 if (!empty($data["token"])) {
                     $token = $data["token"];
@@ -96,7 +117,7 @@ class BackendController extends Controller
                 }
 
                 try {
-                    $ds = JWT::decode($token, $module->getJwtSecret(), array('HS256'));
+                    $ds = JWT::decode($token, $this->module->getJwtSecret(), array('HS256'));
                     $data = isset($ds->payload) ? (array)$ds->payload : (array)$ds;
                 } catch (\Exception $ex) {
                     throw new \Exception('Invalid JWT signature');

@@ -267,4 +267,36 @@ class Module extends \humhub\components\Module
         return [];
     }
 
+    /**
+     * @inheritdoc
+     */
+    public function generateHash($key, $userGuid)
+    {
+        $data = [
+            'key' => $key
+        ];
+
+        if (!empty($userGuid)) {
+            $data['userGuid'] = $userGuid;
+        }
+
+        return JWT::encode($data, Yii::$app->settings->get('secret'));
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function readHash($hash)
+    {
+        try {
+            $data = JWT::decode($hash, Yii::$app->settings->get('secret'), array('HS256'));
+        } catch (\Exception $ex) {
+            $error = 'Invalid hash ' . $ex->getMessage();
+            Yii::error($error);
+            return [null, $error];
+        }
+
+        return [$data, null];
+    }
+
 }
