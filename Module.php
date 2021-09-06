@@ -209,6 +209,14 @@ class Module extends \humhub\components\Module
         $url = $this->getInternalServerUrl() . '/ConvertService.ashx';
         $key = $this->generateDocumentKey($file);
 
+        $user = Yii::$app->user->getIdentity();
+        $userGuid = null;
+        if (isset($user->guid)) {
+            $userGuid = $user->guid;
+        }
+
+        $docHash = $this->generateHash($key, $userGuid);
+
         $ext = FileHelper::getExtension($file);
         $data = [
             'async' => true,
@@ -216,7 +224,7 @@ class Module extends \humhub\components\Module
             'filetype' => $ext,
             'outputtype' => $this->convertsTo[$ext],
             'key' => $key . $ts,
-            'url' => Url::to(['/onlyoffice/backend/download', 'key' => $key], true),
+            'url' => Url::to(['/onlyoffice/backend/download', 'doc' => $docHash], true),
         ];
 
         try {
