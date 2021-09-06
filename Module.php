@@ -209,6 +209,14 @@ class Module extends \humhub\components\Module
         $url = $this->getInternalServerUrl() . '/ConvertService.ashx';
         $key = $this->generateDocumentKey($file);
 
+        $user = Yii::$app->user->getIdentity();
+        $userGuid = null;
+        if (isset($user->guid)) {
+            $userGuid = $user->guid;
+        }
+
+        $docHash = $this->generateHash($key, $userGuid);
+
         $ext = FileHelper::getExtension($file);
         $data = [
             'async' => true,
@@ -216,7 +224,7 @@ class Module extends \humhub\components\Module
             'filetype' => $ext,
             'outputtype' => $this->convertsTo[$ext],
             'key' => $key . $ts,
-            'url' => Url::to(['/onlyoffice/backend/download', 'key' => $key], true),
+            'url' => Url::to(['/onlyoffice/backend/download', 'doc' => $docHash], true),
         ];
 
         try {
@@ -265,6 +273,38 @@ class Module extends \humhub\components\Module
         }
 
         return [];
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function generateHash($key, $userGuid)
+    {
+        $data = [
+            'key' => $key
+        ];
+
+        if (!empty($userGuid)) {
+            $data['userGuid'] = $userGuid;
+        }
+
+        return JWT::encode($data, Yii::$app->settings->get('secret'));
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function readHash($hash)
+    {
+        try {
+            $data = JWT::decode($hash, Yii::$app->settings->get('secret'), array('HS256'));
+        } catch (\Exception $ex) {
+            $error = 'Invalid hash ' . $ex->getMessage();
+            Yii::error($error);
+            return [null, $error];
+        }
+
+        return [$data, null];
     }
 
 }
