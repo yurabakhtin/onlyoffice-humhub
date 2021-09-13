@@ -18,10 +18,10 @@
  */
 return [
     '<strong>Create</strong> document' => 'Dokument <strong>erstellen</strong> ',
-    '<strong>DocumentServer</strong> not accessible.' => '<strong>DocumentServer</strong> nicht erreichbar',
-    '<strong>DocumentServer</strong> not configured yet.' => '<strong>DocumentServer</strong> wurde noch nicht konfiguriert.',
-    '<strong>DocumentServer</strong> successfully connected! - Installed version: {version}' => 'Erfolgreich mit dem <strong>DocumentServer</strong> verbunden! – Installierte Version: {version}',
-    '<strong>ONLYOFFICE - DocumentServer</strong> module configuration' => '<strong>ONLYOFFICE – DocumentServer</strong> Modul-Konfiguration',
+    '<strong>ONLYOFFICE Docs</strong> not accessible.' => '<strong>ONLYOFFICE Docs</strong> nicht erreichbar',
+    '<strong>ONLYOFFICE Docs</strong> not configured yet.' => '<strong>ONLYOFFICE Docs</strong> wurde noch nicht konfiguriert.',
+    '<strong>ONLYOFFICE Docs</strong> successfully connected! - Installed version: {version}' => 'Erfolgreich mit dem <strong>ONLYOFFICE Docs</strong> verbunden! – Installierte Version: {version}',
+    '<strong>ONLYOFFICE - Docs</strong> module configuration' => '<strong>ONLYOFFICE – Docs</strong> Modul-Konfiguration',
     '<strong>Share</strong> document' => 'Dokument <strong>teilen</strong>',
     'Close' => 'Schließen',
     'Copy to clipboard' => 'In die Zwischenablage kopieren',
@@ -36,7 +36,7 @@ return [
     'You can simply share this document using a direct link. The user does not need an valid user account on the platform.' => 'Du kannst dieses Dokument einfach über einen direkten Link teilen. Der Nutzer benötigt kein gültiges Benutzerkonto auf der Plattform.',
     'e.g. http://documentserver' => 'z.B. http://documentserver',
     '<strong>Convert</strong> document' => 'Dokument <strong>konvertieren</strong>',
-    '<strong>DocumentServer</strong> invalid JWT token.' => '<strong>DocumentServer</strong> ungültiges JWT-Token.',
+    '<strong>ONLYOFFICE Docs</strong> invalid JWT token.' => '<strong>ONLYOFFICE Docs</strong> ungültiges JWT-Token.',
     'Convert document' => 'Dokument konvertieren',
     'Converting <strong>{oldFileName}</strong> to <strong>{newFileName}</strong>..' => 'Konvertieren <strong>{oldFileName}</strong> zu <strong>{newFileName}</strong>..',
     'Create document <small>(Text, Spreadsheet, Presentation)</small>' => 'Dokument erstellen <small>(Text, Tabellenkalkulation, Präsentation)</small>',
@@ -47,4 +47,8 @@ return [
     'JWT Secret key (leave blank to disable)' => 'JWT geheimer Schlüssel (zum Deaktivieren leer lassen)',
     'Share' => 'Freigeben',
     'View document' => 'Dokument anzeigen',
+    'ONLYOFFICE Docs address for internal requests from the server' => 'Die Adresse von ONLYOFFICE Docs für interne Anforderungen vom Server',
+    'Server address for internal requests from ONLYOFFICE Docs' => 'Serveradresse für interne Anforderungen  vom ONLYOFFICE Docs',
+    'Can use ONLYOFFICE' => 'Kann ONLYOFFICE benutzen',
+    'Allows the user to use ONLYOFFICE.' => 'Erlaubt diesem Benutzer Arbeit in ONLYOFFICE.',
 ];

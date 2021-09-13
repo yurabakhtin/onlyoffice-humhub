@@ -1,0 +1,4 @@
+[submodule "resources/templates"]
+	path = resources/templates
+	url = https://github.com/ONLYOFFICE/document-templates
+	branch = main/new

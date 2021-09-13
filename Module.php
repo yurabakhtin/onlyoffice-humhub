@@ -34,9 +34,9 @@ class Module extends \humhub\components\Module
     /**
      * Only document types
      */
-    const DOCUMENT_TYPE_TEXT = 'text';
-    const DOCUMENT_TYPE_PRESENTATION = 'presentation';
-    const DOCUMENT_TYPE_SPREADSHEET = 'spreadsheet';
+    const DOCUMENT_TYPE_TEXT = 'word';
+    const DOCUMENT_TYPE_PRESENTATION = 'slide';
+    const DOCUMENT_TYPE_SPREADSHEET = 'cell';
 
     /**
      * @var string[] allowed spreadsheet extensions 
@@ -83,6 +83,22 @@ class Module extends \humhub\components\Module
     public function getServerUrl()
     {
         return $this->settings->get('serverUrl');
+    }
+
+    public function getInternalServerUrl()
+    {
+        $url = $this->settings->get('internalServerUrl');
+
+        if (empty($url)) {
+            $url = $this->getServerUrl();
+        }
+
+        return $url;
+    }
+
+    public function getStorageUrl()
+    {
+        return $this->settings->get('storageUrl');
     }
 
     /**
@@ -154,7 +170,7 @@ class Module extends \humhub\components\Module
 
     public function commandService($data)
     {
-        $url = $this->getServerUrl() . '/coauthoring/CommandService.ashx';
+        $url = $this->getInternalServerUrl() . '/coauthoring/CommandService.ashx';
 
         try {
             $http = new \Zend\Http\Client($url, [
@@ -190,8 +206,16 @@ class Module extends \humhub\components\Module
 
     public function convertService($file, $ts)
     {
-        $url = $this->getServerUrl() . '/ConvertService.ashx';
+        $url = $this->getInternalServerUrl() . '/ConvertService.ashx';
         $key = $this->generateDocumentKey($file);
+
+        $user = Yii::$app->user->getIdentity();
+        $userGuid = null;
+        if (isset($user->guid)) {
+            $userGuid = $user->guid;
+        }
+
+        $docHash = $this->generateHash($key, $userGuid);
 
         $ext = FileHelper::getExtension($file);
         $data = [
@@ -200,7 +224,7 @@ class Module extends \humhub\components\Module
             'filetype' => $ext,
             'outputtype' => $this->convertsTo[$ext],
             'key' => $key . $ts,
-            'url' => Url::to(['/onlyoffice/backend/download', 'key' => $key], true),
+            'url' => Url::to(['/onlyoffice/backend/download', 'doc' => $docHash], true),
         ];
 
         try {
@@ -235,6 +259,52 @@ class Module extends \humhub\components\Module
             Yii::error($error);
             return [ 'error' => $error ];
         }
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getPermissions($contentContainer = null)
+    {
+        if (!$contentContainer) {
+            return [
+                new permissions\CanUseOnlyOffice(),
+            ];
+        }
+
+        return [];
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function generateHash($key, $userGuid)
+    {
+        $data = [
+            'key' => $key
+        ];
+
+        if (!empty($userGuid)) {
+            $data['userGuid'] = $userGuid;
+        }
+
+        return JWT::encode($data, Yii::$app->settings->get('secret'));
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function readHash($hash)
+    {
+        try {
+            $data = JWT::decode($hash, Yii::$app->settings->get('secret'), array('HS256'));
+        } catch (\Exception $ex) {
+            $error = 'Invalid hash ' . $ex->getMessage();
+            Yii::error($error);
+            return [null, $error];
+        }
+
+        return [$data, null];
     }
 
 }

@@ -57,6 +57,10 @@ humhub.module('onlyoffice', function (module, require, $) {
                 refreshFileInfo(this, evt);
             }
         } else {
+            this.docEditor.destroyEditor();
+            this.modal.clear();
+            this.modal.close();
+            evt.finish();
             closeModal(this, evt);
         }
 
@@ -150,9 +154,25 @@ humhub.module('onlyoffice', function (module, require, $) {
     function refreshFileInfo(that, evt) {
         client.post({ url: that.options.fileInfoUrl }).then(function (response) {
             event.trigger('humhub:file:modified', [response.file]);
+            if (that.docEditor) {
+                that.docEditor.destroyEditor();
+            }
+            if (that.modal) {
+                that.modal.clear();
+                that.modal.close();
+            }
+            evt.finish();
             closeModal(that, evt);
         }).catch(function (e) {
+            if (that.docEditor) {
+                that.docEditor.destroyEditor();
+            }
             module.log.error(e);
+            if (that.modal) {
+                that.modal.clear();
+                that.modal.close();
+            }
+            evt.finish();
             closeModal(that, evt);
         });
     }

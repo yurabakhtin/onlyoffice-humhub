@@ -18,10 +18,10 @@
  */
 return [
     '<strong>Create</strong> document' => '<strong>Criar</strong> documento',
-    '<strong>DocumentServer</strong> not accessible.' => '<strong>Servidor de Documentos</strong> não acessível.',
-    '<strong>DocumentServer</strong> not configured yet.' => '<strong>Servidor de Documentos</strong> não configurado.',
-    '<strong>DocumentServer</strong> successfully connected! - Installed version: {version}' => '<strong>Servidor de Documentos</strong> conectado com sucesso! - Versão instalada: {version}',
-    '<strong>ONLYOFFICE - DocumentServer</strong> module configuration' => '<strong>ONLYOFFICE - Servidor de Documentos</strong> Configuração de módulo',
+    '<strong>ONLYOFFICE Docs</strong> not accessible.' => '<strong>ONLYOFFICE Docs</strong> não acessível.',
+    '<strong>ONLYOFFICE Docs</strong> not configured yet.' => '<strong>ONLYOFFICE Docs</strong> não configurado.',
+    '<strong>ONLYOFFICE Docs</strong> successfully connected! - Installed version: {version}' => '<strong>ONLYOFFICE Docs</strong> conectado com sucesso! - Versão instalada: {version}',
+    '<strong>ONLYOFFICE - Docs</strong> module configuration' => '<strong>ONLYOFFICE - Docs</strong> Configuração de módulo',
     '<strong>Share</strong> document' => '<strong>Compartilhar</strong> documento',
     'Close' => 'Fechar',
     'Copy to clipboard' => 'Copiar para área de transferência',
@@ -36,7 +36,7 @@ return [
     'You can simply share this document using a direct link. The user does not need an valid user account on the platform.' => 'Você pode simplesmente compartilhar esse documento usando um link direto. O usuário não precisa de uma conta válida na plataforma.',
     'e.g. http://documentserver' => 'e.g. http://documentserver',
     '<strong>Convert</strong> document' => '<strong>Converter</strong> documento',
-    '<strong>DocumentServer</strong> invalid JWT token.' => '<strong>Servidor de Documentos</strong> token JWT inválido.',
+    '<strong>ONLYOFFICE Docs</strong> invalid JWT token.' => '<strong>ONLYOFFICE Docs</strong> token JWT inválido.',
     'Convert document' => 'Converter documento',
     'Converting <strong>{oldFileName}</strong> to <strong>{newFileName}</strong>..' => 'Convertendo <strong>{oldFileName}</strong> para <strong>{newFileName}</strong>..',
     'Create document <small>(Text, Spreadsheet, Presentation)</small>' => 'Criar documento <small>(Texto, Planilha, Apresentação)</small>',
@@ -47,4 +47,8 @@ return [
     'JWT Secret key (leave blank to disable)' => 'Chave secreta JWT (deixe em branco para desativar)',
     'Share' => 'Compartilhar',
     'View document' => 'Visualizar documento',
+    'ONLYOFFICE Docs address for internal requests from the server' => 'Endereço do ONLYOFFICE Docs para pedidos internos do servidor',
+    'Server address for internal requests from ONLYOFFICE Docs' => 'Endereço do servidor para pedidos internos do ONLYOFFICE Docs',
+    'Can use ONLYOFFICE' => 'Pode usar ONLYOFFICE',
+    'Allows the user to use ONLYOFFICE.' => 'Permite que o usuário use ONLYOFFICE.',
 ];

@@ -51,6 +51,11 @@ class EditorWidget extends JsWidget
     protected $documentType = null;
 
     /**
+     * Mobile regex from https://github.com/ONLYOFFICE/CommunityServer/blob/v9.1.1/web/studio/ASC.Web.Studio/web.appsettings.config#L35
+     */
+    const USER_AGENT_MOBILE = "/android|avantgo|playbook|blackberry|blazer|compal|elaine|fennec|hiptop|iemobile|ip(hone|od|ad)|iris|kindle|lge |maemo|midp|mmp|opera m(ob|in)i|palm( os)?|phone|p(ixi|re)\\/|plucker|pocket|psp|symbian|treo|up\\.(browser|link)|vodafone|wap|windows (ce|phone)|xda|xiino/i";
+
+    /**
      * @inheritdoc
      */
     public function init()
@@ -106,14 +111,26 @@ class EditorWidget extends JsWidget
     {
         $module = Yii::$app->getModule('onlyoffice');
         $user = Yii::$app->user->getIdentity();
+        $userGuid = null;
+        if (isset($user->guid)) {
+            $userGuid = $user->guid;
+        }
         $key = $module->generateDocumentKey($this->file);
+        $docHash = $module->generateHash($key, $userGuid);
+
+        $url = Url::to(['/onlyoffice/backend/download', 'doc' => $docHash], true);
+        $callbackUrl = Url::to(['/onlyoffice/backend/track', 'doc' => $docHash], true);
+        if (!empty($module->getStorageUrl())) {
+            $url = $module->getStorageUrl() . Url::to(['/onlyoffice/backend/download', 'doc' => $docHash], false);
+            $callbackUrl = $module->getStorageUrl() . Url::to(['/onlyoffice/backend/track', 'doc' => $docHash], false);
+        }
 
         $config = [
             'type' => 'desktop',
             'documentType' => $this->documentType,
             'document' => [
                 'title' => Html::encode($this->file->fileName),
-                'url' => Url::to(['/onlyoffice/backend/download', 'key' => $key], true),
+                'url' => $url,
                 'fileType' => Html::encode(strtolower(FileHelper::getExtension($this->file))),
                 'key' => $key,
                 'info' => [
@@ -127,7 +144,7 @@ class EditorWidget extends JsWidget
             'editorConfig' => [
                 'mode' => $this->mode,
                 'lang' => ($user) && !empty($user->language) ? $user->language : Yii::$app->language,
-                'callbackUrl' => Url::to(['/onlyoffice/backend/track', 'key' => $key], true),
+                'callbackUrl' => $callbackUrl,
                 'user' => [
                     'id' => ($user) ? Html::encode($user->guid) : '',
                     'name' => ($user) ? Html::encode($user->displayname) : 'Anonymous User',
@@ -137,6 +154,11 @@ class EditorWidget extends JsWidget
                 ]
             ]
         ];
+
+        $userAgent = Yii::$app->request->getUserAgent();
+        if (preg_match($this::USER_AGENT_MOBILE, $userAgent)) {
+            $config['type'] = 'mobile';
+        }
 
         if ($module->isJwtEnabled()) {
             $token = JWT::encode($config, $module->getJwtSecret());

@@ -18,10 +18,10 @@
  */
 return [
     '<strong>Create</strong> document' => 'Dokumentum <strong>létrehozása</strong>',
-    '<strong>DocumentServer</strong> not accessible.' => '<strong>DocumentServer</strong> nem elérhető.',
-    '<strong>DocumentServer</strong> not configured yet.' => '<strong>DocumentServer</strong> még nincs konfigurálva.',
-    '<strong>DocumentServer</strong> successfully connected! - Installed version: {version}' => '<strong>DocumentServer</strong> sikeresen kapcsolódott! - Telepített verzió: {version}',
-    '<strong>ONLYOFFICE - DocumentServer</strong> module configuration' => '<strong>ONLYOFFICE - DocumentServer</strong> modul konfiguráció',
+    '<strong>ONLYOFFICE Docs</strong> not accessible.' => '<strong>ONLYOFFICE Docs</strong> nem elérhető.',
+    '<strong>ONLYOFFICE Docs</strong> not configured yet.' => '<strong>ONLYOFFICE Docs</strong> még nincs konfigurálva.',
+    '<strong>ONLYOFFICE Docs</strong> successfully connected! - Installed version: {version}' => '<strong>ONLYOFFICE Docs</strong> sikeresen kapcsolódott! - Telepített verzió: {version}',
+    '<strong>ONLYOFFICE - Docs</strong> module configuration' => '<strong>ONLYOFFICE - Docs</strong> modul konfiguráció',
     '<strong>Share</strong> document' => 'Dokumentum <strong>megosztása</strong>',
     'Close' => 'Bezárás',
     'Copy to clipboard' => 'Másolás a vágólapra',
@@ -36,7 +36,7 @@ return [
     'You can simply share this document using a direct link. The user does not need an valid user account on the platform.' => 'Egyszerűen megoszthatod ezt a dokumentumot közvetlen hivatkozás használatával. A felhasználónak nem kell érvényes felhasználói fiókkal rendelkeznie a platformon.',
     'e.g. http://documentserver' => 'pl. http://documentserver',
     '<strong>Convert</strong> document' => 'Dokumentum <strong>konvertálása</strong>',
-    '<strong>DocumentServer</strong> invalid JWT token.' => '<strong>DocumentServer</strong> érvénytelen JWT  jelkép.',
+    '<strong>ONLYOFFICE Docs</strong> invalid JWT token.' => '<strong>ONLYOFFICE Docs</strong> érvénytelen JWT  jelkép.',
     'Convert document' => 'Dokumentum konvertálása',
     'Converting <strong>{oldFileName}</strong> to <strong>{newFileName}</strong>..' => '<strong>{oldFileName}</strong> konvertálása <strong>{newFileName}</strong>-re..',
     'Create document <small>(Text, Spreadsheet, Presentation)</small>' => 'Dokumentum készítése <small>(Szöveg,  Táblázatkezelő, Prezentáció)</small>',
@@ -47,4 +47,8 @@ return [
     'JWT Secret key (leave blank to disable)' => 'JWT Titok kulcs (hagyd üresen a kikapcsoláshoz)',
     'Share' => 'Megosztás',
     'View document' => 'Dokumentum megnézése',
+    'ONLYOFFICE Docs address for internal requests from the server' => 'ONLYOFFICE Docs elérési címe szerveroldali belső lekérésekhez',
+    'Server address for internal requests from ONLYOFFICE Docs' => 'Szerver elérési címe a ONLYOFFICE Docs érkező belső lekérésekhez',
+    'Can use ONLYOFFICE' => 'ONLYOFFICE használható',
+    'Allows the user to use ONLYOFFICE.' => 'Lehetővé teszi, hogy a felhasználó használja az ONLYOFFICE-t.',
 ];

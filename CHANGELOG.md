@@ -1,5 +1,23 @@
 # Change Log
 
+## Changed
+- document server v6.0 and earlier is no longer supported
+- Fixed opening file when maintenance mode
+
+## 2.2.2
+## Fixed
+- Fixed JWT
+
+## 2.2.1
+## Fixed
+- Fixed French and Italian translations
+
+## 2.2.0
+## Added
+- advanced server settings for specifying internal addresses
+- Empty file templates added in multiple new languages
+- access for groups to the application
+
 ## 2.1.4
 ## Fixed
 - Missing `<?php` tag

@@ -18,10 +18,10 @@
  */
 return [
     '<strong>Create</strong> document' => '<strong>Utwórz</strong> dokument',
-    '<strong>DocumentServer</strong> not accessible.' => '<strong>DocumentServer</strong> niedostępny.',
-    '<strong>DocumentServer</strong> not configured yet.' => '<strong>DocumentServer</strong> jeszcze nie skonfigurowany.',
-    '<strong>DocumentServer</strong> successfully connected! - Installed version: {version}' => '<strong>DocumentServer</strong> Połączono - Zainstalowana wersja: {version}',
-    '<strong>ONLYOFFICE - DocumentServer</strong> module configuration' => '<strong>ONLYOFFICE - DocumentServer</strong> konfiguracja modułu',
+    '<strong>ONLYOFFICE Docs</strong> not accessible.' => '<strong>ONLYOFFICE Docs</strong> niedostępny.',
+    '<strong>ONLYOFFICE Docs</strong> not configured yet.' => '<strong>ONLYOFFICE Docs</strong> jeszcze nie skonfigurowany.',
+    '<strong>ONLYOFFICE Docs</strong> successfully connected! - Installed version: {version}' => '<strong>ONLYOFFICE Docs</strong> Połączono - Zainstalowana wersja: {version}',
+    '<strong>ONLYOFFICE - Docs</strong> module configuration' => '<strong>ONLYOFFICE - Docs</strong> konfiguracja modułu',
     '<strong>Share</strong> document' => '<strong>Udostępnij</strong> dokument',
     'Close' => 'Zamknij',
     'Copy to clipboard' => 'Kopiuj do schowka',
@@ -36,7 +36,7 @@ return [
     'You can simply share this document using a direct link. The user does not need an valid user account on the platform.' => 'Możesz udostępnić ten dokument używając bezpośredniego odnośnika. Użytkownik nie musi posiadać konta na tej platformie.',
     'e.g. http://documentserver' => 'np. http://documentserver',
     '<strong>Convert</strong> document' => '<strong>Konwertuj</strong> dokument',
-    '<strong>DocumentServer</strong> invalid JWT token.' => '<strong>DocumentServer</strong> nieprawidłowy token JWT.',
+    '<strong>ONLYOFFICE Docs</strong> invalid JWT token.' => '<strong>ONLYOFFICE Docs</strong> nieprawidłowy token JWT.',
     'Convert document' => 'Konwertuj dokument',
     'Converting <strong>{oldFileName}</strong> to <strong>{newFileName}</strong>..' => 'Konwertowanie <strong>{oldFileName}</strong> do <strong>{newFileName}</strong>..',
     'Create document <small>(Text, Spreadsheet, Presentation)</small>' => 'Utwórz dokument <small>(Tekst, Arkusz kalkulacyjny, Prezentacja)</small>',
@@ -47,4 +47,8 @@ return [
     'JWT Secret key (leave blank to disable)' => 'JWT Secret key (pozostaw puste, aby wyłączyć)',
     'Share' => 'Udostępnij',
     'View document' => 'Wyświetl dokument',
+    'ONLYOFFICE Docs address for internal requests from the server' => 'Adres ONLYOFFICE Docs dla zapytań wewnętrznych',
+    'Server address for internal requests from ONLYOFFICE Docs' => 'Adres serwera dla zapytań wewnętrznych z ONLYOFFICE Docs',
+    'Can use ONLYOFFICE' => 'Może korzystać z ONLYOFFICE',
+    'Allows the user to use ONLYOFFICE.' => 'Zezwala użytkownikowi na korzystanie z ONLYOFFICE.',
 ];

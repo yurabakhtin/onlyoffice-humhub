@@ -18,10 +18,10 @@
  */
 return [
     '<strong>Create</strong> document' => '<strong>Kreiraj</strong> dokument',
-    '<strong>DocumentServer</strong> not accessible.' => '<strong>DokumentServer</strong> nije pristupačan.',
-    '<strong>DocumentServer</strong> not configured yet.' => '<strong>DokumentServer</strong> još nije konfiguriran.',
-    '<strong>DocumentServer</strong> successfully connected! - Installed version: {version}' => '<strong>DokumentServer</strong> uspješno spojen! - Instalirana verzija: {version}',
-    '<strong>ONLYOFFICE - DocumentServer</strong> module configuration' => '<strong>ONLYOFFICE - DokumentServer</strong> konfiguracija modula',
+    '<strong>ONLYOFFICE Docs</strong> not accessible.' => '<strong>ONLYOFFICE Docs</strong> nije pristupačan.',
+    '<strong>ONLYOFFICE Docs</strong> not configured yet.' => '<strong>ONLYOFFICE Docs</strong> još nije konfiguriran.',
+    '<strong>ONLYOFFICE Docs</strong> successfully connected! - Installed version: {version}' => '<strong>ONLYOFFICE Docs</strong> uspješno spojen! - Instalirana verzija: {version}',
+    '<strong>ONLYOFFICE - Docs</strong> module configuration' => '<strong>ONLYOFFICE - Docs</strong> konfiguracija modula',
     '<strong>Share</strong> document' => '<strong>Dijeli</strong> dokument',
     'Close' => 'Zatvori',
     'Copy to clipboard' => 'Kopiraj u međuspremnik',
@@ -35,7 +35,7 @@ return [
     'Open the new document in the next step' => 'Otvori novi dokument u sljedećem koraku',
     'You can simply share this document using a direct link. The user does not need an valid user account on the platform.' => 'Možete jednostavno podijeliti ovaj dokument koristeći direktnu poveznicu (link). Korisnik ne treba registirani račun na platformi.',
     '<strong>Convert</strong> document' => '<strong>Pretvori</strong> dokument',
-    '<strong>DocumentServer</strong> invalid JWT token.' => '<strong>DokumentServer</strong> nevažeći JWT token',
+    '<strong>ONLYOFFICE Docs</strong> invalid JWT token.' => '<strong>ONLYOFFICE Docs</strong> nevažeći JWT token',
     'Convert document' => 'Pretvori dokument',
     'Converting <strong>{oldFileName}</strong> to <strong>{newFileName}</strong>..' => 'Pretvaranje <strong>{oldFileName}</strong> u <strong>{newFileName}</strong>..',
     'Create document <small>(Text, Spreadsheet, Presentation)</small>' => 'Kreiraj dokument <small>(Tekst, Proračunska tablica, Prezentacija)</small>',
@@ -47,4 +47,8 @@ return [
     'Share' => 'Podijeli',
     'View document' => 'Pogledaj dokument',
     'e.g. http://documentserver' => 'Npr. http://documentserver',
+    'ONLYOFFICE Docs address for internal requests from the server' => 'Adresa pružatelja ONLYOFFICE Docs za interne zahtjeve od strane poslužitelja',
+    'Server address for internal requests from ONLYOFFICE Docs' => 'Adresa poslužitelja za interne zahtjeve od strane pružatelja ONLYOFFICE Docs',
+    'Can use ONLYOFFICE' => 'Može koristiti ONLYOFFICE',
+    'Allows the user to use ONLYOFFICE.' => 'Omogućuje korisniku da upotrebljava ONLYOFFICE.',
 ];
