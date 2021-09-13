@@ -1,5 +1,8 @@
 # Change Log
 
+## Added
+- check unsaved changes before closing
+
 ## Changed
 - document server v6.0 and earlier is no longer supported
 - Fixed opening file when maintenance mode
