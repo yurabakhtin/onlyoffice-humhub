@@ -51,4 +51,5 @@ return [
     'Server address for internal requests from ONLYOFFICE Docs' => 'Adresse du serveur pour les demandes internes du ONLYOFFICE Docs',
     'Can use ONLYOFFICE' => 'Peut utiliser ONLYOFFICE',
     'Allows the user to use ONLYOFFICE.' => 'Permet à l\'utilisateur d\'utiliser ONLYOFFICE.',
+    'Disable certificate verification (insecure)' => 'Désactiver la vérification du certificat (non sur)',
 ];
