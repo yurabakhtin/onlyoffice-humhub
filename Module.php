@@ -267,4 +267,37 @@ class Module extends \humhub\components\Module
         return [];
     }
 
+    /**
+     * @inheritdoc
+     */
+    public function request($url, $method = 'GET', $options = [])
+    {
+        $curloptions = CURLHelper::getOptions();
+        if (substr($url, 0, strlen("https")) === "https" && $this->getVerifyPeerOff()) {
+            $curloptions[CURLOPT_SSL_VERIFYPEER] = false;
+            $curloptions[CURLOPT_SSL_VERIFYHOST] = 0;
+        }
+
+        $http = new \Zend\Http\Client($url, [
+            'adapter' => '\Zend\Http\Client\Adapter\Curl',
+            'curloptions' => $curloptions,
+            'timeout' => 10
+        ]);
+
+        $http->setMethod($method);
+
+        if (array_key_exists('headers', $options)) {
+            $headers = $http->getRequest()->getHeaders();
+            foreach ($options['headers'] as $nameHeader => $header) {
+                $headers->addHeaderLine($nameHeader, $header);
+            }
+
+        }
+
+        if (array_key_exists('body', $options)) {
+            $http->setRawBody(Json::encode($options['body']));
+        }
+
+        return $http->send();
+    }
 }
