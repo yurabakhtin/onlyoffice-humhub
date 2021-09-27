@@ -101,6 +101,11 @@ class Module extends \humhub\components\Module
         return $this->settings->get('storageUrl');
     }
 
+    public function getVerifyPeerOff()
+    {
+        return $this->settings->get('verifyPeerOff');
+    }
+
     /**
      * 
      * @return type
@@ -173,23 +178,19 @@ class Module extends \humhub\components\Module
         $url = $this->getInternalServerUrl() . '/coauthoring/CommandService.ashx';
 
         try {
-            $http = new \Zend\Http\Client($url, [
-                'adapter' => '\Zend\Http\Client\Adapter\Curl',
-                'curloptions' => CURLHelper::getOptions(),
-                'timeout' => 10
-            ]);
-            $http->setMethod('POST');
-            $headers = $http->getRequest()->getHeaders();
-
+            $headers = [];
+            $headers['Accept'] = 'application/json';
             if ($this->isJwtEnabled()) {
                 $data['token'] = JWT::encode($data, $this->getJwtSecret());
-                $headers->addHeaderLine('Authorization', 'Bearer ' . JWT::encode(['payload' => $data], $this->getJwtSecret()));
+                $headers['Authorization'] = 'Bearer ' . JWT::encode(['payload' => $data], $this->getJwtSecret());
             }
 
-            $http->setRawBody(Json::encode($data));
-            $headers->addHeaderLine('Accept', 'application/json');
+            $options = array(
+                'headers' => $headers,
+                'body' => $data
+            );
 
-            $response = $http->send();
+            $response = $this->request($url, 'POST', $options);
             $json = $response->getBody();
         } catch (\Exception $ex) {
             Yii::error('Could not get document server response! ' . $ex->getMessage());
@@ -228,23 +229,19 @@ class Module extends \humhub\components\Module
         ];
 
         try {
-            $http = new \Zend\Http\Client($url, [
-                'adapter' => '\Zend\Http\Client\Adapter\Curl',
-                'curloptions' => CURLHelper::getOptions(),
-                'timeout' => 10
-            ]);
-            $http->setMethod('POST');
-            $headers = $http->getRequest()->getHeaders();
-
+            $headers = [];
+            $headers['Accept'] = 'application/json';
             if ($this->isJwtEnabled()) {
                 $data['token'] = JWT::encode($data, $this->getJwtSecret());
-                $headers->addHeaderLine('Authorization', 'Bearer ' . JWT::encode(['payload' => $data], $this->getJwtSecret()));
+                $headers['Authorization'] = 'Bearer ' . JWT::encode(['payload' => $data], $this->getJwtSecret());
             }
 
-            $http->setRawBody(Json::encode($data));
-            $headers->addHeaderLine('Accept', 'application/json');
+            $options = array(
+                'headers' => $headers,
+                'body' => $data
+            );
 
-            $response = $http->send();
+            $response = $this->request($url, 'POST', $options);
             $json = $response->getBody();
         } catch (\Exception $ex) {
             $error = 'Could not get document server response! ' . $ex->getMessage();
@@ -307,4 +304,37 @@ class Module extends \humhub\components\Module
         return [$data, null];
     }
 
+    /**
+     * @inheritdoc
+     */
+    public function request($url, $method = 'GET', $options = [])
+    {
+        $curloptions = CURLHelper::getOptions();
+        if (substr($url, 0, strlen("https")) === "https" && $this->getVerifyPeerOff()) {
+            $curloptions[CURLOPT_SSL_VERIFYPEER] = false;
+            $curloptions[CURLOPT_SSL_VERIFYHOST] = 0;
+        }
+
+        $http = new \Zend\Http\Client($url, [
+            'adapter' => '\Zend\Http\Client\Adapter\Curl',
+            'curloptions' => $curloptions,
+            'timeout' => 10
+        ]);
+
+        $http->setMethod($method);
+
+        if (array_key_exists('headers', $options)) {
+            $headers = $http->getRequest()->getHeaders();
+            foreach ($options['headers'] as $nameHeader => $header) {
+                $headers->addHeaderLine($nameHeader, $header);
+            }
+
+        }
+
+        if (array_key_exists('body', $options)) {
+            $http->setRawBody(Json::encode($options['body']));
+        }
+
+        return $http->send();
+    }
 }

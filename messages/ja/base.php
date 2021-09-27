@@ -51,4 +51,5 @@ return [
     'Server address for internal requests from ONLYOFFICE Docs' => 'ONLYOFFICE Docsからの内部リクエストにはサーバーアドレス',
     'Can use ONLYOFFICE' => 'ONLYOFFICEを使用できる',
     'Allows the user to use ONLYOFFICE.' => 'ユーザーがONLYOFFICEを使用できるようにします。',
+    'Disable certificate verification (insecure)' => '証明書の検証を無効にする（安全でない',
 ];

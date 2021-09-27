@@ -1,6 +1,7 @@
 # Change Log
 
 ## Added
+- certificate verification setting
 - check unsaved changes before closing
 
 ## Changed
