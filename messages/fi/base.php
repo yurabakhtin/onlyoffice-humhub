@@ -51,4 +51,5 @@ return [
     'Server address for internal requests from ONLYOFFICE Docs' => 'Palvelimen osoite ONLYOFFICE Docs sisäisille pyynnöille',
     'Can use ONLYOFFICE' => 'Voi käyttää ONLYOFFICEA',
     'Allows the user to use ONLYOFFICE.' => 'Sallii käyttäjän käyttää ONLYOFFICEA.',
+    'Disable certificate verification (insecure)' => 'Poista varmenteen vahvistus käytöstä (epävarma)',
 ];
