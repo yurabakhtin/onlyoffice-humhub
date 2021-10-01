@@ -51,4 +51,5 @@ return [
     'Server address for internal requests from ONLYOFFICE Docs' => 'Szerver elérési címe a ONLYOFFICE Docs érkező belső lekérésekhez',
     'Can use ONLYOFFICE' => 'ONLYOFFICE használható',
     'Allows the user to use ONLYOFFICE.' => 'Lehetővé teszi, hogy a felhasználó használja az ONLYOFFICE-t.',
+    'Disable certificate verification (insecure)' => 'Tanúsítvány ellenőrzésének letiltása (bizonytalan)',
 ];
