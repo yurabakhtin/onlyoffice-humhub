@@ -64,6 +64,7 @@ class ConfigureForm extends \yii\base\Model
         $this->verifyPeerOff = (boolean)Yii::$app->getModule('onlyoffice')->settings->get('verifyPeerOff');
         $this->jwtSecret = Yii::$app->getModule('onlyoffice')->settings->get('jwtSecret');
         $this->internalServerUrl = Yii::$app->getModule('onlyoffice')->settings->get('internalServerUrl');
+        $this->storageUrl = Yii::$app->getModule('onlyoffice')->settings->get('storageUrl');
 
         return true;
     }
