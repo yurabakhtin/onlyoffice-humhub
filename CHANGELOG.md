@@ -1,5 +1,8 @@
 # Change Log
 
+## 2.2.0 - Unreleased
+- Versioning support
+
 ## 2.1.4
 ## Fixed
 - Missing `<?php` tag
