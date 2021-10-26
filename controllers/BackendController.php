@@ -118,14 +118,11 @@ class BackendController extends Controller
 
                     if (!empty($newData)) {
 
-                        $newFile = new File();
-                        $newFile->size = strlen($newData);
+                        $this->file->setStoredFileContent($newData);
 
-                        if (!$this->file->replaceWithFile($newFile)) {
+                        if (!$this->file->save()) {
                             throw new \Exception('Could not save onlyoffice document: ' . $data["url"]);
                         }
-
-                        $newFile->store->setContent($newData);
 
                         if ($status != 'ForceSave') {
                             $newAttr = [
@@ -135,7 +132,7 @@ class BackendController extends Controller
                             ];
                             if (!empty($user)) $newAttr['updated_by'] = $user->getId();
 
-                            $newFile->updateAttributes($newAttr);
+                            $this->file->updateAttributes($newAttr);
                             //Yii::warning('Dosaved', 'onlyoffice');
                         } else {
                             //Yii::warning('ForceSaved', 'onlyoffice');
