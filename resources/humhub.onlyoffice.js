@@ -50,9 +50,11 @@ humhub.module('onlyoffice', function (module, require, $) {
 
         if (this.options.editMode == 'edit') {
             if (this.docEditor.requestClose) {
-                onRequestCloseObj = { that: this, evt: null };
-                this.docEditor.requestClose();
-                evt.finish();
+                setTimeout(() => {
+                    onRequestCloseObj = { that: this, evt: null };
+                    this.docEditor.requestClose();
+                    evt.finish();
+                }, 0);
             } else {
                 refreshFileInfo(this, evt);
             }
