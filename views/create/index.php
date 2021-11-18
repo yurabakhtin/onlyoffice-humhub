@@ -50,15 +50,19 @@ $modal = \humhub\widgets\ModalDialog::begin([
     .try-editor.presentation {
         background-image: url("<?= $this->context->module->getPublishedUrl('/file_pptx.png'); ?>");
     }
+    .try-editor.masterform {
+        background-image: url("<?= $this->context->module->getPublishedUrl('/file_docx.png'); ?>");
+    }
 </style>
 <div class="modal-body">
     <br />
     <span class="try-descr">Please select a document type.</span>
     <br />
     <ul class="try-editor-list">
-        <li><a class="try-editor document" data-action-click="ui.modal.load" data-action-url="<?= Url::to(['document', 'type' => Module::DOCUMENT_TYPE_TEXT]); ?>">Document</a></li>
-        <li><a class="try-editor spreadsheet" data-action-click="ui.modal.load" data-action-url="<?= Url::to(['document', 'type' => Module::DOCUMENT_TYPE_SPREADSHEET]); ?>">Spreadsheet</a></li>
-        <li><a class="try-editor presentation" data-action-click="ui.modal.load" data-action-url="<?= Url::to(['document', 'type' => Module::DOCUMENT_TYPE_PRESENTATION]); ?>">Presentation</a></li>
+        <li><a class="try-editor document" data-action-click="ui.modal.load" data-action-url="<?= Url::to(['document', 'extension' => 'docx']); ?>">Document</a></li>
+        <li><a class="try-editor spreadsheet" data-action-click="ui.modal.load" data-action-url="<?= Url::to(['document', 'extension' => 'xlsx']); ?>">Spreadsheet</a></li>
+        <li><a class="try-editor presentation" data-action-click="ui.modal.load" data-action-url="<?= Url::to(['document', 'extension' => 'pptx']); ?>">Presentation</a></li>
+        <li><a class="try-editor masterform" data-action-click="ui.modal.load" data-action-url="<?= Url::to(['document', 'extension' => 'docxf']); ?>">Master Form</a></li>
     </ul>
 </div>
 <?php \humhub\widgets\ModalDialog::end(); ?>

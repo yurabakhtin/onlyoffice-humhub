@@ -21,7 +21,7 @@ use humhub\modules\file\models\File;
 class CreateDocument extends Model
 {
 
-    public $documentType;
+    public $extension;
     public $fileName;
     public $openFlag = true;
     private $localPath = [
@@ -68,24 +68,23 @@ class CreateDocument extends Model
 
     public function save()
     {
-        if (empty($this->documentType)) {
-            throw new Exception("Document type cannot be empty");
+        if (empty($this->extension)) {
+            throw new Exception("File extension cannot be empty");
         }
 
         if ($this->validate()) {
 
-            if ($this->documentType == Module::DOCUMENT_TYPE_TEXT) {
-                $source = $this->templatePath() . '/new.docx';
-                $newFile = $this->fileName . '.docx';
+            $source = $this->templatePath() . '/new.' . $this->extension;
+            $newFile = $this->fileName . '.' . $this->extension;
+
+            if ($this->extension == 'docx') {
                 $mime = 'application/vnd.openxmlformats-officedocument.wordprocessingml.document';
-            } elseif ($this->documentType == Module::DOCUMENT_TYPE_PRESENTATION) {
-                $source = $this->templatePath() . '/new.pptx';
-                $newFile = $this->fileName . '.pptx';
+            } elseif ($this->extension == 'xlsx') {
                 $mime = 'application/vnd.openxmlformats-officedocument.presentationml.presentation';
-            } elseif ($this->documentType == Module::DOCUMENT_TYPE_SPREADSHEET) {
-                $source = $this->templatePath() . '/new.xlsx';
-                $newFile = $this->fileName . '.xlsx';
+            } elseif ($this->extension == 'pptx') {
                 $mime = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet';
+            } elseif ($this->extension == 'docxf') {
+                $mime = 'application/vnd.openxmlformats-officedocument.wordprocessingml.document';
             }
 
             $file = new File();

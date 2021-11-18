@@ -51,12 +51,12 @@ class Module extends \humhub\components\Module
     /**
      * @var string[] allowed text extensions 
      */
-    public $textExtensions = ['docx', 'doc', 'odt', 'rtf', 'txt', 'html', 'htm', 'mht', 'pdf', 'djvu', 'fb2', 'epub', 'xps'];
+    public $textExtensions = ['docx', 'docxf', 'oform', 'doc', 'odt', 'rtf', 'txt', 'html', 'htm', 'mht', 'pdf', 'djvu', 'fb2', 'epub', 'xps'];
 
     /**
      * @var string[] allowed for editing extensions
      */
-    public $editableExtensions = ['xlsx', 'ppsx', 'pptx', 'docx' ];
+    public $editableExtensions = ['xlsx', 'ppsx', 'pptx', 'docx', 'docxf', 'oform' ];
     public $convertableExtensions = ['doc','odt','xls','ods','ppt','odp','txt','csv'];
 
     

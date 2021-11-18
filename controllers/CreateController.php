@@ -38,18 +38,7 @@ class CreateController extends \humhub\components\Controller
     {
 
         $model = new \humhub\modules\onlyoffice\models\CreateDocument();
-        $model->documentType = Yii::$app->request->get('type');
-
-        $ext = '';
-        if ($model->documentType == Module::DOCUMENT_TYPE_TEXT) {
-            $ext = '.docx';
-        } elseif ($model->documentType == Module::DOCUMENT_TYPE_PRESENTATION) {
-            $ext = '.pptx';
-        } elseif ($model->documentType == Module::DOCUMENT_TYPE_SPREADSHEET) {
-            $ext = '.xlsx';
-        } else {
-            throw new HttpException("Invalid document type!");
-        }
+        $model->extension = Yii::$app->request->get('extension');
 
         if ($model->load(Yii::$app->request->post())) {
 
@@ -70,7 +59,7 @@ class CreateController extends \humhub\components\Controller
             }
         }
 
-        return $this->renderAjax('document', ['model' => $model, 'ext' => $ext]);
+        return $this->renderAjax('document', ['model' => $model, 'ext' => $model->extension]);
     }
 
     public function determineContentFileUrl($file)
