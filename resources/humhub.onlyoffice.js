@@ -8,6 +8,10 @@ humhub.module('onlyoffice', function (module, require, $) {
     var loader = require('ui.loader');
     var ooJSLoadRetries = 0;
 
+    var editorData = {
+        saveasUrl: null
+    };
+
     var Editor = function (node, options) {
         Widget.call(this, node, options);
     };
@@ -72,10 +76,13 @@ humhub.module('onlyoffice', function (module, require, $) {
             }
         }
         
+        editorData.saveasUrl = this.options.saveasUrl;
+
         var config = this.options.config;
         config.width = "100%";
         config.height = "100%";
         config.events = {
+            'onRequestSaveAs': onRequestSaveAs,
             //'onReady': onReady,
             //'onDocumentStateChange': onDocumentStateChange,
             //'onRequestEditRights': onRequestEditRights,
@@ -138,6 +145,19 @@ humhub.module('onlyoffice', function (module, require, $) {
     Convert.prototype.close = function (evt) {
         refreshFileInfo(this, evt);
     };
+
+    function onRequestSaveAs(evt) {
+        var saveData = {
+            name: evt.data.title,
+            url: evt.data.url
+        };
+
+        client.post(editorData.saveasUrl, {data: JSON.stringify(saveData), dataType: 'json'}).then((response) => {
+            event.trigger('humhub:file:created.cfiles', [response.file]);
+        }).catch(function(e) {
+            module.log.error(e, true);
+        });
+    }
 
     function refreshFileInfo(that, evt) {
         client.post({url: that.options.fileInfoUrl}).then(function (response) {

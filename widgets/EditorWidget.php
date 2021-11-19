@@ -80,6 +80,7 @@ class EditorWidget extends JsWidget
             'config' => $this->getConfig(),
             'edit-mode' => $this->mode,
             'file-info-url' => Url::to(['/onlyoffice/open/get-info', 'guid' => $this->file->guid]),
+            'saveas-url' => Url::to(['/onlyoffice/api/saveas'], true),
             'module-configured' => (empty($module->getServerUrl()) ? '0' : '1'),
         ];
     }
