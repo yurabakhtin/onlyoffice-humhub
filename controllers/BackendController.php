@@ -121,7 +121,7 @@ class BackendController extends Controller
 
                     if (!empty($newData)) {
 
-                        if (version_compare(Yii::$app->version, '1.10', '=>')) {
+                        if (version_compare(Yii::$app->version, '1.10', '>=')) {
                             // For HumHub from version 1.10 with versioning support
                             $this->file->setStoredFileContent($newData);
                         } else {
