@@ -9,7 +9,9 @@ $modal = \humhub\widgets\ModalDialog::begin([
 ?>
 <style>
 
-
+    .modal-dialog {
+        width: 800px;
+    }
     .try-editor-list {
         list-style: none;
         margin: 0;
@@ -51,7 +53,7 @@ $modal = \humhub\widgets\ModalDialog::begin([
         background-image: url("<?= $this->context->module->getPublishedUrl('/file_pptx.png'); ?>");
     }
     .try-editor.masterform {
-        background-image: url("<?= $this->context->module->getPublishedUrl('/file_docx.png'); ?>");
+        background-image: url("<?= $this->context->module->getPublishedUrl('/file_docxf.png'); ?>");
     }
 </style>
 <div class="modal-body">
