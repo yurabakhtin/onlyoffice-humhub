@@ -120,7 +120,14 @@ class BackendController extends Controller
                     $newData = file_get_contents($data["url"]);
 
                     if (!empty($newData)) {
-                        $this->file->getStore()->setContent($newData);
+
+                        if (version_compare(Yii::$app->version, '1.10', '=>')) {
+                            // For HumHub from version 1.10 with versioning support
+                            $this->file->setStoredFileContent($newData);
+                        } else {
+                            // Older HumHub versions
+                            $this->file->getStore()->setContent($newData);
+                        }
 
                         if ($status != 'ForceSave') {
                             $newAttr = [
