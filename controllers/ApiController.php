@@ -38,14 +38,14 @@ class ApiController extends Controller
             throw new \Exception('Could not parse json');
         }
 
-        $response = $this->module->request($data["url"]);
+        $response = $this->module->request($data['url']);
 
         $newContent = $response->getBody();
         $headers = $response->getHeaders()->toArray();
 
         $file = new File();
-        $file->file_name = $data["name"];
-        $file->size = $headers['Content-Length'];
+        $file->file_name = $data['name'];
+        $file->size = mb_strlen($newContent, '8bit');
         $file->mime_type = $headers['Content-Type'];
         $file->save();
         $file->getStore()->setContent($newContent);
