@@ -49,12 +49,12 @@ class ApiController extends Controller
         $response = $this->module->request($data['url']);
 
         $newContent = $response->getBody();
-        $headers = $response->getHeaders()->toArray();
+        $fileExt = pathinfo($data['name'], PATHINFO_EXTENSION);
 
         $file = new File();
         $file->file_name = $data['name'];
         $file->size = mb_strlen($newContent, '8bit');
-        $file->mime_type = $headers['Content-Type'];
+        $file->mime_type = $this->module->mimes[$fileExt];
         $file->save();
         $file->getStore()->setContent($newContent);
 

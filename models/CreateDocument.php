@@ -73,19 +73,12 @@ class CreateDocument extends Model
         }
 
         if ($this->validate()) {
+            $module = Yii::$app->getModule('onlyoffice');
 
             $source = $this->templatePath() . '/new.' . $this->extension;
             $newFile = $this->fileName . '.' . $this->extension;
 
-            if ($this->extension == 'docx') {
-                $mime = 'application/vnd.openxmlformats-officedocument.wordprocessingml.document';
-            } elseif ($this->extension == 'xlsx') {
-                $mime = 'application/vnd.openxmlformats-officedocument.presentationml.presentation';
-            } elseif ($this->extension == 'pptx') {
-                $mime = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet';
-            } elseif ($this->extension == 'docxf') {
-                $mime = 'application/vnd.openxmlformats-officedocument.wordprocessingml.document';
-            }
+            $mime = $module->mimes[$this->extension];
 
             $file = new File();
             $file->file_name = $newFile;
