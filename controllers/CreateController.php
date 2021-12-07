@@ -54,12 +54,12 @@ class CreateController extends \humhub\components\Controller
             } else {
                 return $this->asJson([
                             'success' => false,
-                            'output' => $this->renderAjax('document', ['model' => $model, 'ext' => $ext])
+                            'output' => $this->renderAjax('document', ['model' => $model])
                 ]);
             }
         }
 
-        return $this->renderAjax('document', ['model' => $model, 'ext' => $model->extension]);
+        return $this->renderAjax('document', ['model' => $model]);
     }
 
     public function determineContentFileUrl($file)

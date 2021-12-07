@@ -23,17 +23,25 @@ class ApiController extends Controller
     public $module;
 
     /**
-     * Saveas function for the Only server
+     * @inheritdoc
      */
-    public function actionSaveas()
+    public function beforeAction($action)
     {
         $this->module = Yii::$app->getModule('onlyoffice');
 
-        if (($body_stream = file_get_contents('php://input')) === FALSE) {
+        return parent::beforeAction($action);
+    }
+
+    /**
+     * Saveas action
+     */
+    public function actionSaveas()
+    {
+        if (($body_data = file_get_contents('php://input')) === FALSE) {
             throw new \Exception('Empty body');
         }
 
-        $data = json_decode($body_stream, TRUE);
+        $data = json_decode($body_data, TRUE);
         if ($data === NULL) {
             throw new \Exception('Could not parse json');
         }

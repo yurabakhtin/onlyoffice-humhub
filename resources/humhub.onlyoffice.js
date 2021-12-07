@@ -8,9 +8,7 @@ humhub.module('onlyoffice', function (module, require, $) {
     var loader = require('ui.loader');
     var ooJSLoadRetries = 0;
 
-    var editorData = {
-        saveasUrl: null
-    };
+    var api = null;
 
     var Editor = function (node, options) {
         Widget.call(this, node, options);
@@ -76,7 +74,7 @@ humhub.module('onlyoffice', function (module, require, $) {
             }
         }
         
-        editorData.saveasUrl = this.options.saveasUrl;
+        api = this.options.api;
 
         var config = this.options.config;
         config.width = "100%";
@@ -152,7 +150,7 @@ humhub.module('onlyoffice', function (module, require, $) {
             url: evt.data.url
         };
 
-        client.post(editorData.saveasUrl, {data: JSON.stringify(saveData), dataType: 'json'}).then((response) => {
+        client.post(api.saveasUrl, {data: JSON.stringify(saveData), dataType: 'json'}).then((response) => {
             event.trigger('humhub:file:created.cfiles', [response.file]);
         }).catch(function(e) {
             module.log.error(e, true);
