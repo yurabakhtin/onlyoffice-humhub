@@ -27,13 +27,19 @@ class EditFileHandler extends BaseFileHandler
      */
     public function getLinkAttributes()
     {
-        return [
+        $attributes = [
             'label' => Yii::t('OnlyofficeModule.base', 'Edit document'),
             'data-action-url' => Url::to(['/onlyoffice/open', 'guid' => $this->file->guid, 'mode' => Module::OPEN_MODE_EDIT]),
             'data-action-click' => 'ui.modal.load',
             'data-modal-id' => 'onlyoffice-modal',
             'data-modal-close' => ''
         ];
+
+        if (pathinfo($this->file->file_name, PATHINFO_EXTENSION) === 'oform') {
+            $attributes['label'] = Yii::t('OnlyofficeModule.base', 'Fill in form in ONLYOFFICE');
+        }
+
+        return $attributes;
     }
 
 }
