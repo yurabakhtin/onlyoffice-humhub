@@ -77,6 +77,13 @@ humhub.module('onlyoffice', function (module, require, $) {
         api = this.options.api;
 
         var config = this.options.config;
+
+        if ((config.document.fileType === 'docxf' || config.document.fileType === 'oform')
+            && DocsAPI.DocEditor.version().split('.')[0] < 7) {
+            module.log.error('Please update ONLYOFFICE Docs to version 7.0 to work on fillable forms online', true);
+            return;
+        }
+
         config.width = "100%";
         config.height = "100%";
         config.events = {
