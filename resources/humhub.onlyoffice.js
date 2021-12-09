@@ -87,12 +87,15 @@ humhub.module('onlyoffice', function (module, require, $) {
         config.width = "100%";
         config.height = "100%";
         config.events = {
-            'onRequestSaveAs': onRequestSaveAs,
             //'onReady': onReady,
             //'onDocumentStateChange': onDocumentStateChange,
             //'onRequestEditRights': onRequestEditRights,
             //'onError': onError,
         };
+
+        if (api.saveasUrl && location.search.indexOf('?r=cfiles') === 0) {
+            config.events.onRequestSaveAs = onRequestSaveAs;
+        }
 
         this.docEditor = new DocsAPI.DocEditor('iframeContainer', config);
     }
