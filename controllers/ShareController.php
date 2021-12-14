@@ -10,9 +10,6 @@ namespace humhub\modules\onlyoffice\controllers;
 
 use Yii;
 use yii\web\HttpException;
-use yii\helpers\Url;
-use humhub\modules\file\models\File;
-use humhub\modules\file\libs\FileHelper;
 use humhub\modules\onlyoffice\Module;
 use humhub\modules\onlyoffice\models\Share;
 use humhub\modules\onlyoffice\components\BaseFileController;

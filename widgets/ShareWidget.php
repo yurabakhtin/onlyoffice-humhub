@@ -8,8 +8,6 @@
 
 namespace humhub\modules\onlyoffice\widgets;
 
-use Yii;
-use yii\web\HttpException;
 use yii\helpers\Url;
 use humhub\modules\file\models\File;
 use humhub\modules\onlyoffice\models\Share;
