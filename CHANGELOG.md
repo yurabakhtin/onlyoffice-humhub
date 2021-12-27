@@ -1,5 +1,6 @@
 # Change Log
 
+## 2.3.0
 ## Added
 - support docxf and oform formats
 - create blank docxf from creation menu
