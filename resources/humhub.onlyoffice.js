@@ -8,6 +8,8 @@ humhub.module('onlyoffice', function (module, require, $) {
     var loader = require('ui.loader');
     var ooJSLoadRetries = 0;
 
+    var api = null;
+
     var Editor = function (node, options) {
         Widget.call(this, node, options);
     };
@@ -78,7 +80,16 @@ humhub.module('onlyoffice', function (module, require, $) {
             }
         }
 
+        api = this.options.api;
+
         var config = this.options.config;
+
+        if ((config.document.fileType === 'docxf' || config.document.fileType === 'oform')
+            && DocsAPI.DocEditor.version().split('.')[0] < 7) {
+            module.log.error('Please update ONLYOFFICE Docs to version 7.0 to work on fillable forms online', true);
+            return;
+        }
+
         config.width = "100%";
         config.height = "100%";
         config.events = {
@@ -88,6 +99,10 @@ humhub.module('onlyoffice', function (module, require, $) {
             //'onRequestEditRights': onRequestEditRights,
             //'onError': onError,
         };
+
+        if (api.saveasUrl && location.search.indexOf('?r=cfiles') === 0) {
+            config.events.onRequestSaveAs = onRequestSaveAs;
+        }
 
         this.docEditor = new DocsAPI.DocEditor('iframeContainer', config);
     }
@@ -145,6 +160,19 @@ humhub.module('onlyoffice', function (module, require, $) {
     Convert.prototype.close = function (evt) {
         refreshFileInfo(this, evt);
     };
+
+    function onRequestSaveAs(evt) {
+        var saveData = {
+            name: evt.data.title,
+            url: evt.data.url
+        };
+
+        client.post(api.saveasUrl, {data: JSON.stringify(saveData), dataType: 'json'}).then((response) => {
+            event.trigger('humhub:file:created.cfiles', [response.file]);
+        }).catch(function(e) {
+            module.log.error(e, true);
+        });
+    }
 
     var onRequestCloseObj = null;
     function onRequestClose() {

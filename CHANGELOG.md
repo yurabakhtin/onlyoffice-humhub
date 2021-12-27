@@ -8,6 +8,12 @@
 - document server v6.0 and earlier is no longer supported
 - Fixed opening file when maintenance mode
 
+## 2.3.0
+## Added
+- support docxf and oform formats
+- create blank docxf from creation menu
+- "save as" in editor
+
 ## 2.2.2
 ## Fixed
 - Fixed JWT
