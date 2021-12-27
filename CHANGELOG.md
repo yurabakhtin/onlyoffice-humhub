@@ -1,5 +1,10 @@
 # Change Log
 
+## Added
+- support docxf and oform formats
+- create blank docxf from creation menu
+- "save as" in editor
+
 ## 2.2.2
 ## Fixed
 - Fixed JWT

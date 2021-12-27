@@ -12,7 +12,7 @@ The plugin allows to:
 
 Supported formats:
 
-* For viewing and editing:  DOCX, XLSX, PPTX.
+* For viewing and editing:  DOCX, XLSX, PPTX, DOCXF, OFORM.
 * For viewing only: ODT, ODS, ODP, DOC, XLS, PPT, TXT, PDF.
 * For conversion to Office Open XML: ODT, ODS, ODP, DOC, XLS, PPT, TXT, CSV.
 
