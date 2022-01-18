@@ -59,7 +59,9 @@ humhub.module('onlyoffice', function (module, require, $) {
                 refreshFileInfo(this, evt);
             }
         } else {
-            this.docEditor.destroyEditor();
+            if (this.docEditor) {
+                this.docEditor.destroyEditor();
+            }
             this.modal.clear();
             this.modal.close();
             evt.finish();
