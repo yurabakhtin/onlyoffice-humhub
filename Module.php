@@ -51,12 +51,12 @@ class Module extends \humhub\components\Module
     /**
      * @var string[] allowed text extensions 
      */
-    public $textExtensions = ['docx', 'doc', 'odt', 'rtf', 'txt', 'html', 'htm', 'mht', 'pdf', 'djvu', 'fb2', 'epub', 'xps'];
+    public $textExtensions = ['docx', 'docxf', 'oform', 'doc', 'odt', 'rtf', 'txt', 'html', 'htm', 'mht', 'pdf', 'djvu', 'fb2', 'epub', 'xps'];
 
     /**
      * @var string[] allowed for editing extensions
      */
-    public $editableExtensions = ['xlsx', 'ppsx', 'pptx', 'docx' ];
+    public $editableExtensions = ['xlsx', 'ppsx', 'pptx', 'docx', 'docxf', 'oform' ];
     public $convertableExtensions = ['doc','odt','xls','ods','ppt','odp','txt','csv'];
 
     
@@ -267,4 +267,68 @@ class Module extends \humhub\components\Module
         return [];
     }
 
+    /**
+     * @inheritdoc
+     */
+    public function request($url, $method = 'GET', $options = [])
+    {
+        $curloptions = CURLHelper::getOptions();
+        if (substr($url, 0, strlen("https")) === "https" && $this->getVerifyPeerOff()) {
+            $curloptions[CURLOPT_SSL_VERIFYPEER] = false;
+            $curloptions[CURLOPT_SSL_VERIFYHOST] = 0;
+        }
+
+        $http = new \Zend\Http\Client($url, [
+            'adapter' => '\Zend\Http\Client\Adapter\Curl',
+            'curloptions' => $curloptions,
+            'timeout' => 10
+        ]);
+
+        $http->setMethod($method);
+
+        if (array_key_exists('headers', $options)) {
+            $headers = $http->getRequest()->getHeaders();
+            foreach ($options['headers'] as $nameHeader => $header) {
+                $headers->addHeaderLine($nameHeader, $header);
+            }
+
+        }
+
+        if (array_key_exists('body', $options)) {
+            $http->setRawBody(Json::encode($options['body']));
+        }
+
+        return $http->send();
+    }
+
+    /**
+     * @var string[] mimes dictionary
+     */
+    public $mimes = [
+        'csv' => 'text/csv',
+        'doc' => 'application/msword',
+        'docx' => 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+        'docxf' => 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+        'oform' => 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+        'dotx' => 'application/vnd.openxmlformats-officedocument.wordprocessingml.template',
+        'epub' => 'application/epub+zip',
+        'html' => 'text/html',
+        'odp' => 'application/vnd.oasis.opendocument.presentation',
+        'ods' => 'application/vnd.oasis.opendocument.spreadsheet',
+        'odt' => 'application/vnd.oasis.opendocument.text',
+        'otp' => 'application/vnd.oasis.opendocument.presentation-template',
+        'ots' => 'application/vnd.oasis.opendocument.spreadsheet-template',
+        'ott' => 'application/vnd.oasis.opendocument.text-template',
+        'pdf' => 'application/pdf',
+        'potx' => 'application/vnd.openxmlformats-officedocument.presentationml.template',
+        'ppsx' => 'application/vnd.openxmlformats-officedocument.presentationml.slideshow',
+        'ppt' => 'application/vnd.ms-powerpoint',
+        'pptm' => 'application/vnd.ms-powerpoint.presentation.macroEnabled.12',
+        'pptx' => 'application/vnd.openxmlformats-officedocument.presentationml.presentation',
+        'rtf' => 'text/rtf',
+        'txt' => 'text/plain',
+        'xls' => 'application/vnd.ms-excel',
+        'xlsx' => 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+        'xltx' => 'application/vnd.openxmlformats-officedocument.spreadsheetml.template'
+    ];
 }

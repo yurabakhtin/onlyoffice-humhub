@@ -11,6 +11,8 @@ namespace humhub\modules\onlyoffice\widgets;
 use Yii;
 use yii\web\HttpException;
 use humhub\modules\file\models\File;
+use humhub\modules\cfiles\models\File as cFile;
+use humhub\modules\cfiles\models\Folder as cFolder;
 use yii\helpers\Url;
 use humhub\libs\Html;
 use humhub\modules\file\libs\FileHelper;
@@ -76,11 +78,21 @@ class EditorWidget extends JsWidget
     {
         $module = Yii::$app->getModule('onlyoffice');
 
+        $api = [];
+        if ($this->file->object_model === cFile::class) {
+            $cfile = cFile::findOne($this->file->object_id);
+            $cfolder = cFolder::findOne($cfile->parent_folder_id);
+            if (!$cfolder->isAllPostedFiles()) {
+                $api['saveasUrl'] = Url::to(['/onlyoffice/api/saveas'], true);
+            }
+        }
+
         return [
             'config' => $this->getConfig(),
             'edit-mode' => $this->mode,
             'file-info-url' => Url::to(['/onlyoffice/open/get-info', 'guid' => $this->file->guid]),
             'module-configured' => (empty($module->getServerUrl()) ? '0' : '1'),
+            'api' => $api
         ];
     }
 
