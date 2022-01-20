@@ -7,6 +7,7 @@
 ## Changed
 - document server v6.0 and earlier is no longer supported
 - Fixed opening file when maintenance mode
+- Added Versioning Support (HumHub v1.10+) 
 
 ## 2.3.0
 ## Added
