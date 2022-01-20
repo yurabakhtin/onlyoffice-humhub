@@ -1,7 +1,5 @@
 <?php
 
-use humhub\modules\onlyoffice\Module;
-use yii\helpers\Url;
 use humhub\widgets\ActiveForm;
 use humhub\libs\Html;
 
