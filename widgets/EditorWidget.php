@@ -11,6 +11,8 @@ namespace humhub\modules\onlyoffice\widgets;
 use Yii;
 use yii\web\HttpException;
 use humhub\modules\file\models\File;
+use humhub\modules\cfiles\models\File as cFile;
+use humhub\modules\cfiles\models\Folder as cFolder;
 use yii\helpers\Url;
 use humhub\libs\Html;
 use humhub\modules\file\libs\FileHelper;
@@ -76,11 +78,21 @@ class EditorWidget extends JsWidget
     {
         $module = Yii::$app->getModule('onlyoffice');
 
+        $api = [];
+        if ($this->file->object_model === cFile::class) {
+            $cfile = cFile::findOne($this->file->object_id);
+            $cfolder = cFolder::findOne($cfile->parent_folder_id);
+            if (!$cfolder->isAllPostedFiles()) {
+                $api['saveasUrl'] = Url::to(['/onlyoffice/api/saveas'], true);
+            }
+        }
+
         return [
             'config' => $this->getConfig(),
             'edit-mode' => $this->mode,
             'file-info-url' => Url::to(['/onlyoffice/open/get-info', 'guid' => $this->file->guid]),
             'module-configured' => (empty($module->getServerUrl()) ? '0' : '1'),
+            'api' => $api
         ];
     }
 
@@ -111,13 +123,18 @@ class EditorWidget extends JsWidget
     {
         $module = Yii::$app->getModule('onlyoffice');
         $user = Yii::$app->user->getIdentity();
+        $userGuid = null;
+        if (isset($user->guid)) {
+            $userGuid = $user->guid;
+        }
         $key = $module->generateDocumentKey($this->file);
+        $docHash = $module->generateHash($key, $userGuid);
 
-        $url = Url::to(['/onlyoffice/backend/download', 'key' => $key], true);
-        $callbackUrl = Url::to(['/onlyoffice/backend/track', 'key' => $key], true);
+        $url = Url::to(['/onlyoffice/backend/download', 'doc' => $docHash], true);
+        $callbackUrl = Url::to(['/onlyoffice/backend/track', 'doc' => $docHash], true);
         if (!empty($module->getStorageUrl())) {
-            $url = $module->getStorageUrl() . Url::to(['/onlyoffice/backend/download', 'key' => $key], false);
-            $callbackUrl = $module->getStorageUrl() . Url::to(['/onlyoffice/backend/track', 'key' => $key], false);
+            $url = $module->getStorageUrl() . Url::to(['/onlyoffice/backend/download', 'doc' => $docHash], false);
+            $callbackUrl = $module->getStorageUrl() . Url::to(['/onlyoffice/backend/track', 'doc' => $docHash], false);
         }
 
         $config = [

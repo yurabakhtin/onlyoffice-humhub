@@ -51,4 +51,5 @@ return [
     'Server address for internal requests from ONLYOFFICE Docs' => 'Adresa poslužitelja za interne zahtjeve od strane pružatelja ONLYOFFICE Docs',
     'Can use ONLYOFFICE' => 'Može koristiti ONLYOFFICE',
     'Allows the user to use ONLYOFFICE.' => 'Omogućuje korisniku da upotrebljava ONLYOFFICE.',
+    'Disable certificate verification (insecure)' => 'Onemogući verifikaciju certifikata (nesigurno)',
 ];
