@@ -117,7 +117,7 @@ class Module extends \humhub\components\Module
 
     public function getDocumentType($file)
     {
-        $fileExtension = FileHelper::getExtension($file);
+        $fileExtension = strtolower(FileHelper::getExtension($file));
 
         if (in_array($fileExtension, $this->spreadsheetExtensions)) {
             return self::DOCUMENT_TYPE_SPREADSHEET;
@@ -132,13 +132,13 @@ class Module extends \humhub\components\Module
 
     public function canEdit($file)
     {
-        $fileExtension = FileHelper::getExtension($file);
+        $fileExtension = strtolower(FileHelper::getExtension($file));
         return in_array($fileExtension, $this->editableExtensions);
     }
 
     public function canConvert($file)
     {
-        $fileExtension = FileHelper::getExtension($file);
+        $fileExtension = strtolower(FileHelper::getExtension($file));
         return in_array($fileExtension, $this->convertableExtensions);
     }
 
@@ -218,7 +218,7 @@ class Module extends \humhub\components\Module
 
         $docHash = $this->generateHash($key, $userGuid);
 
-        $ext = FileHelper::getExtension($file);
+        $ext = strtolower(FileHelper::getExtension($file));
         $data = [
             'async' => true,
             'embeddedfonts' => true,
