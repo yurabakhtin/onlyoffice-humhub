@@ -7,18 +7,14 @@ use humhub\modules\onlyoffice\Module;
 \humhub\modules\onlyoffice\assets\Assets::register($this);
 
 
-$headerTitle = '';
 $headerBackgroundColor = '';
 
 if ($documentType === Module::DOCUMENT_TYPE_SPREADSHEET) {
     $headerBackgroundColor = '#8CA946';
-    $headerTitle = 'Spreadsheet Editor';
 } elseif ($documentType === Module::DOCUMENT_TYPE_TEXT) {
     $headerBackgroundColor = '#5A7DC9';
-    $headerTitle = 'Document Editor';
 } elseif ($documentType === Module::DOCUMENT_TYPE_PRESENTATION) {
     $headerBackgroundColor = '#DD682B';
-    $headerTitle = 'Presentation Editor';
 }
 ?>
 
@@ -30,7 +26,6 @@ if ($documentType === Module::DOCUMENT_TYPE_SPREADSHEET) {
         <?php endif; ?>
         <?= humhub\libs\Html::a(Yii::t('OnlyofficeModule.base', 'Close'), '#', ['class' => 'btn btn btn-default', 'data-ui-loader' => '', 'data-action-click' => 'close', 'data-action-block' => 'manual']); ?>
     </div>
-    <div style="color:white;padding-left:12px;font-size:24px;padding-top:3px;padding-left:18px"><?= $headerTitle; ?></div>
 </div>
 <div id="iframeContainer"></div>
 <?= Html::endTag('div'); ?>
