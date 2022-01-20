@@ -1,5 +1,9 @@
 # Change Log
 
+## 2.2.3
+## Changed
+- Added Versioning Support (HumHub v1.10+) 
+
 ## 2.2.2
 ## Fixed
 - Fixed JWT
