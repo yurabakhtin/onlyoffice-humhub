@@ -15,7 +15,7 @@ $modal = \humhub\widgets\ModalDialog::begin([
 <?php $form = ActiveForm::begin(); ?>
 
 <div class="modal-body">
-    <?= $form->field($model, 'fileName', ['template' => '{label}<div class="input-group">{input}<div class="input-group-addon">' . $ext . '</div></div>{hint}{error}']); ?>
+    <?= $form->field($model, 'fileName', ['template' => '{label}<div class="input-group">{input}<div class="input-group-addon">' . $model->extension . '</div></div>{hint}{error}']); ?>
     <?= $form->field($model, 'openFlag')->checkbox(); ?>
 </div>
 
