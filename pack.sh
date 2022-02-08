@@ -1,17 +1,19 @@
 #!/bin/bash
-
 rm -rf ./deploy
-rm -rf /tmp/humhub-deploy/
+rm ./RELEASE.md
 
 cwd=$(pwd)
+git submodule update --init --recursive
 
-cp -r ./ /tmp/humhub-deploy/
 mkdir -p ./deploy/onlyoffice
-cd /tmp/humhub-deploy/
+rsync -av --exclude='deploy' ./ ./deploy/onlyoffice
+cd ./deploy/onlyoffice
 
+rm -rf ./.github
 rm -rf ./.git/
-rm -rf ./resources/templates/.git/
-rm ./.gitignore
+rm .gitignore
+rm .gitmodules
+rm -rf ./resources/templates/.git
 rm ./pack.sh
 
 mkdir docs
@@ -24,4 +26,5 @@ node pack.js
 rm ./pack.js
 rm ./README.md
 
-mv ./* $cwd/deploy/onlyoffice/
+cd $cwd
+awk '/## [0-9]/{p++} p; /## [0-9]/{if (p > 1) exit}' CHANGELOG.md | awk 'NR>2 {print last} {last=$0}' > RELEASE.md
