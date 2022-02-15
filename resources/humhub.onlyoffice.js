@@ -23,6 +23,7 @@ humhub.module('onlyoffice', function (module, require, $) {
     };
 
     Editor.prototype.init = function () {
+        this.modal = modal.get('#onlyoffice-modal');
 
         if (this.options.moduleConfigured != 1) {
             module.log.error('No OnlyOffice server configured! - Check onlyoffice module configuration!', true);
@@ -30,8 +31,6 @@ humhub.module('onlyoffice', function (module, require, $) {
         }
 
         this.initEditor();
-
-        this.modal = modal.get('#onlyoffice-modal');
 
         var that = this;
         this.modal.$.on('hidden.bs.modal', function (evt) {
@@ -50,7 +49,8 @@ humhub.module('onlyoffice', function (module, require, $) {
 
     Editor.prototype.close = function (evt) {
 
-        if (this.options.editMode == 'edit') {
+        if (this.docEditor
+            && this.options.editMode == 'edit') {
             if (this.docEditor.requestClose) {
                 setTimeout(() => {
                     onRequestCloseObj = { that: this, evt: evt };
@@ -63,7 +63,6 @@ humhub.module('onlyoffice', function (module, require, $) {
         } else {
             closeModal(this, evt);
         }
-
     }
 
     Editor.prototype.initEditor = function () {
