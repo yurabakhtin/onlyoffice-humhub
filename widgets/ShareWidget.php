@@ -6,6 +6,11 @@
  * @license https://www.humhub.com/licences
  */
 
+/**
+ *  Copyright (c) Ascensio System SIA 2022. All rights reserved.
+ *  http://www.onlyoffice.com
+ */
+
 namespace humhub\modules\onlyoffice\widgets;
 
 use yii\helpers\Url;

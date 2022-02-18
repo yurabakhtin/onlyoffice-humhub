@@ -1,5 +1,10 @@
 <?php
 
+/**
+ *  Copyright (c) Ascensio System SIA 2022. All rights reserved.
+ *  http://www.onlyoffice.com
+ */
+
 use yii\helpers\Url;
 use humhub\libs\Html;
 use humhub\modules\onlyoffice\Module;
