@@ -52,7 +52,7 @@ return [
     'Can use ONLYOFFICE' => 'Kan ONLYOFFICE gebruiken',
     'Allows the user to use ONLYOFFICE.' => 'Geeft de gebruiker toestemming om ONLYOFFICE te gebruiken.',
     'Form template' => 'Formulier sjabloon',
-    'Fill in form in ONLYOFFICE' => 'ЗFormulier invullen in ONLYOFFICE',
+    'Fill in form in ONLYOFFICE' => 'Formulier invullen in ONLYOFFICE',
     'Please update ONLYOFFICE Docs to version 7.0 to work on fillable forms online' => 'Update ONLYOFFICE Docs naar versie 7.0 om online invulbare formulieren te kunnen gebruiken',
     'Disable certificate verification (insecure)' => 'Certificaatverificatie uitschakelen (onveilig)',
 ];
