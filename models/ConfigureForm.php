@@ -1,12 +1,16 @@
 <?php
 
+/**
+ *  Copyright (c) Ascensio System SIA 2022. All rights reserved.
+ *  http://www.onlyoffice.com
+ */
+
 namespace humhub\modules\onlyoffice\models;
 
 use Yii;
 
 /**
  * ConfigureForm defines the configurable fields.
-
  */
 class ConfigureForm extends \yii\base\Model
 {

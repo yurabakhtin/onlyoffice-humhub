@@ -1,3 +1,8 @@
+/**
+ *  Copyright (c) Ascensio System SIA 2022. All rights reserved.
+ *  http://www.onlyoffice.com
+ */
+
 humhub.module('onlyoffice', function (module, require, $) {
 
     var client = require('client');
