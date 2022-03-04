@@ -20,6 +20,8 @@ $modal = \humhub\widgets\ModalDialog::begin([
 <div class="modal-body">
     <?= $form->field($model, 'fileName', ['template' => '{label}<div class="input-group">{input}<div class="input-group-addon">' . $model->extension . '</div></div>{hint}{error}']); ?>
     <?= $form->field($model, 'openFlag')->checkbox(); ?>
+
+    <?= $form->field($model, 'fid')->hiddenInput()->label(false); ?>
 </div>
 
 <div class="modal-footer">

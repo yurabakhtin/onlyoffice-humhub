@@ -312,6 +312,10 @@ humhub.module('onlyoffice', function (module, require, $) {
     var init = function (pjax) { };
 
     var createSubmit = function (evt) {
+        if ($('#cfiles-folderView').length > 0) {
+            $('input#createdocument-fid').val($('#cfiles-folderView').attr('data-fid'));
+        }
+
         client.submit(evt).then(function (response) {
             event.trigger('humhub:file:created', [response.file]);
 
