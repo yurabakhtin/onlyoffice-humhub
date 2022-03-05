@@ -3,6 +3,7 @@
 ## Added
 - certificate verification setting
 - check unsaved changes before closing
+- Turkish and Galician empty file templates
 
 ## Changed
 - document server v6.0 and earlier is no longer supported
