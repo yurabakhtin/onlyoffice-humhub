@@ -1,14 +1,16 @@
 <?php
 
+/**
+ *  Copyright (c) Ascensio System SIA 2022. All rights reserved.
+ *  http://www.onlyoffice.com
+ */
+
 namespace humhub\modules\onlyoffice\widgets;
 
 use Yii;
-use yii\web\HttpException;
 use yii\helpers\Url;
 use humhub\modules\file\libs\FileHelper;
 use humhub\modules\file\models\File;
-use humhub\modules\onlyoffice\models\Share;
-use humhub\modules\onlyoffice\Module;
 use humhub\widgets\JsWidget;
 
 class ConvertWidget extends JsWidget

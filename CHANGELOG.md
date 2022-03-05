@@ -1,5 +1,16 @@
 # Change Log
 
+## 2.4.0
+## Added
+- certificate verification setting
+- check unsaved changes before closing
+- Turkish and Galician empty file templates
+
+## Changed
+- document server v6.0 and earlier is no longer supported
+- Fixed opening file when maintenance mode
+- Added Versioning Support (HumHub v1.10+) 
+
 ## 2.3.0
 ## Added
 - support docxf and oform formats

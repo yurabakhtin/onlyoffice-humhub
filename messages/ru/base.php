@@ -53,5 +53,7 @@ return [
     'Allows the user to use ONLYOFFICE.' => 'Позволяет пользователю использовать ONLYOFFICE.',
     'Form template' => 'Шаблон формы',
     'Fill in form in ONLYOFFICE' => 'Заполнить форму в ONLYOFFICE',
-    'Please update ONLYOFFICE Docs to version 7.0 to work on fillable forms online' => 'Обновите сервер ONLYOFFICE Docs до версии 7.0 для работы с формами онлайн'
+    'Please update ONLYOFFICE Docs to version 7.0 to work on fillable forms online' => 'Обновите сервер ONLYOFFICE Docs до версии 7.0 для работы с формами онлайн',
+    'Disable certificate verification (insecure)' => 'Отключить проверку сертификата (небезопасно)',
+    'Not supported version' => 'Неподдерживаемая версия'
 ];

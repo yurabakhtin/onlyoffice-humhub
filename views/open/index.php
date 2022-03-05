@@ -1,3 +1,11 @@
+<?php
+
+/**
+ *  Copyright (c) Ascensio System SIA 2022. All rights reserved.
+ *  http://www.onlyoffice.com
+ */
+
+?>
 <div class="modal-dialog animated fadeIn" style="width:96%">
     <div class="modal-content onlyofficeModal" style="background-color:transparent;">
         <?=

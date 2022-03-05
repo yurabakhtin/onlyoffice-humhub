@@ -53,5 +53,6 @@ return [
     'Allows the user to use ONLYOFFICE.' => 'Permette all\'utente di usare ONLYOFFICE.',
     'Form template' => 'Modello di modulo',
     'Fill in form in ONLYOFFICE' => 'Compilare il modulo in ONLYOFFICE',
-    'Please update ONLYOFFICE Docs to version 7.0 to work on fillable forms online' => 'Si prega di aggiornare ONLYOFFICE Docs alla versione 7.0 per lavorare su moduli compilabili online'
+    'Please update ONLYOFFICE Docs to version 7.0 to work on fillable forms online' => 'Si prega di aggiornare ONLYOFFICE Docs alla versione 7.0 per lavorare su moduli compilabili online',
+    'Disable certificate verification (insecure)' => 'Disattiva la verifica del certificato (non sicuro)',
 ];

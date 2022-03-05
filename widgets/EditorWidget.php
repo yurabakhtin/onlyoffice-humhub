@@ -6,6 +6,11 @@
  * @license https://www.humhub.com/licences
  */
 
+/**
+ *  Copyright (c) Ascensio System SIA 2022. All rights reserved.
+ *  http://www.onlyoffice.com
+ */
+
 namespace humhub\modules\onlyoffice\widgets;
 
 use Yii;
@@ -123,13 +128,18 @@ class EditorWidget extends JsWidget
     {
         $module = Yii::$app->getModule('onlyoffice');
         $user = Yii::$app->user->getIdentity();
+        $userGuid = null;
+        if (isset($user->guid)) {
+            $userGuid = $user->guid;
+        }
         $key = $module->generateDocumentKey($this->file);
+        $docHash = $module->generateHash($key, $userGuid);
 
-        $url = Url::to(['/onlyoffice/backend/download', 'key' => $key], true);
-        $callbackUrl = Url::to(['/onlyoffice/backend/track', 'key' => $key], true);
+        $url = Url::to(['/onlyoffice/backend/download', 'doc' => $docHash], true);
+        $callbackUrl = Url::to(['/onlyoffice/backend/track', 'doc' => $docHash], true);
         if (!empty($module->getStorageUrl())) {
-            $url = $module->getStorageUrl() . Url::to(['/onlyoffice/backend/download', 'key' => $key], false);
-            $callbackUrl = $module->getStorageUrl() . Url::to(['/onlyoffice/backend/track', 'key' => $key], false);
+            $url = $module->getStorageUrl() . Url::to(['/onlyoffice/backend/download', 'doc' => $docHash], false);
+            $callbackUrl = $module->getStorageUrl() . Url::to(['/onlyoffice/backend/track', 'doc' => $docHash], false);
         }
 
         $config = [

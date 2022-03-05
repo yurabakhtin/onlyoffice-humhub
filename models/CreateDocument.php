@@ -6,12 +6,18 @@
  * @license https://www.humhub.com/licences
  */
 
+/**
+ *  Copyright (c) Ascensio System SIA 2022. All rights reserved.
+ *  http://www.onlyoffice.com
+ */
+
 namespace humhub\modules\onlyoffice\models;
 
 use Yii;
 use yii\base\Model;
 use humhub\modules\onlyoffice\Module;
 use humhub\modules\file\models\File;
+use humhub\modules\cfiles\models\Folder;
 
 /**
  * Description of CreateDocument
@@ -23,6 +29,7 @@ class CreateDocument extends Model
 
     public $extension;
     public $fileName;
+    public $fid;
     public $openFlag = true;
     private $localPath = [
         "az" => "az-Latn-AZ",
@@ -30,8 +37,8 @@ class CreateDocument extends Model
         "cs" => "cs-CZ",
         "de" => "de-DE",
         "el" => "el-GR",
-        "en-US" => "en-US",
         "en_GB" => "en-GB",
+        "en-US" => "en-US",
         "es" => "es-ES",
         "fr" => "fr-FR",
         "it" => "it-IT",
@@ -45,6 +52,7 @@ class CreateDocument extends Model
         "ru" => "ru-RU",
         "sk" => "sk-SK",
         "sv" => "sv-SE",
+        "tr" => "tr-TR",
         "uk" => "uk-UA",
         "vi" => "vi-VN",
         "zh-CN" => "zh-CN",
@@ -56,6 +64,7 @@ class CreateDocument extends Model
         return [
             ['fileName', 'required'],
             ['openFlag', 'boolean'],
+            ['fid', 'string'],
         ];
     }
 
@@ -70,6 +79,14 @@ class CreateDocument extends Model
     {
         if (empty($this->extension)) {
             throw new Exception("File extension cannot be empty");
+        }
+
+        $folder = Folder::findOne($this->fid);
+        if (!is_null($folder)) {
+            $canEdit = $folder->canEdit();
+            if (!$canEdit) {
+                return false;
+            }
         }
 
         if ($this->validate()) {

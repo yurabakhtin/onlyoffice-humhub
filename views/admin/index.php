@@ -1,5 +1,10 @@
 <?php
 
+/**
+ *  Copyright (c) Ascensio System SIA 2022. All rights reserved.
+ *  http://www.onlyoffice.com
+ */
+
 use yii\bootstrap\ActiveForm;
 use yii\helpers\Html;
 ?>
@@ -23,6 +28,7 @@ use yii\helpers\Html;
         <?php $form = ActiveForm::begin(['id' => 'configure-form']); ?>
         <div class="form-group">
             <?= $form->field($model, 'serverUrl'); ?>
+            <?= $form->field($model, 'verifyPeerOff')->checkbox(); ?>
         </div>
 
         <div class="form-group">

@@ -6,11 +6,14 @@
  * @license https://www.humhub.com/licences
  */
 
+/**
+ *  Copyright (c) Ascensio System SIA 2022. All rights reserved.
+ *  http://www.onlyoffice.com
+ */
+
 namespace humhub\modules\onlyoffice\filehandler;
 
 use Yii;
-use humhub\libs\Html;
-use humhub\modules\onlyoffice\Module;
 use humhub\modules\file\handler\BaseFileHandler;
 use yii\helpers\Url;
 
