@@ -1,5 +1,6 @@
 # Change Log
 
+## 2.4.0
 ## Added
 - certificate verification setting
 - check unsaved changes before closing
