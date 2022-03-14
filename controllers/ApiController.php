@@ -53,7 +53,7 @@ class ApiController extends Controller
 
         $response = $this->module->request($data['url']);
 
-        $newContent = $response->getBody();
+        $newContent = $response->getContent();
         $fileExt = pathinfo($data['name'], PATHINFO_EXTENSION);
 
         $file = new File();

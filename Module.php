@@ -20,6 +20,7 @@ use humhub\modules\file\libs\FileHelper;
 use humhub\libs\CURLHelper;
 use \Firebase\JWT\JWT;
 use yii\httpclient\Client;
+use yii\httpclient\Response;
 
 /**
  * File Module
@@ -179,7 +180,7 @@ class Module extends \humhub\components\Module
         return $key;
     }
 
-    public function commandService($data)
+    public function commandService($data): array
     {
         $url = $this->getInternalServerUrl() . '/coauthoring/CommandService.ashx';
 
@@ -197,21 +198,14 @@ class Module extends \humhub\components\Module
             );
 
             $response = $this->request($url, 'POST', $options);
-            $json = $response->getBody();
+            return $response->getData();
         } catch (\Exception $ex) {
-            Yii::error('Could not get document server response! ' . $ex->getMessage());
-            return [];
-        }
-
-        try {
-            return Json::decode($json);
-        } catch (\yii\base\InvalidParamException $ex) {
             Yii::error('Could not get document server response! ' . $ex->getMessage());
             return [];
         }
     }
 
-    public function convertService($file, $ts)
+    public function convertService($file, $ts): array
     {
         $url = $this->getInternalServerUrl() . '/ConvertService.ashx';
         $key = $this->generateDocumentKey($file);
@@ -242,25 +236,17 @@ class Module extends \humhub\components\Module
                 $headers['Authorization'] = 'Bearer ' . JWT::encode(['payload' => $data], $this->getJwtSecret());
             }
 
-            $options = array(
+            $options = [
                 'headers' => $headers,
                 'body' => $data
-            );
+            ];
 
             $response = $this->request($url, 'POST', $options);
-            $json = $response->getBody();
+            return $response->getData();
         } catch (\Exception $ex) {
             $error = 'Could not get document server response! ' . $ex->getMessage();
             Yii::error($error);
-            return [ 'error' => $error ];
-        }
-
-        try {
-            return Json::decode($json);
-        } catch (\yii\base\InvalidParamException $ex) {
-            $error = 'Could not get document server response! ' . $ex->getMessage();
-            Yii::error($error);
-            return [ 'error' => $error ];
+            return ['error' => $error];
         }
     }
 
@@ -310,9 +296,14 @@ class Module extends \humhub\components\Module
         return [$data, null];
     }
     /**
-     * @inheritdoc
+     * Send request by URL with CURL method
+     *
+     * @param string $url
+     * @param string $method
+     * @param array $options
+     * @return Response
      */
-    public function request($url, $method = 'GET', $options = [])
+    public function request($url, $method = 'GET', $options = []): Response
     {
         $http = new Client(['transport' => 'yii\httpclient\CurlTransport']);
         $response = $http->createRequest()
