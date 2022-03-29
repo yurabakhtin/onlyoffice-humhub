@@ -44,7 +44,7 @@ use yii\helpers\Html;
         </div>
 
         <div class="form-group">
-            <?= $form->field($model, 'customLabel')->label(); ?>
+            <?= Html::activeLabel($model,'customLabel', ['class' => 'control-label']); ?>
             <?= $form->field($model, 'chat')->checkbox(); ?>
             <?= $form->field($model, 'compactHeader')->checkbox(); ?>
             <?= $form->field($model, 'feedback')->checkbox(); ?>
