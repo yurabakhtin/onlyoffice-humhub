@@ -43,8 +43,8 @@ use yii\helpers\Html;
             <?= $form->field($model, 'storageUrl'); ?>
         </div>
 
-        <label class="control-label">The customization section allows personalizing the editor interface</label>
         <div class="form-group">
+            <?= $form->field($model, 'customLabel')->label(); ?>
             <?= $form->field($model, 'chat')->checkbox(); ?>
             <?= $form->field($model, 'compactHeader')->checkbox(); ?>
             <?= $form->field($model, 'feedback')->checkbox(); ?>

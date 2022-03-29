@@ -25,6 +25,7 @@ class ConfigureForm extends \yii\base\Model
     public $feedback;
     public $help;
     public $compactToolbar;
+    public $customLabel;
 
     /**
      * @inheritdoc
@@ -61,6 +62,7 @@ class ConfigureForm extends \yii\base\Model
             'feedback' => Yii::t('OnlyofficeModule.base', 'Display Feedback & Support menu button'),
             'help' => Yii::t('OnlyofficeModule.base', 'Display Help menu button'),
             'compactToolbar' => Yii::t('OnlyofficeModule.base', 'Display monochrome toolbar header'),
+            'customLabel' => Yii::t('OnlyofficeModule.base', 'The customization section allows personalizing the editor interface'),
         ];
     }
     
