@@ -43,6 +43,15 @@ use yii\helpers\Html;
             <?= $form->field($model, 'storageUrl'); ?>
         </div>
 
+        <label class="control-label">The customization section allows personalizing the editor interface</label>
+        <div class="form-group">
+            <?= $form->field($model, 'chat')->checkbox(); ?>
+            <?= $form->field($model, 'compactHeader')->checkbox(); ?>
+            <?= $form->field($model, 'feedback')->checkbox(); ?>
+            <?= $form->field($model, 'help')->checkbox(); ?>
+            <?= $form->field($model, 'compactToolbar')->checkbox(); ?>
+        </div>
+
         <div class="form-group">
             <?= Html::submitButton('Submit', ['class' => 'btn btn-primary', 'data-ui-loader' => '']) ?>
         </div>
