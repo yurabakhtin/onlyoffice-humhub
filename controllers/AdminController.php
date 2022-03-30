@@ -37,7 +37,8 @@ class AdminController extends Controller
 
         $serverStatus = $this->getServerStatus();
         $response = $this->getDocumentServerVersion();
-        return $this->render('index', ['model' => $model, 'view' => $response, 'serverApiUrl' => $serverApiUrl, 'serverStatus' => $serverStatus]);
+        $invalidHttps = $this->checkValidHttps($model->serverUrl);
+        return $this->render('index', ['model' => $model, 'view' => $response, 'serverApiUrl' => $serverApiUrl, 'serverStatus' => $serverStatus, 'invalidHttps' => $invalidHttps]);
     }
 
     private function getDocumentServerVersion()
@@ -57,5 +58,10 @@ class AdminController extends Controller
             return false;
         }
         return boolval($response->getBody());
+    }
+    private function checkValidHttps($serverUrl)
+    {
+        $response = (isset($_SERVER['HTTPS']) && substr($serverUrl, 0, strlen("http")) === "http") ? true : false;
+        return $response;
     }
 }

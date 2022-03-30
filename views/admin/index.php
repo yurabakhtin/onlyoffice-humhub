@@ -54,8 +54,16 @@ use yii\web\View;
                 View::registerJsFile($serverApiUrl); 
                 View::registerJs('
                     if(typeof DocsAPI === "undefined") {
+                        $(".invalid-server-url").html("<strong>ONLYOFFICE Docs</strong> invalid hostname");
                         $(".invalid-server-url").show();
                     } 
+                ');
+            }
+
+            if($invalidHttps) {
+                View::registerJs(' 
+                    $(".invalid-server-url").html("<strong>ONLYOFFICE Docs</strong> The hostname is not connected via <strong>http</strong> when using <strong>https</strong> on the hamhab server");
+                    $(".invalid-server-url").show(); 
                 ');
             }
         ?>
