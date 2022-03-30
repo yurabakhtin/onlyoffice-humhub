@@ -26,15 +26,17 @@ class AdminController extends Controller
 
     public function actionIndex()
     {
+        $serverApiUrl = "";
         $model = new ConfigureForm();
         $model->loadSettings();
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             $this->view->saved();
+            $serverApiUrl = Yii::$app->getModule('onlyoffice')->getServerApiUrl();
         }
 
         $response = $this->getDocumentServerVersion();
-        return $this->render('index', ['model' => $model, 'view' => $response]);
+        return $this->render('index', ['model' => $model, 'view' => $response, 'serverApiUrl' => $serverApiUrl]);
     }
 
     private function getDocumentServerVersion()

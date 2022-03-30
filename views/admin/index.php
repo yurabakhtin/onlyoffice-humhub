@@ -7,6 +7,7 @@
 
 use yii\bootstrap\ActiveForm;
 use yii\helpers\Html;
+use yii\web\View; 
 ?>
 
 <div class="panel panel-default">
@@ -28,6 +29,7 @@ use yii\helpers\Html;
         <?php $form = ActiveForm::begin(['id' => 'configure-form']); ?>
         <div class="form-group">
             <?= $form->field($model, 'serverUrl'); ?>
+            <div class="alert alert-danger invalid-server-url" role="alert" hidden><?= Yii::t('OnlyofficeModule.base', '<strong>ONLYOFFICE Docs</strong> invalid hostname'); ?></div>
             <?= $form->field($model, 'verifyPeerOff')->checkbox(); ?>
         </div>
 
@@ -47,6 +49,16 @@ use yii\helpers\Html;
             <?= Html::submitButton('Submit', ['class' => 'btn btn-primary', 'data-ui-loader' => '']) ?>
         </div>
 
+        <?php 
+            if(!empty($serverApiUrl)) {
+                View::registerJsFile($serverApiUrl); 
+                View::registerJs('
+                    if(typeof DocsAPI === "undefined") {
+                        $(".invalid-server-url").show();
+                    } 
+                ');
+            }
+        ?>
         <?php ActiveForm::end(); ?>
     </div>
 </div>
