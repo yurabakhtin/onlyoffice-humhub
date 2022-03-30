@@ -17,7 +17,7 @@ use yii\web\View;
     <div class="panel-body">
 
         <?php if (!empty($view['version'])): ?>
-            <div class="alert alert-success" role="alert"><?= Yii::t('OnlyofficeModule.base', '<strong>ONLYOFFICE Docs</strong> successfully connected! - Installed version: {version}', ['version' => $view['version']]); ?></div>
+            <div class="alert alert-success" role="alert"><?= Yii::t('OnlyofficeModule.base', '<strong>ONLYOFFICE Docs</strong> successfully connected! - Installed version: {version}, server status: {status}', ['version' => $view['version'], 'status' => $serverStatus]); ?></div>
         <?php elseif (empty($model->serverUrl)): ?>
             <div class="alert alert-warning" role="alert"><?= Yii::t('OnlyofficeModule.base', '<strong>ONLYOFFICE Docs</strong> not configured yet.'); ?></div>
         <?php elseif (!empty($view['error']) && $view['error'] == 6): ?>

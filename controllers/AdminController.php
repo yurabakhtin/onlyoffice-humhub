@@ -35,8 +35,9 @@ class AdminController extends Controller
             $serverApiUrl = Yii::$app->getModule('onlyoffice')->getServerApiUrl();
         }
 
+        $serverStatus = $this->getServerStatus();
         $response = $this->getDocumentServerVersion();
-        return $this->render('index', ['model' => $model, 'view' => $response, 'serverApiUrl' => $serverApiUrl]);
+        return $this->render('index', ['model' => $model, 'view' => $response, 'serverApiUrl' => $serverApiUrl, 'serverStatus' => $serverStatus]);
     }
 
     private function getDocumentServerVersion()
@@ -45,4 +46,16 @@ class AdminController extends Controller
         return $module->commandService(['c' => 'version']);
     }
 
+    private function getServerStatus()
+    {
+        $module = Yii::$app->getModule('onlyoffice');
+        $url = $module->getInternalServerUrl() . '/healthcheck';
+        try {
+            $response = $module->request($url);
+        } catch (\Exception $ex) {
+            Yii::error('Internal server url error' . $ex->getMessage());
+            return false;
+        }
+        return boolval($response->getBody());
+    }
 }
