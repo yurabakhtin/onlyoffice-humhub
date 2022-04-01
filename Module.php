@@ -210,7 +210,7 @@ class Module extends \humhub\components\Module
         }
     }
 
-    public function convertService($file, $ts)
+    public function convertService($file, $ts, $to = "docx", $async = true, $test = false)
     {
         $url = $this->getInternalServerUrl() . '/ConvertService.ashx';
         $key = $this->generateDocumentKey($file);
@@ -224,13 +224,22 @@ class Module extends \humhub\components\Module
         $docHash = $this->generateHash($key, $userGuid);
 
         $ext = strtolower(FileHelper::getExtension($file));
+
+        if ($test === true){
+            $downloadUrl = $this->getStorageUrl() . Url::to(['/onlyoffice/backend/download', 'doc' => $docHash], false);
+        }
+        else {
+            $to = $this->convertsTo[$ext];
+            $downloadUrl = Url::to(['/onlyoffice/backend/download', 'doc' => $docHash], true);
+        }
+
         $data = [
-            'async' => true,
+            'async' => $async,
             'embeddedfonts' => true,
             'filetype' => $ext,
-            'outputtype' => $this->convertsTo[$ext],
+            'outputtype' => $to,
             'key' => $key . $ts,
-            'url' => Url::to(['/onlyoffice/backend/download', 'doc' => $docHash], true),
+            'url' => $downloadUrl,
         ];
 
         try {

@@ -14,10 +14,7 @@
 namespace humhub\modules\onlyoffice\controllers;
 
 use Yii;
-use yii\web\HttpException;
-use yii\helpers\Url;
 use humhub\modules\file\models\File;
-use humhub\modules\file\libs\FileHelper;
 use humhub\modules\onlyoffice\models\ConfigureForm;
 use humhub\modules\admin\components\Controller;
 
@@ -26,6 +23,7 @@ class AdminController extends Controller
 
     public function actionIndex()
     {
+        $module = Yii::$app->getModule('onlyoffice');
         $serverApiUrl = "";
         $model = new ConfigureForm();
         $model->loadSettings();
@@ -35,21 +33,28 @@ class AdminController extends Controller
             $serverApiUrl = Yii::$app->getModule('onlyoffice')->getServerApiUrl();
         }
 
-        $serverStatus = $this->getServerStatus();
-        $response = $this->getDocumentServerVersion();
         $invalidHttps = $this->checkValidHttps($model->serverUrl);
-        return $this->render('index', ['model' => $model, 'view' => $response, 'serverApiUrl' => $serverApiUrl, 'serverStatus' => $serverStatus, 'invalidHttps' => $invalidHttps]);
+        $serverStatus = $this->getServerStatus($module);
+        $response = $this->getDocumentServerVersion($module);
+        $conversion = $this->checkConvertFile($module);
+        
+        return $this->render('index', [
+                                        'model' => $model, 
+                                        'view' => $response, 
+                                        'serverApiUrl' => $serverApiUrl, 
+                                        'serverStatus' => $serverStatus, 
+                                        'invalidHttps' => $invalidHttps, 
+                                        'conversion' => $conversion
+                                    ]);
     }
 
-    private function getDocumentServerVersion()
+    private function getDocumentServerVersion($module)
     {
-        $module = Yii::$app->getModule('onlyoffice');
         return $module->commandService(['c' => 'version']);
     }
 
-    private function getServerStatus()
+    private function getServerStatus($module)
     {
-        $module = Yii::$app->getModule('onlyoffice');
         $url = $module->getInternalServerUrl() . '/healthcheck';
         try {
             $response = $module->request($url);
@@ -62,6 +67,18 @@ class AdminController extends Controller
     private function checkValidHttps($serverUrl)
     {
         $response = (isset($_SERVER['HTTPS']) && substr($serverUrl, 0, strlen("http")) === "http") ? true : false;
+        return $response;
+    }
+    private function checkConvertFile($module)
+    {
+        $ext = "txt";
+        $to = "txt";
+        $file = new File();
+        $file->file_name = "testConvert." . $ext;
+
+        $json = $module->convertService($file, 0, $to, false, true);
+        $response = (empty($json["error"]) && $json["endConvert"]) ? true : false;
+
         return $response;
     }
 }

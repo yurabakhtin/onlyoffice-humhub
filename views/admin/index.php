@@ -16,8 +16,8 @@ use yii\web\View;
 
     <div class="panel-body">
 
-        <?php if (!empty($view['version'])): ?>
-            <div class="alert alert-success" role="alert"><?= Yii::t('OnlyofficeModule.base', '<strong>ONLYOFFICE Docs</strong> successfully connected! - Installed version: {version}, server status: {status}', ['version' => $view['version'], 'status' => $serverStatus]); ?></div>
+        <?php if (!empty($view['version']) && $conversion && $serverStatus): ?>
+            <div class="alert alert-success" role="alert"><?= Yii::t('OnlyofficeModule.base', '<strong>ONLYOFFICE Docs</strong> successfully connected! - Installed version: {version}', ['version' => $view['version']]); ?></div>
         <?php elseif (empty($model->serverUrl)): ?>
             <div class="alert alert-warning" role="alert"><?= Yii::t('OnlyofficeModule.base', '<strong>ONLYOFFICE Docs</strong> not configured yet.'); ?></div>
         <?php elseif (!empty($view['error']) && $view['error'] == 6): ?>
@@ -29,7 +29,7 @@ use yii\web\View;
         <?php $form = ActiveForm::begin(['id' => 'configure-form']); ?>
         <div class="form-group">
             <?= $form->field($model, 'serverUrl'); ?>
-            <div class="alert alert-danger invalid-server-url" role="alert" hidden><?= Yii::t('OnlyofficeModule.base', '<strong>ONLYOFFICE Docs</strong> invalid hostname'); ?></div>
+            <div class="alert alert-danger invalid-server-url" role="alert" hidden><?= Yii::t('OnlyofficeModule.base', ''); ?></div>
             <?= $form->field($model, 'verifyPeerOff')->checkbox(); ?>
         </div>
 
