@@ -122,7 +122,12 @@ class Module extends \humhub\components\Module
         return $this->settings->get('demoServer');
     }
     public function isDemoServerEnabled() {
-        return !empty($this->getDemoServer());
+        if(boolval($this->getDemoServer())) {
+            $trial = $this->getTrial();
+            if($trial != false)
+                return true;
+        }
+        return false;
     }
 
     /**
@@ -138,6 +143,18 @@ class Module extends \humhub\components\Module
         return 'https://onlinedocs.onlyoffice.com';
     }
 
+    public function getTrial()
+    {
+        $settings =  Yii::$app->getModule('onlyoffice')->settings;
+        $trial = $settings->get('trial');
+        
+        if(empty($trial)) {
+            $settings->set('trial', time());
+        } elseif(30 - round((time() - $trial) / 86400) < 0) {
+            return false;
+        }
+        return 30 - round((time() - $trial) / 86400);
+    }
     public function getDocumentType($file)
     {
         $fileExtension = strtolower(FileHelper::getExtension($file));

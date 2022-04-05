@@ -34,13 +34,22 @@ class AdminController extends Controller
         }
 
         $response = $this->getDocumentServerVersion();
-        return $this->render('index', ['model' => $model, 'view' => $response]);
+        $trial = $this->getTrial();
+        
+        return $this->render('index', ['model' => $model, 'view' => $response, 'trial' => $trial]);
     }
 
     private function getDocumentServerVersion()
     {
         $module = Yii::$app->getModule('onlyoffice');
         return $module->commandService(['c' => 'version']);
+    }
+    private function getTrial()
+    {
+        $module = Yii::$app->getModule('onlyoffice');
+        if($module->isDemoServerEnabled())
+            return $module->getTrial();
+        return -1;
     }
 
 }

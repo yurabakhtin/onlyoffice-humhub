@@ -7,6 +7,7 @@
 
 use yii\bootstrap\ActiveForm;
 use yii\helpers\Html;
+use yii\web\View;
 ?>
 
 <div class="panel panel-default">
@@ -15,8 +16,14 @@ use yii\helpers\Html;
 
     <div class="panel-body">
 
-        <?php if (!empty($view['version'])): ?>
-            <div class="alert alert-success" role="alert"><?= Yii::t('OnlyofficeModule.base', '<strong>ONLYOFFICE Docs</strong> successfully connected! - Installed version: {version}', ['version' => $view['version']]); ?></div>
+        <?php if ($trial >= 0 && !empty($view['version'])): ?>
+            <div class="alert alert-success" role="alert">
+                <?= Yii::t('OnlyofficeModule.base', '<strong>ONLYOFFICE Docs</strong> successfully connected! - Installed version: {version}, trial period: {trial} days', ['version' => $view['version'], 'trial' => $trial]); ?>
+            </div>
+        <?php elseif (!empty($view['version'])): ?>
+            <div class="alert alert-success" role="alert">
+                <?= Yii::t('OnlyofficeModule.base', '<strong>ONLYOFFICE Docs</strong> successfully connected! - Installed version: {version}', ['version' => $view['version']]); ?>
+            </div>
         <?php elseif (empty($model->serverUrl)): ?>
             <div class="alert alert-warning" role="alert"><?= Yii::t('OnlyofficeModule.base', '<strong>ONLYOFFICE Docs</strong> not configured yet.'); ?></div>
         <?php elseif (!empty($view['error']) && $view['error'] == 6): ?>
@@ -51,3 +58,12 @@ use yii\helpers\Html;
         <?php ActiveForm::end(); ?>
     </div>
 </div>
+<?php
+   if($trial === false) {
+    View::registerJs('
+        $("#configureform-demoserver").closest("label").css({"cursor":"default", "opacity":"0.5"});
+        $("#configureform-demoserver").attr("checked", false);
+        $("#configureform-demoserver").attr("disabled", true);
+    ');
+   } 
+?>
