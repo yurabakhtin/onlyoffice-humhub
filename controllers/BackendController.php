@@ -106,12 +106,13 @@ class BackendController extends Controller
                 throw new \Exception('Could not parse json');
             }
 
-            if ($this->module->isJwtEnabled()) {
+            if ($this->module->isJwtEnabled() || $this->module->isDemoServerEnabled()) {
                 $token = null;
                 if (!empty($data["token"])) {
                     $token = $data["token"];
                 } else {
-                    $header = Yii::$app->request->headers->get('Authorization');
+                    $str = $this->module->isDemoServerEnabled() ? 'AuthorizationJWT' : 'Authorization';
+                    $header = Yii::$app->request->headers->get($str);
                     if (!empty($header)) {
                         $token = substr($header, strlen('Bearer '));
                     }

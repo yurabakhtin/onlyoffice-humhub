@@ -82,11 +82,18 @@ class Module extends \humhub\components\Module
     }
 
     public function getJwtSecret() {
+        if($this->isDemoServerEnabled()) { 
+            return 'sn2puSUF7muF5Jas';
+        }
         return $this->settings->get('jwtSecret');
     }
 
     public function getServerUrl()
     {
+        if($this->isDemoServerEnabled()) {
+            return $this->getDemoServerUrl();
+        }
+
         return $this->settings->get('serverUrl');
     }
 
@@ -110,6 +117,13 @@ class Module extends \humhub\components\Module
     {
         return $this->settings->get('verifyPeerOff');
     }
+    public function getDemoServer()
+    {
+        return $this->settings->get('demoServer');
+    }
+    public function isDemoServerEnabled() {
+        return !empty($this->getDemoServer());
+    }
 
     /**
      * 
@@ -118,6 +132,10 @@ class Module extends \humhub\components\Module
     public function getServerApiUrl()
     {
         return $this->getServerUrl() . '/web-apps/apps/api/documents/api.js';
+    }
+    public function getDemoServerUrl()
+    {
+        return 'https://onlinedocs.onlyoffice.com';
     }
 
     public function getDocumentType($file)
@@ -185,9 +203,10 @@ class Module extends \humhub\components\Module
         try {
             $headers = [];
             $headers['Accept'] = 'application/json';
-            if ($this->isJwtEnabled()) {
+            if ($this->isJwtEnabled() || $this->isDemoServerEnabled()) {
                 $data['token'] = JWT::encode($data, $this->getJwtSecret());
-                $headers['Authorization'] = 'Bearer ' . JWT::encode(['payload' => $data], $this->getJwtSecret());
+                $str = $this->isDemoServerEnabled() ? 'AuthorizationJWT' : 'Authorization';
+                $headers[$str] = 'Bearer ' . JWT::encode(['payload' => $data], $this->getJwtSecret());
             }
 
             $options = array(
@@ -236,9 +255,9 @@ class Module extends \humhub\components\Module
         try {
             $headers = [];
             $headers['Accept'] = 'application/json';
-            if ($this->isJwtEnabled()) {
-                $data['token'] = JWT::encode($data, $this->getJwtSecret());
-                $headers['Authorization'] = 'Bearer ' . JWT::encode(['payload' => $data], $this->getJwtSecret());
+            if ($this->isJwtEnabled() || $this->isDemoServerEnabled()) {
+                $str = $this->isDemoServerEnabled() ? 'AuthorizationJWT' : 'Authorization';
+                $headers[$str] = 'Bearer ' . JWT::encode(['payload' => $data], $this->getJwtSecret());
             }
 
             $options = array(

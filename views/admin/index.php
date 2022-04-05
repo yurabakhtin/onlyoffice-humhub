@@ -29,6 +29,7 @@ use yii\helpers\Html;
         <div class="form-group">
             <?= $form->field($model, 'serverUrl'); ?>
             <?= $form->field($model, 'verifyPeerOff')->checkbox(); ?>
+            <?= $form->field($model, 'demoServer')->checkbox(); ?>
         </div>
 
         <div class="form-group">

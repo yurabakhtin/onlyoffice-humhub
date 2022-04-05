@@ -20,6 +20,7 @@ class ConfigureForm extends \yii\base\Model
     public $jwtSecret;
     public $internalServerUrl;
     public $storageUrl;
+    public $demoServer;
 
     /**
      * @inheritdoc
@@ -32,6 +33,7 @@ class ConfigureForm extends \yii\base\Model
             ['jwtSecret', 'string'],
             ['internalServerUrl', 'string'],
             ['storageUrl', 'string'],
+            ['demoServer', 'boolean'],
         ];
     }
 
@@ -46,6 +48,7 @@ class ConfigureForm extends \yii\base\Model
             'jwtSecret' => Yii::t('OnlyofficeModule.base', 'JWT Secret'),
             'internalServerUrl' => Yii::t('OnlyofficeModule.base', 'ONLYOFFICE Docs address for internal requests from the server'),
             'storageUrl' => Yii::t('OnlyofficeModule.base', 'Server address for internal requests from ONLYOFFICE Docs'),
+            'demoServer' => Yii::t('OnlyofficeModule.base', 'Connect to demo server'),
         ];
     }
     
@@ -69,6 +72,7 @@ class ConfigureForm extends \yii\base\Model
         $this->jwtSecret = Yii::$app->getModule('onlyoffice')->settings->get('jwtSecret');
         $this->internalServerUrl = Yii::$app->getModule('onlyoffice')->settings->get('internalServerUrl');
         $this->storageUrl = Yii::$app->getModule('onlyoffice')->settings->get('storageUrl');
+        $this->demoServer = (boolean)Yii::$app->getModule('onlyoffice')->settings->get('demoServer');
 
         return true;
     }
@@ -80,6 +84,7 @@ class ConfigureForm extends \yii\base\Model
         Yii::$app->getModule('onlyoffice')->settings->set('jwtSecret', $this->jwtSecret);
         Yii::$app->getModule('onlyoffice')->settings->set('internalServerUrl', rtrim($this->internalServerUrl, '/'));
         Yii::$app->getModule('onlyoffice')->settings->set('storageUrl', rtrim($this->storageUrl, '/'));
+        Yii::$app->getModule('onlyoffice')->settings->set('demoServer', $this->demoServer);
 
         return true;
     }

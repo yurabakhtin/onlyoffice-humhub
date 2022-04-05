@@ -177,7 +177,7 @@ class EditorWidget extends JsWidget
             $config['type'] = 'mobile';
         }
 
-        if ($module->isJwtEnabled()) {
+        if ($module->isJwtEnabled() || $module->isDemoServerEnabled()) {
             $token = JWT::encode($config, $module->getJwtSecret());
             $config['token'] = $token;
         }
