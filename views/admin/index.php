@@ -16,14 +16,12 @@ use yii\web\View;
 
     <div class="panel-body">
 
-        <?php if (!empty($view['version']) && $conversion && $serverStatus): ?>
+        <?php if (!empty($view['version'])): ?>
             <div class="alert alert-success" role="alert"><?= Yii::t('OnlyofficeModule.base', '<strong>ONLYOFFICE Docs</strong> successfully connected! - Installed version: {version}', ['version' => $view['version']]); ?></div>
         <?php elseif (empty($model->serverUrl)): ?>
             <div class="alert alert-warning" role="alert"><?= Yii::t('OnlyofficeModule.base', '<strong>ONLYOFFICE Docs</strong> not configured yet.'); ?></div>
-        <?php elseif (!empty($view['error']) && $view['error'] == 6): ?>
-            <div class="alert alert-danger" role="alert"><?= Yii::t('OnlyofficeModule.base', '<strong>ONLYOFFICE Docs</strong> invalid JWT token.'); ?></div>
-        <?php else: ?>
-            <div class="alert alert-danger" role="alert"><?= Yii::t('OnlyofficeModule.base', '<strong>ONLYOFFICE Docs</strong> not accessible.'); ?></div>
+        <?php elseif (!empty($view['error'])): ?>
+            <div class="alert alert-danger" role="alert"><?= Yii::t('OnlyofficeModule.base', '<strong>ONLYOFFICE Docs</strong> {error}', ['error' => $view['error']]); ?></div>
         <?php endif; ?>
 
         <?php $form = ActiveForm::begin(['id' => 'configure-form']); ?>
@@ -57,13 +55,6 @@ use yii\web\View;
                         $(".invalid-server-url").html("<strong>ONLYOFFICE Docs</strong> invalid hostname");
                         $(".invalid-server-url").show();
                     } 
-                ');
-            }
-
-            if($invalidHttps) {
-                View::registerJs(' 
-                    $(".invalid-server-url").html("<strong>ONLYOFFICE Docs</strong> The hostname is not connected via <strong>http</strong> when using <strong>https</strong> on the hamhab server");
-                    $(".invalid-server-url").show(); 
                 ');
             }
         ?>

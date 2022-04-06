@@ -209,10 +209,8 @@ class Module extends \humhub\components\Module
             return [];
         }
     }
-
-    public function convertService($file, $ts, $to = "docx", $async = true, $test = false)
+    public function fileToConversion($file, $ts, $toExt = null, $async = true)
     {
-        $url = $this->getInternalServerUrl() . '/ConvertService.ashx';
         $key = $this->generateDocumentKey($file);
 
         $user = Yii::$app->user->getIdentity();
@@ -223,23 +221,28 @@ class Module extends \humhub\components\Module
 
         $docHash = $this->generateHash($key, $userGuid);
 
-        $ext = strtolower(FileHelper::getExtension($file));
+        $fromExt = strtolower(FileHelper::getExtension($file));
 
-        if ($test === true){
+        $downloadUrl = Url::to(['/onlyoffice/backend/download', 'doc' => $docHash], true);
+        if (!empty($this->getStorageUrl())) {
             $downloadUrl = $this->getStorageUrl() . Url::to(['/onlyoffice/backend/download', 'doc' => $docHash], false);
         }
-        else {
-            $to = $this->convertsTo[$ext];
-            $downloadUrl = Url::to(['/onlyoffice/backend/download', 'doc' => $docHash], true);
-        }
+        if(is_null($toExt))
+            $toExt = $this->convertsTo[$fromExt];
 
+        return $this->convertService($downloadUrl, $fromExt, $toExt, $key . $ts, $async);
+    }
+    public function convertService($documentUrl, $fromExt, $toExt, $key, $async = true)
+    {
+        $url = $this->getInternalServerUrl() . '/ConvertService.ashx';
+        
         $data = [
             'async' => $async,
             'embeddedfonts' => true,
-            'filetype' => $ext,
-            'outputtype' => $to,
-            'key' => $key . $ts,
-            'url' => $downloadUrl,
+            'filetype' => $fromExt,
+            'outputtype' => $toExt,
+            'key' => $key,
+            'url' => $documentUrl,
         ];
 
         try {

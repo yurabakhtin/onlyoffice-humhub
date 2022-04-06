@@ -40,7 +40,7 @@ class ConvertController extends BaseFileController
     {
         Yii::$app->response->format = 'json';
 
-        $json = $this->module->convertService($this->file, $ts);
+        $json = $this->module->fileToConversion($this->file, $ts);
 
         if (!empty($json["endConvert"]) && $json["endConvert"]) {
             $this->saveFileReplace($json["fileUrl"], $newName);

@@ -17,66 +17,104 @@ use Yii;
 use humhub\modules\file\models\File;
 use humhub\modules\onlyoffice\models\ConfigureForm;
 use humhub\modules\admin\components\Controller;
+use yii\helpers\Url;
 
 class AdminController extends Controller
 {
+    /**
+     * @var Module
+     */
+    public $module;
 
     public function actionIndex()
     {
-        $module = Yii::$app->getModule('onlyoffice');
-        $serverApiUrl = "";
+        $this->module = Yii::$app->getModule('onlyoffice');
         $model = new ConfigureForm();
         $model->loadSettings();
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             $this->view->saved();
-            $serverApiUrl = Yii::$app->getModule('onlyoffice')->getServerApiUrl();
         }
 
-        $invalidHttps = $this->checkValidHttps($model->serverUrl);
-        $serverStatus = $this->getServerStatus($module);
-        $response = $this->getDocumentServerVersion($module);
-        $conversion = $this->checkConvertFile($module);
+        $response = $this->validation();
         
         return $this->render('index', [
                                         'model' => $model, 
-                                        'view' => $response, 
-                                        'serverApiUrl' => $serverApiUrl, 
-                                        'serverStatus' => $serverStatus, 
-                                        'invalidHttps' => $invalidHttps, 
-                                        'conversion' => $conversion
+                                        'view' => $response
                                     ]);
     }
 
-    private function getDocumentServerVersion($module)
+    private function validation()
     {
-        return $module->commandService(['c' => 'version']);
+        $response['serverApiUrl'] = $this->module->getServerApiUrl();
+
+        if(!$this->checkValidHttps()) {
+            $response['error'] = "The hostname is not connected via <strong>http</strong> when using <strong>https</strong> on the hamhab server.";
+            return $response;
+        }
+
+        $version = $this->getDocumentServerVersion();
+        if($version === 'error 6') {
+            $response['error'] = "invalid JWT token";
+            return $response;
+        } elseif($version === false) {
+            $response['error'] = "invalid hostname";
+            return $response;
+        }
+
+        if(!$this->getServerStatus()) {
+            $response['error'] = "invalid hostname";
+            return $response;
+        }
+
+        if(!$this->checkConvertFile()) {
+            $response['error'] = "invalid Server address for internal requests";
+            return $response;
+        }
+
+        $response['version'] = $version;
+        return $response;
+    }
+    private function getDocumentServerVersion()
+    {
+        $response = $this->module->commandService(['c' => 'version']);
+        if(!empty($response['version'])) {
+            return $response['version'];
+        } elseif(!empty($response['error']) && $response['error'] == 6) {
+            return 'error 6';
+        }
+        return false;
     }
 
-    private function getServerStatus($module)
+    private function getServerStatus()
     {
-        $url = $module->getInternalServerUrl() . '/healthcheck';
+        $url = $this->module->getInternalServerUrl() . '/healthcheck';
         try {
-            $response = $module->request($url);
+            $response = $this->module->request($url);
         } catch (\Exception $ex) {
-            Yii::error('Internal server url error' . $ex->getMessage());
             return false;
         }
         return boolval($response->getBody());
     }
-    private function checkValidHttps($serverUrl)
+    private function checkValidHttps()
     {
-        $response = (isset($_SERVER['HTTPS']) && substr($serverUrl, 0, strlen("http")) === "http") ? true : false;
+        $serverUrl = $this->module->getServerUrl();
+        if(empty($serverUrl))
+            return false;
+        $response = (isset($_SERVER['HTTPS']) && substr($serverUrl, 0, strlen("http")) === "http") ? false : true;
         return $response;
     }
-    private function checkConvertFile($module)
+    private function checkConvertFile()
     {
-        $ext = "txt";
-        $to = "txt";
-        $file = new File();
-        $file->file_name = "testConvert." . $ext;
+        $downloadUrl = Url::to(['/onlyoffice/backend/empty-file'], true);
 
-        $json = $module->convertService($file, 0, $to, false, true);
+        if (!empty($this->module->getStorageUrl())) {
+            $downloadUrl = $this->module->getStorageUrl() . Url::to(['/onlyoffice/backend/empty-file'], false);
+        }
+        $key = substr(strtolower(md5(Yii::$app->security->generateRandomString(20))), 0, 20);
+
+        $json = $this->module->convertService($downloadUrl, "docx", "docx", $key, false);
+
         $response = (empty($json["error"]) && $json["endConvert"]) ? true : false;
 
         return $response;

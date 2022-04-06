@@ -48,25 +48,29 @@ class BackendController extends Controller
         $this->enableCsrfValidation = false;
 
         $hash = Yii::$app->request->get('doc');
-        list ($hashData, $error) = $this->module->readHash($hash);
-        if (!empty($error)) {
-            throw new HttpException(404, 'Backend action with empty or invalid hash');
-        }
 
-        $key = $hashData->key;
-        $userGuid = isset($hashData->userGuid) ? $hashData->userGuid : null;
+        if(isset($hash)) {
 
-        $this->file = File::findOne(['onlyoffice_key' => $key]);
-
-        if (Yii::$app->settings->get('maintenanceMode')) {
-            $user = User::findOne(['guid' => $userGuid]);
-            if (!empty($user) && $user->isSystemAdmin()) {
-                Yii::$app->user->login($user);
+            list ($hashData, $error) = $this->module->readHash($hash);
+            if (!empty($error)) {
+                throw new HttpException(404, 'Backend action with empty or invalid hash');
             }
-        }
 
-        if ($this->file == null) {
-            throw new HttpException(404, Yii::t('OnlyofficeModule.base', 'Could not find requested file!'));
+            $key = $hashData->key;
+            $userGuid = isset($hashData->userGuid) ? $hashData->userGuid : null;
+
+            $this->file = File::findOne(['onlyoffice_key' => $key]);
+
+            if (Yii::$app->settings->get('maintenanceMode')) {
+                $user = User::findOne(['guid' => $userGuid]);
+                if (!empty($user) && $user->isSystemAdmin()) {
+                    Yii::$app->user->login($user);
+                }
+            }
+
+            if ($this->file == null) {
+                throw new HttpException(404, Yii::t('OnlyofficeModule.base', 'Could not find requested file!'));
+            }
         }
 
         return parent::beforeAction($action);
@@ -79,6 +83,13 @@ class BackendController extends Controller
     {
         //Yii::warning("Downloading file guid: " . $this->file->guid, 'onlyoffice');
         return Yii::$app->response->sendFile($this->file->store->get(), $this->file->file_name);
+    }
+    /**
+     * Download empty file
+     */
+    public function actionEmptyFile()
+    {
+        return Yii::$app->response->sendFile($this->module->getAssetPath() . '/templates/en-US/new.docx');
     }
 
     public function actionTrack()
