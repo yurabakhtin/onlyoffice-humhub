@@ -1,5 +1,8 @@
 # Change Log
 
+## Added
+- editor customization
+
 ## 2.4.0
 ## Added
 - certificate verification setting
