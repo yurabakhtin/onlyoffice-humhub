@@ -21,7 +21,7 @@ use yii\web\View;
         <?php elseif (empty($model->serverUrl)): ?>
             <div class="alert alert-warning" role="alert"><?= Yii::t('OnlyofficeModule.base', '<strong>ONLYOFFICE Docs</strong> not configured yet.'); ?></div>
         <?php elseif (!empty($view['error'])): ?>
-            <div class="alert alert-danger" role="alert"><?= Yii::t('OnlyofficeModule.base', '<strong>ONLYOFFICE Docs</strong> {error}', ['error' => $view['error']]); ?></div>
+            <div class="alert alert-danger" role="alert"><?= Yii::t('OnlyofficeModule.base', '<strong>ONLYOFFICE Docs</strong> ' . $view['error']); ?></div>
         <?php endif; ?>
 
         <?php $form = ActiveForm::begin(['id' => 'configure-form']); ?>

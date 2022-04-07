@@ -55,20 +55,20 @@ class AdminController extends Controller
 
         $version = $this->getDocumentServerVersion();
         if($version === 'error 6') {
-            $response['error'] = "invalid JWT token";
+            $response['error'] = "invalid JWT token.";
             return $response;
         } elseif($version === false) {
-            $response['error'] = "invalid hostname";
+            $response['error'] = "invalid hostname.";
             return $response;
         }
 
         if(!$this->getServerStatus()) {
-            $response['error'] = "invalid hostname";
+            $response['error'] = "invalid hostname.";
             return $response;
         }
 
         if(!$this->checkConvertFile()) {
-            $response['error'] = "invalid Server address for internal requests";
+            $response['error'] = "invalid Server address for internal requests.";
             return $response;
         }
 
