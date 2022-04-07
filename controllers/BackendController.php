@@ -143,7 +143,7 @@ class BackendController extends Controller
                 case "Corrupted":
                 case "ForceSave":
 
-                    $newData = $this->module->request($data["url"])->getBody();
+                    $newData = $this->module->request($data["url"])->getContent();
 
                     if (!empty($newData)) {
 
