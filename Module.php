@@ -218,6 +218,9 @@ class Module extends \humhub\components\Module
             );
 
             $response = $this->request($url, 'POST', $options);
+            if (isset($response->error)) {
+                $this->commandResponceError($response->error);
+            }
             return $response->getData();
         } catch (\Exception $ex) {
             Yii::error('Could not get document server response! ' . $ex->getMessage());
@@ -445,6 +448,36 @@ class Module extends \humhub\components\Module
                 $errorMessage = ": Unknown error";
                 break;
             case 0:
+                break;
+            default:
+                $errorMessage = ": ErrorCode = " . $errorCode;
+                break;
+        }
+
+        throw new \Exception($errorMessage);
+    }
+
+    private function commandResponceError($errorCode) {
+        $errorMessage = "";
+
+        switch ($errorCode) {
+            case 1:
+                $errorMessage = ": Document key is missing or no document with such key could be found.";
+                break;
+            case 2:
+                $errorMessage = ": Callback url not correct.";
+                break;
+            case 3:
+                $errorMessage = ": Internal server error.";
+                break;
+            case 4:
+                $errorMessage = ": No changes were applied to the document before the forcesave command was received.";
+                break;
+            case 5:
+                $errorMessage = ": Command not correct.";
+                break;
+            case 6:
+                $errorMessage = ": Invalid token.";
                 break;
             default:
                 $errorMessage = ": ErrorCode = " . $errorCode;
