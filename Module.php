@@ -217,14 +217,15 @@ class Module extends \humhub\components\Module
                 'body' => $data
             );
 
-            $response = $this->request($url, 'POST', $options);
-            if (isset($response->error)) {
-                $this->commandResponceError($response->error);
+            $response = $this->request($url, 'POST', $options)->getData();
+            if (isset($response['error'])) {
+                $this->commandResponceError($response['error']);
             }
-            return $response->getData();
+
+            return $response;
         } catch (\Exception $ex) {
-            Yii::error('Could not get document server response! ' . $ex->getMessage());
-            return [];
+            Yii::error('CommandService: ' . $ex->getMessage());
+            return ['error' => $ex->getMessage()];
         }
     }
 
@@ -414,36 +415,36 @@ class Module extends \humhub\components\Module
 
         switch ($errorCode) {
             case -20:
-                $errorMessage = ": Error encrypt signature";
+                $errorMessage = "Error encrypt signature";
                 break;
             case -8:
-                $errorMessage = ": Invalid token";
+                $errorMessage = "Invalid token";
                 break;
             case -7:
-                $errorMessage = ": Error document request";
+                $errorMessage = "Error document request";
                 break;
             case -6:
-                $errorMessage = ": Error while accessing the conversion result database";
+                $errorMessage = "Error while accessing the conversion result database";
                 break;
             case -5:
-                $errorMessage = ": Incorrect password";
+                $errorMessage = "Incorrect password";
                 break;
             case -4:
-                $errorMessage = ": Error while downloading the document file to be converted.";
+                $errorMessage = "Error while downloading the document file to be converted.";
                 break;
             case -3:
-                $errorMessage = ": Conversion error";
+                $errorMessage = "Conversion error";
                 break;
             case -2:
-                $errorMessage = ": Timeout conversion error";
+                $errorMessage = "Timeout conversion error";
                 break;
             case -1:
-                $errorMessage = ": Unknown error";
+                $errorMessage = "Unknown error";
                 break;
             case 0:
                 break;
             default:
-                $errorMessage = ": ErrorCode = " . $errorCode;
+                $errorMessage = "ErrorCode = " . $errorCode;
                 break;
         }
 
@@ -454,26 +455,19 @@ class Module extends \humhub\components\Module
         $errorMessage = "";
 
         switch ($errorCode) {
-            case 1:
-                $errorMessage = ": Document key is missing or no document with such key could be found.";
-                break;
-            case 2:
-                $errorMessage = ": Callback url not correct.";
-                break;
             case 3:
-                $errorMessage = ": Internal server error.";
-                break;
-            case 4:
-                $errorMessage = ": No changes were applied to the document before the forcesave command was received.";
+                $errorMessage = "Internal server error.";
                 break;
             case 5:
-                $errorMessage = ": Command not correct.";
+                $errorMessage = "Command not correct.";
                 break;
             case 6:
-                $errorMessage = ": Invalid token.";
+                $errorMessage = "Invalid token.";
                 break;
+            case 0:
+                return;
             default:
-                $errorMessage = ": ErrorCode = " . $errorCode;
+                $errorMessage = "ErrorCode = " . $errorCode;
                 break;
         }
 

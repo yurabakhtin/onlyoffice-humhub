@@ -16,12 +16,12 @@ use yii\web\View;
 
     <div class="panel-body">
 
-        <?php if (!empty($view['version'])): ?>
-            <div class="alert alert-success" role="alert"><?= Yii::t('OnlyofficeModule.base', '<strong>ONLYOFFICE Docs</strong> successfully connected! - Installed version: {version}', ['version' => $view['version']]); ?></div>
-        <?php elseif (empty($model->serverUrl)): ?>
+        <?php if (empty($model->serverUrl)): ?>
             <div class="alert alert-warning" role="alert"><?= Yii::t('OnlyofficeModule.base', '<strong>ONLYOFFICE Docs</strong> not configured yet.'); ?></div>
-        <?php elseif (!empty($view['error'])): ?>
-            <div class="alert alert-danger" role="alert"><?= Yii::t('OnlyofficeModule.base', '<strong>ONLYOFFICE Docs</strong> ' . $view['error']); ?></div>
+        <?php elseif (!empty($error)): ?>
+            <div class="alert alert-danger" role="alert"><?= Yii::t('OnlyofficeModule.base', 'Error when trying to connect ({error})', ['error' => $error]); ?></div>
+        <?php elseif (!empty($version)): ?>
+            <div class="alert alert-success" role="alert"><?= Yii::t('OnlyofficeModule.base', '<strong>ONLYOFFICE Docs</strong> successfully connected! - Installed version: {version}', ['version' => $version]); ?></div>
         <?php endif; ?>
 
         <?php $form = ActiveForm::begin(['id' => 'configure-form']); ?>
@@ -57,8 +57,8 @@ use yii\web\View;
         </div>
 
         <?php 
-            if(!empty($view['serverApiUrl'])) {
-                View::registerJsFile($view['serverApiUrl']); 
+            if(!empty($serverApiUrl)) {
+                View::registerJsFile($serverApiUrl);
                 View::registerJs('
                     if(typeof DocsAPI === "undefined") {
                         $(".invalid-server-url").html("<strong>ONLYOFFICE Docs</strong> DocsAPI undefined.");

@@ -36,74 +36,76 @@ class AdminController extends Controller
             $this->view->saved();
         }
 
-        $response = $this->validation();
-        
+        $serverApiUrl = $this->module->getServerApiUrl();
+
+        list($error, $version) = $this->validation();
+
         return $this->render('index', [
-                                        'model' => $model, 
-                                        'view' => $response
-                                    ]);
+                                        'model' => $model,
+                                        'serverApiUrl' => $serverApiUrl,
+                                        'error' => $error,
+                                        'version' => $version
+                                      ]);
     }
 
     private function validation()
     {
-        $response['serverApiUrl'] = $this->module->getServerApiUrl();
+        $version = null;
 
-        if(!$this->checkValidHttps()) {
-            $response['error'] = "The hostname is not connected via <strong>http</strong> when using <strong>https</strong> on the hamhab server.";
-            return $response;
+        if (!$this->checkValidHttps()) {
+            return [Yii::t('OnlyofficeModule.base', 'Mixed Active Content is not allowed. HTTPS address for ONLYOFFICE Docs is required.'), $version];
         }
 
-        $version = $this->getDocumentServerVersion();
-        if($version === 'error 6') {
-            $response['error'] = "invalid JWT token.";
-            return $response;
-        } elseif($version === false) {
-            $response['error'] = "invalid hostname.";
-            return $response;
+        $command = $this->module->commandService(['c' => 'version']);
+        if (isset($command['version'])) {
+            $version = $command['version'];
+        } else {
+            return [$command['error'], $version];
         }
 
-        if(!$this->getServerStatus()) {
-            $response['error'] = "invalid hostname.";
-            return $response;
+        $status = $this->getServerStatus();
+        if (isset($status['error'])) {
+            return [$status['error'], $version];
         }
 
-        if(!$this->checkConvertFile()) {
-            $response['error'] = "invalid Server address for internal requests.";
-            return $response;
+        $convert = $this->checkConvertFile();
+        if (isset($convert['error'])) {
+            return [$convert['error'], $version];
         }
 
-        $response['version'] = $version;
-        return $response;
-    }
-    private function getDocumentServerVersion()
-    {
-        $response = $this->module->commandService(['c' => 'version']);
-        if(!empty($response['version'])) {
-            return $response['version'];
-        } elseif(!empty($response['error']) && $response['error'] == 6) {
-            return 'error 6';
-        }
-        return false;
+        return ["", $version];
     }
 
     private function getServerStatus()
     {
         $url = $this->module->getInternalServerUrl() . '/healthcheck';
+
         try {
-            $response = $this->module->request($url);
+            $healthcheck = $this->module->request($url)->getContent();
+            if ($healthcheck !== 'true') {
+                throw new \Exception('Bad healthcheck status');
+            }
         } catch (\Exception $ex) {
-            return false;
+            Yii::error('ServerStatus: ' . $ex->getMessage());
+            return ['error' => Yii::t('Bad healthcheck status')];
         }
-        return boolval($response->getContent());
+
+        return [];
     }
+
     private function checkValidHttps()
     {
         $serverUrl = $this->module->getServerUrl();
-        if(empty($serverUrl))
+        $baseUrl = Url::base(true);
+
+        if ((substr($baseUrl, 0, strlen("https:")) === "https:")
+            && (substr($serverUrl, 0, strlen("http:")) === "http:")) {
             return false;
-        $response = (isset($_SERVER['HTTPS']) && substr($serverUrl, 0, strlen("http")) === "http") ? false : true;
-        return $response;
+        }
+
+        return true;
     }
+
     private function checkConvertFile()
     {
         $user = Yii::$app->user->getIdentity();
@@ -122,9 +124,17 @@ class AdminController extends Controller
         $key = substr(strtolower(md5(Yii::$app->security->generateRandomString(20))), 0, 20);
 
         $result = $this->module->convertService($downloadUrl, "docx", "docx", $key, false);
+        if (isset($result['error'])) {
+            return ['error' => $result['error']];
+        }
 
-        $response = (!isset($result['error']) && isset($result['endConvert'])) ? $result['endConvert'] : false;
+        try {
+        $this->module->request($result['fileUrl']);
+        } catch (\Exception $ex) {
+            Yii::error('CheckConvertFile: ' . $ex->getMessage());
+            return ['error' => $ex->getMessage()];
+        }
 
-        return $response;
+        return [];
     }
 }
