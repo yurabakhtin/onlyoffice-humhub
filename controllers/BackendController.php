@@ -49,28 +49,26 @@ class BackendController extends Controller
 
         $hash = Yii::$app->request->get('doc');
 
-        if(isset($hash)) {
+        list ($hashData, $error) = $this->module->readHash($hash);
+        if (!empty($error)) {
+            throw new HttpException(404, 'Backend action with empty or invalid hash');
+        }
 
-            list ($hashData, $error) = $this->module->readHash($hash);
-            if (!empty($error)) {
-                throw new HttpException(404, 'Backend action with empty or invalid hash');
+        $key = isset($hashData->key) ? $hashData->key : null;
+        $userGuid = isset($hashData->userGuid) ? $hashData->userGuid : null;
+        $isEmpty = isset($hashData->isEmpty) ? $hashData->isEmpty : false;
+
+        $this->file = File::findOne(['onlyoffice_key' => $key]);
+
+        if (Yii::$app->settings->get('maintenanceMode')) {
+            $user = User::findOne(['guid' => $userGuid]);
+            if (!empty($user) && $user->isSystemAdmin()) {
+                Yii::$app->user->login($user);
             }
+        }
 
-            $key = $hashData->key;
-            $userGuid = isset($hashData->userGuid) ? $hashData->userGuid : null;
-
-            $this->file = File::findOne(['onlyoffice_key' => $key]);
-
-            if (Yii::$app->settings->get('maintenanceMode')) {
-                $user = User::findOne(['guid' => $userGuid]);
-                if (!empty($user) && $user->isSystemAdmin()) {
-                    Yii::$app->user->login($user);
-                }
-            }
-
-            if ($this->file == null) {
-                throw new HttpException(404, Yii::t('OnlyofficeModule.base', 'Could not find requested file!'));
-            }
+        if ($this->file == null && !$isEmpty) {
+            throw new HttpException(404, Yii::t('OnlyofficeModule.base', 'Could not find requested file!'));
         }
 
         return parent::beforeAction($action);

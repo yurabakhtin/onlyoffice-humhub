@@ -94,7 +94,7 @@ class AdminController extends Controller
         } catch (\Exception $ex) {
             return false;
         }
-        return boolval($response->getBody());
+        return boolval($response->getContent());
     }
     private function checkValidHttps()
     {
@@ -106,16 +106,24 @@ class AdminController extends Controller
     }
     private function checkConvertFile()
     {
-        $downloadUrl = Url::to(['/onlyoffice/backend/empty-file'], true);
-
-        if (!empty($this->module->getStorageUrl())) {
-            $downloadUrl = $this->module->getStorageUrl() . Url::to(['/onlyoffice/backend/empty-file'], false);
+        $user = Yii::$app->user->getIdentity();
+        $userGuid = null;
+        if (isset($user->guid)) {
+            $userGuid = $user->guid;
         }
+
+        $docHash = $this->module->generateHash(null, $userGuid, true);
+
+        $downloadUrl = Url::to(['/onlyoffice/backend/empty-file', 'doc' => $docHash], true);
+        if (!empty($this->module->getStorageUrl())) {
+            $downloadUrl = $this->module->getStorageUrl() . Url::to(['/onlyoffice/backend/empty-file', 'doc' => $docHash], false);
+        }
+
         $key = substr(strtolower(md5(Yii::$app->security->generateRandomString(20))), 0, 20);
 
-        $json = $this->module->convertService($downloadUrl, "docx", "docx", $key, false);
+        $result = $this->module->convertService($downloadUrl, "docx", "docx", $key, false);
 
-        $response = (empty($json["error"]) && $json["endConvert"]) ? true : false;
+        $response = (empty($result["error"]) && $result["url"]) ? true : false;
 
         return $response;
     }

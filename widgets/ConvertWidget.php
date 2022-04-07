@@ -51,7 +51,7 @@ class ConvertWidget extends JsWidget
     public function getData()
     {
         return [
-            'convert-post' => Url::to(['/onlyoffice/convert/convert', 'guid' => $this->file->guid, 'ts' => time(), 'newName' => $this->newName]),
+            'convert-post' => Url::to(['/onlyoffice/convert/convert', 'guid' => $this->file->guid, 'newName' => $this->newName]),
             'file-info-url' => Url::to(['/onlyoffice/open/get-info', 'guid' => $this->file->guid]),
             'done-message' => Yii::t('OnlyofficeModule.base', 'Done!'),
             'error-message' => Yii::t('OnlyofficeModule.base', 'Error:'),

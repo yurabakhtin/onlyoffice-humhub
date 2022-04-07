@@ -142,16 +142,8 @@ humhub.module('onlyoffice', function (module, require, $) {
                         return;
                     }
 
-                    if (data.percent != null) {
-                        msg.text(data.percent + "%");
-                    }
-
-                    if (!data.endConvert) {
-                        setTimeout(_callAjax, 1000);
-                    } else {
-                        msg.text(that.options.doneMessage);
-                        loader.reset(that.$.find('.modal-footer'));
-                    }
+                    msg.text(that.options.doneMessage);
+                    loader.reset(that.$.find('.modal-footer'));
                 },
                 error: _onError
             });

@@ -224,7 +224,8 @@ class Module extends \humhub\components\Module
             return [];
         }
     }
-    public function fileToConversion($file, $ts, $toExt = null, $async = true)
+
+    public function fileToConversion($file, $toExt = null)
     {
         $key = $this->generateDocumentKey($file);
 
@@ -242,16 +243,17 @@ class Module extends \humhub\components\Module
         if (!empty($this->getStorageUrl())) {
             $downloadUrl = $this->getStorageUrl() . Url::to(['/onlyoffice/backend/download', 'doc' => $docHash], false);
         }
+
         if(is_null($toExt))
             $toExt = $this->convertsTo[$fromExt];
 
-        return $this->convertService($downloadUrl, $fromExt, $toExt, $key . $ts, $async);
+        return $this->convertService($downloadUrl, $fromExt, $toExt, $key . time());
     }
 
-    public function convertService($documentUrl, $fromExt, $toExt, $key, $async = true): array
+    public function convertService($documentUrl, $fromExt, $toExt, $key, $async = false): array
     {
         $url = $this->getInternalServerUrl() . '/ConvertService.ashx';
-        
+
         $data = [
             'async' => $async,
             'embeddedfonts' => true,
@@ -274,11 +276,21 @@ class Module extends \humhub\components\Module
                 'body' => $data
             ];
 
-            $response = $this->request($url, 'POST', $options);
-            return $response->getData();
+            $response = json_decode($this->request($url, 'POST', $options)->getContent());
+            if (isset($response->error)) {
+                $this->convertResponceError($response->error);
+            }
+
+            if (isset($response->endConvert) && $response->endConvert) {
+                return ['url' => $response->fileUrl];
+            } else {
+                throw new \Exception('Could not get document server response.');
+            }
+
         } catch (\Exception $ex) {
-            $error = 'Could not get document server response! ' . $ex->getMessage();
+            $error = $ex->getMessage();
             Yii::error($error);
+
             return ['error' => $error];
         }
     }
@@ -300,14 +312,20 @@ class Module extends \humhub\components\Module
     /**
      * @inheritdoc
      */
-    public function generateHash($key, $userGuid)
+    public function generateHash($key, $userGuid, $isEmpty = false)
     {
-        $data = [
-            'key' => $key
-        ];
+        $data = [];
+
+        if (!empty($key)) {
+            $data['key'] = $key;
+        }
 
         if (!empty($userGuid)) {
             $data['userGuid'] = $userGuid;
+        }
+
+        if ($isEmpty) {
+            $data['isEmpty'] = true;
         }
 
         return JWT::encode($data, Yii::$app->settings->get('secret'));
@@ -394,4 +412,45 @@ class Module extends \humhub\components\Module
         'xlsx' => 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
         'xltx' => 'application/vnd.openxmlformats-officedocument.spreadsheetml.template'
     ];
+
+    private function convertResponceError($errorCode) {
+        $errorMessage = "";
+
+        switch ($errorCode) {
+            case -20:
+                $errorMessage = ": Error encrypt signature";
+                break;
+            case -8:
+                $errorMessage = ": Invalid token";
+                break;
+            case -7:
+                $errorMessage = ": Error document request";
+                break;
+            case -6:
+                $errorMessage = ": Error while accessing the conversion result database";
+                break;
+            case -5:
+                $errorMessage = ": Incorrect password";
+                break;
+            case -4:
+                $errorMessage = ": Error while downloading the document file to be converted.";
+                break;
+            case -3:
+                $errorMessage = ": Conversion error";
+                break;
+            case -2:
+                $errorMessage = ": Timeout conversion error";
+                break;
+            case -1:
+                $errorMessage = ": Unknown error";
+                break;
+            case 0:
+                break;
+            default:
+                $errorMessage = ": ErrorCode = " . $errorCode;
+                break;
+        }
+
+        throw new \Exception($errorMessage);
+    }
 }

@@ -36,17 +36,17 @@ class ConvertController extends BaseFileController
         return $this->renderAjax('index', ['file' => $this->file]);
     }
 
-    public function actionConvert($guid, $ts, $newName)
+    public function actionConvert($guid, $newName)
     {
         Yii::$app->response->format = 'json';
 
-        $json = $this->module->fileToConversion($this->file, $ts);
+        $result = $this->module->fileToConversion($this->file);
 
-        if (!empty($json["endConvert"]) && $json["endConvert"]) {
-            $this->saveFileReplace($json["fileUrl"], $newName);
+        if (isset($result["url"])) {
+            $this->saveFileReplace($result["url"], $newName);
         }
 
-        return $json;
+        return $result;
     }
 
     private function saveFileReplace($url, $newName) {
