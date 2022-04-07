@@ -57,11 +57,11 @@ use yii\web\View;
         </div>
 
         <?php 
-            if(!empty($serverApiUrl)) {
-                View::registerJsFile($serverApiUrl); 
+            if(!empty($view['serverApiUrl'])) {
+                View::registerJsFile($view['serverApiUrl']); 
                 View::registerJs('
                     if(typeof DocsAPI === "undefined") {
-                        $(".invalid-server-url").html("<strong>ONLYOFFICE Docs</strong> invalid hostname");
+                        $(".invalid-server-url").html("<strong>ONLYOFFICE Docs</strong> DocsAPI undefined.");
                         $(".invalid-server-url").show();
                     } 
                 ');
