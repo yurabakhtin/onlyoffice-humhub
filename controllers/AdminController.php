@@ -123,7 +123,7 @@ class AdminController extends Controller
 
         $result = $this->module->convertService($downloadUrl, "docx", "docx", $key, false);
 
-        $response = (empty($result["error"]) && $result["url"]) ? true : false;
+        $response = (!isset($result['error']) && isset($result['endConvert'])) ? $result['endConvert'] : false;
 
         return $response;
     }

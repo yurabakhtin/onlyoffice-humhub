@@ -228,7 +228,7 @@ class Module extends \humhub\components\Module
         }
     }
 
-    public function fileToConversion($file, $toExt = null)
+    public function fileToConversion($file, $ts, $toExt = null, $async = true)
     {
         $key = $this->generateDocumentKey($file);
 
@@ -250,7 +250,7 @@ class Module extends \humhub\components\Module
         if(is_null($toExt))
             $toExt = $this->convertsTo[$fromExt];
 
-        return $this->convertService($downloadUrl, $fromExt, $toExt, $key . time());
+        return $this->convertService($downloadUrl, $fromExt, $toExt, $key . $ts, $async);
     }
 
     public function convertService($documentUrl, $fromExt, $toExt, $key, $async = false): array
@@ -279,22 +279,15 @@ class Module extends \humhub\components\Module
                 'body' => $data
             ];
 
-            $response = json_decode($this->request($url, 'POST', $options)->getContent());
-            if (isset($response->error)) {
-                $this->convertResponceError($response->error);
+            $response = $this->request($url, 'POST', $options)->getData();
+            if (isset($response['error'])) {
+                $this->convertResponceError($response['error']);
             }
 
-            if (isset($response->endConvert) && $response->endConvert) {
-                return ['url' => $response->fileUrl];
-            } else {
-                throw new \Exception('Could not get document server response.');
-            }
-
+            return $response;
         } catch (\Exception $ex) {
-            $error = $ex->getMessage();
-            Yii::error($error);
-
-            return ['error' => $error];
+            Yii::error('ConvertService: ' . $ex->getMessage());
+            return ['error' => $ex->getMessage()];
         }
     }
 
