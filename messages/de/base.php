@@ -61,4 +61,6 @@ return [
     'Display Feedback & Support menu button' => 'Feedback-& Support-Taste anzeigen',
     'Display Help menu button' => 'Hilfetaste anzeigen',
     'Display monochrome toolbar header' => 'Monochromen Kopfbereich der Symbolleiste anzeigen',
+    'Error when trying to connect ({error})' => 'Fehler beim Anschließen ({error})',
+    'Mixed Active Content is not allowed. HTTPS address for ONLYOFFICE Docs is required.' => 'Mixed Active Content ist nicht möglich. HTTPS-Adresse für ONLYOFFICE Docs ist erforderlich.',
 ];

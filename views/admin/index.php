@@ -19,15 +19,16 @@ use yii\web\View;
         <?php if (empty($model->serverUrl)): ?>
             <div class="alert alert-warning" role="alert"><?= Yii::t('OnlyofficeModule.base', '<strong>ONLYOFFICE Docs</strong> not configured yet.'); ?></div>
         <?php elseif (!empty($error)): ?>
-            <div class="alert alert-danger" role="alert"><?= Yii::t('OnlyofficeModule.base', 'Error when trying to connect ({error})', ['error' => $error]); ?></div>
+            <div class="alert alert-danger error" role="alert"><?= Yii::t('OnlyofficeModule.base', 'Error when trying to connect ({error})', ['error' => $error]); ?></div>
         <?php elseif (!empty($version)): ?>
             <div class="alert alert-success" role="alert"><?= Yii::t('OnlyofficeModule.base', '<strong>ONLYOFFICE Docs</strong> successfully connected! - Installed version: {version}', ['version' => $version]); ?></div>
         <?php endif; ?>
 
+        <div class="alert alert-danger invalid-server-url" role="alert" hidden><?= Yii::t('OnlyofficeModule.base', ''); ?></div>
+
         <?php $form = ActiveForm::begin(['id' => 'configure-form']); ?>
         <div class="form-group">
             <?= $form->field($model, 'serverUrl'); ?>
-            <div class="alert alert-danger invalid-server-url" role="alert" hidden><?= Yii::t('OnlyofficeModule.base', ''); ?></div>
             <?= $form->field($model, 'verifyPeerOff')->checkbox(); ?>
         </div>
 
@@ -61,8 +62,12 @@ use yii\web\View;
                 View::registerJsFile($serverApiUrl);
                 View::registerJs('
                     if(typeof DocsAPI === "undefined") {
-                        $(".invalid-server-url").html("<strong>ONLYOFFICE Docs</strong> DocsAPI undefined.");
-                        $(".invalid-server-url").show();
+                        if ($(".error").length) {
+                            $(".error").append("' . Yii::t("OnlyofficeModule.base", "<p style=\'color: #ff8989\'><strong>ONLYOFFICE Docs</strong> DocsAPI undefined.</p>") . '");
+                        } else {
+                            $(".invalid-server-url").html("<strong>ONLYOFFICE Docs</strong> DocsAPI undefined.");
+                            $(".invalid-server-url").show();
+                        }
                     } 
                 ');
             }
