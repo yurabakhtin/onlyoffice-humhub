@@ -55,5 +55,11 @@ return [
     'Fill in form in ONLYOFFICE' => 'Заполнить форму в ONLYOFFICE',
     'Please update ONLYOFFICE Docs to version 7.0 to work on fillable forms online' => 'Обновите сервер ONLYOFFICE Docs до версии 7.0 для работы с формами онлайн',
     'Disable certificate verification (insecure)' => 'Отключить проверку сертификата (небезопасно)',
-    'Not supported version' => 'Неподдерживаемая версия'
+    'Not supported version' => 'Неподдерживаемая версия',
+    'The customization section allows personalizing the editor interface' => 'Раздел настройки позволяет изменить интерфейс редактора',
+    'Display Chat menu button' => 'Отображать кнопку чата',
+    'Display the header more compact' => 'Отображать заголовок компактным',
+    'Display Feedback & Support menu button' => 'Отображать кнопку Обратной связи и поддержки',
+    'Display Help menu button' => 'Отображать кнопку справки',
+    'Display monochrome toolbar header' => 'Отображать монохромный заголовок панели инструментов',
 ];

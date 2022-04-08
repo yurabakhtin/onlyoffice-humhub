@@ -44,6 +44,15 @@ use yii\web\View;
         </div>
 
         <div class="form-group">
+            <?= Html::activeLabel($model,'customLabel', ['class' => 'control-label']); ?>
+            <?= $form->field($model, 'chat')->checkbox(); ?>
+            <?= $form->field($model, 'compactHeader')->checkbox(); ?>
+            <?= $form->field($model, 'feedback')->checkbox(); ?>
+            <?= $form->field($model, 'help')->checkbox(); ?>
+            <?= $form->field($model, 'compactToolbar')->checkbox(); ?>
+        </div>
+
+        <div class="form-group">
             <?= Html::submitButton('Submit', ['class' => 'btn btn-primary', 'data-ui-loader' => '']) ?>
         </div>
 

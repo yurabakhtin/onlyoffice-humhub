@@ -50,7 +50,7 @@ class ConvertController extends BaseFileController
     }
 
     private function saveFileReplace($url, $newName) {
-        $content = $this->module->request($url)->getBody();
+        $content = $this->module->request($url)->getContent();
 
         $this->file->store->setContent($content);
         $this->file->updateAttributes([
