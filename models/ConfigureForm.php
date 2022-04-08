@@ -22,6 +22,13 @@ class ConfigureForm extends \yii\base\Model
     public $storageUrl;
     public $demoServer;
 
+    public $chat;
+    public $compactHeader;
+    public $feedback;
+    public $help;
+    public $compactToolbar;
+    public $customLabel;
+
     /**
      * @inheritdoc
      */
@@ -34,6 +41,11 @@ class ConfigureForm extends \yii\base\Model
             ['internalServerUrl', 'string'],
             ['storageUrl', 'string'],
             ['demoServer', 'boolean'],
+            ['chat', 'boolean'],
+            ['compactHeader', 'boolean'],
+            ['feedback', 'boolean'],
+            ['help', 'boolean'],
+            ['compactToolbar', 'boolean'],
         ];
     }
 
@@ -49,6 +61,12 @@ class ConfigureForm extends \yii\base\Model
             'internalServerUrl' => Yii::t('OnlyofficeModule.base', 'ONLYOFFICE Docs address for internal requests from the server'),
             'storageUrl' => Yii::t('OnlyofficeModule.base', 'Server address for internal requests from ONLYOFFICE Docs'),
             'demoServer' => Yii::t('OnlyofficeModule.base', 'Connect to demo server'),
+            'chat' => Yii::t('OnlyofficeModule.base', 'Display Chat menu button'),
+            'compactHeader' => Yii::t('OnlyofficeModule.base', 'Display the header more compact'),
+            'feedback' => Yii::t('OnlyofficeModule.base', 'Display Feedback & Support menu button'),
+            'help' => Yii::t('OnlyofficeModule.base', 'Display Help menu button'),
+            'compactToolbar' => Yii::t('OnlyofficeModule.base', 'Display monochrome toolbar header'),
+            'customLabel' => Yii::t('OnlyofficeModule.base', 'The customization section allows personalizing the editor interface'),
         ];
     }
     
@@ -73,6 +91,11 @@ class ConfigureForm extends \yii\base\Model
         $this->internalServerUrl = Yii::$app->getModule('onlyoffice')->settings->get('internalServerUrl');
         $this->storageUrl = Yii::$app->getModule('onlyoffice')->settings->get('storageUrl');
         $this->demoServer = (boolean)Yii::$app->getModule('onlyoffice')->settings->get('demoServer');
+        $this->chat = (boolean)Yii::$app->getModule('onlyoffice')->settings->get('chat');
+        $this->compactHeader = (boolean)Yii::$app->getModule('onlyoffice')->settings->get('compactHeader');
+        $this->feedback = (boolean)Yii::$app->getModule('onlyoffice')->settings->get('feedback');
+        $this->help = (boolean)Yii::$app->getModule('onlyoffice')->settings->get('help');
+        $this->compactToolbar = (boolean)Yii::$app->getModule('onlyoffice')->settings->get('compactToolbar');
 
         return true;
     }
@@ -85,6 +108,11 @@ class ConfigureForm extends \yii\base\Model
         Yii::$app->getModule('onlyoffice')->settings->set('internalServerUrl', rtrim($this->internalServerUrl, '/'));
         Yii::$app->getModule('onlyoffice')->settings->set('storageUrl', rtrim($this->storageUrl, '/'));
         Yii::$app->getModule('onlyoffice')->settings->set('demoServer', $this->demoServer);
+        Yii::$app->getModule('onlyoffice')->settings->set('chat', $this->chat);
+        Yii::$app->getModule('onlyoffice')->settings->set('compactHeader', $this->compactHeader);
+        Yii::$app->getModule('onlyoffice')->settings->set('feedback', $this->feedback);
+        Yii::$app->getModule('onlyoffice')->settings->set('help', $this->help);
+        Yii::$app->getModule('onlyoffice')->settings->set('compactToolbar', $this->compactToolbar);
 
         return true;
     }

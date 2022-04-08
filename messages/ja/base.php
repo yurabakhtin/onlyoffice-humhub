@@ -55,4 +55,12 @@ return [
     'Fill in form in ONLYOFFICE' => 'ONLYOFFICEでフォームを記入する',
     'Please update ONLYOFFICE Docs to version 7.0 to work on fillable forms online' => 'オンラインで入力可能なフォームを作成するには、ONLYOFFICE Docs 7.0版まで更新してください',
     'Disable certificate verification (insecure)' => '証明書の検証を無効にする（安全でない',
+    'The customization section allows personalizing the editor interface'=> 'カスタマイズセクションでは、エディターインターフェイスをパーソナライズできます',
+    'Display Chat menu button' => 'チャットメニューホタンを表示',
+    'Display the header more compact' => 'ヘッダーをよりコンパクトに表示',
+    'Display Feedback & Support menu button' => 'フィードバックとサポートメニューホタンを表示',
+    'Display Help menu button' => 'ヘルプメニューホタンを表示',
+    'Display monochrome toolbar header' => 'モノクローム・ツールバーヘッダーを表示する',
+    'Error when trying to connect ({error})' => '接続時にエラーが発生しました ({error})',
+    'Mixed Active Content is not allowed. HTTPS address for ONLYOFFICE Docs is required.' => 'アクティブコンテンツの混在は許可されていません。ONLYOFFICE DocsにはHTTPSアドレスが必要です',
 ];

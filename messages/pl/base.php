@@ -55,4 +55,12 @@ return [
     'Fill in form in ONLYOFFICE' => 'Wypełnić formularz w ONLYOFFICE',
     'Please update ONLYOFFICE Docs to version 7.0 to work on fillable forms online' => 'Zaktualizuj ONLYOFFICE Docs do wersji 7.0, aby działały w formularzach do wypełniania online',
     'Disable certificate verification (insecure)' => 'Wyłącz weryfikację certyfikatu (niebezpieczne)',
+    'The customization section allows personalizing the editor interface' => 'Ta sekcja pozwala na personalizację interefejsu edytorów',
+    'Display Chat menu button' => 'Wyświetl menu Czatu',
+    'Display the header more compact' => 'Wyświetlaj bardziej kompaktowy nagłówek',
+    'Display Feedback & Support menu button' => 'Wyświetlaj Opinie i Support',
+    'Display Help menu button' => 'Wyświetlaj menu pomocy',
+    'Display monochrome toolbar header' => 'Wyświetl monochromatyczny nagłówek paska narzędzi',
+    'Error when trying to connect ({error})' => 'Błąd przy próbie połączenia ({error})',
+    'Mixed Active Content is not allowed. HTTPS address for ONLYOFFICE Docs is required.' => 'Aktywna Zawartość Mieszana nie jest dozwolona. Adres HTTPS jest wymagany dla ONLYOFFICE Docs.',
 ];

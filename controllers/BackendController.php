@@ -48,13 +48,15 @@ class BackendController extends Controller
         $this->enableCsrfValidation = false;
 
         $hash = Yii::$app->request->get('doc');
+
         list ($hashData, $error) = $this->module->readHash($hash);
         if (!empty($error)) {
             throw new HttpException(404, 'Backend action with empty or invalid hash');
         }
 
-        $key = $hashData->key;
+        $key = isset($hashData->key) ? $hashData->key : null;
         $userGuid = isset($hashData->userGuid) ? $hashData->userGuid : null;
+        $isEmpty = isset($hashData->isEmpty) ? $hashData->isEmpty : false;
 
         $this->file = File::findOne(['onlyoffice_key' => $key]);
 
@@ -65,7 +67,7 @@ class BackendController extends Controller
             }
         }
 
-        if ($this->file == null) {
+        if ($this->file == null && !$isEmpty) {
             throw new HttpException(404, Yii::t('OnlyofficeModule.base', 'Could not find requested file!'));
         }
 
@@ -79,6 +81,13 @@ class BackendController extends Controller
     {
         //Yii::warning("Downloading file guid: " . $this->file->guid, 'onlyoffice');
         return Yii::$app->response->sendFile($this->file->store->get(), $this->file->file_name);
+    }
+    /**
+     * Download empty file
+     */
+    public function actionEmptyFile()
+    {
+        return Yii::$app->response->sendFile($this->module->getAssetPath() . '/templates/en-US/new.docx');
     }
 
     public function actionTrack()
@@ -144,7 +153,7 @@ class BackendController extends Controller
                 case "Corrupted":
                 case "ForceSave":
 
-                    $newData = $this->module->request($data["url"])->getBody();
+                    $newData = $this->module->request($data["url"])->getContent();
 
                     if (!empty($newData)) {
 

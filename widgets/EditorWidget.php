@@ -168,6 +168,11 @@ class EditorWidget extends JsWidget
                 ],
                 'customization' => [
                     //'forcesave' => true,
+                    'chat' => boolval($module->getChat()),
+                    'compactHeader' => boolval($module->getCompactHeader()),
+                    'feedback' => boolval($module->getFeedback()),
+                    'help' => boolval($module->getHelp()),
+                    'compactToolbar' => boolval($module->getCompactToolbar()),
                 ]
             ]
         ];
