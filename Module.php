@@ -217,17 +217,20 @@ class Module extends \humhub\components\Module
                 'body' => $data
             );
 
-            $response = $this->request($url, 'POST', $options);
-            return $response->getData();
+            $response = $this->request($url, 'POST', $options)->getData();
+            if (isset($response['error'])) {
+                $this->commandResponceError($response['error']);
+            }
+
+            return $response;
         } catch (\Exception $ex) {
-            Yii::error('Could not get document server response! ' . $ex->getMessage());
-            return [];
+            Yii::error('CommandService: ' . $ex->getMessage());
+            return ['error' => $ex->getMessage()];
         }
     }
 
-    public function convertService($file, $ts): array
+    public function fileToConversion($file, $ts, $toExt = null, $async = true)
     {
-        $url = $this->getInternalServerUrl() . '/ConvertService.ashx';
         $key = $this->generateDocumentKey($file);
 
         $user = Yii::$app->user->getIdentity();
@@ -238,14 +241,30 @@ class Module extends \humhub\components\Module
 
         $docHash = $this->generateHash($key, $userGuid);
 
-        $ext = strtolower(FileHelper::getExtension($file));
+        $fromExt = strtolower(FileHelper::getExtension($file));
+
+        $downloadUrl = Url::to(['/onlyoffice/backend/download', 'doc' => $docHash], true);
+        if (!empty($this->getStorageUrl())) {
+            $downloadUrl = $this->getStorageUrl() . Url::to(['/onlyoffice/backend/download', 'doc' => $docHash], false);
+        }
+
+        if(is_null($toExt))
+            $toExt = $this->convertsTo[$fromExt];
+
+        return $this->convertService($downloadUrl, $fromExt, $toExt, $key . $ts, $async);
+    }
+
+    public function convertService($documentUrl, $fromExt, $toExt, $key, $async = false): array
+    {
+        $url = $this->getInternalServerUrl() . '/ConvertService.ashx';
+
         $data = [
-            'async' => true,
+            'async' => $async,
             'embeddedfonts' => true,
-            'filetype' => $ext,
-            'outputtype' => $this->convertsTo[$ext],
-            'key' => $key . $ts,
-            'url' => Url::to(['/onlyoffice/backend/download', 'doc' => $docHash], true),
+            'filetype' => $fromExt,
+            'outputtype' => $toExt,
+            'key' => $key,
+            'url' => $documentUrl,
         ];
 
         try {
@@ -261,12 +280,15 @@ class Module extends \humhub\components\Module
                 'body' => $data
             ];
 
-            $response = $this->request($url, 'POST', $options);
-            return $response->getData();
+            $response = $this->request($url, 'POST', $options)->getData();
+            if (isset($response['error'])) {
+                $this->convertResponceError($response['error']);
+            }
+
+            return $response;
         } catch (\Exception $ex) {
-            $error = 'Could not get document server response! ' . $ex->getMessage();
-            Yii::error($error);
-            return ['error' => $error];
+            Yii::error('ConvertService: ' . $ex->getMessage());
+            return ['error' => $ex->getMessage()];
         }
     }
 
@@ -287,14 +309,20 @@ class Module extends \humhub\components\Module
     /**
      * @inheritdoc
      */
-    public function generateHash($key, $userGuid)
+    public function generateHash($key, $userGuid, $isEmpty = false)
     {
-        $data = [
-            'key' => $key
-        ];
+        $data = [];
+
+        if (!empty($key)) {
+            $data['key'] = $key;
+        }
 
         if (!empty($userGuid)) {
             $data['userGuid'] = $userGuid;
+        }
+
+        if ($isEmpty) {
+            $data['isEmpty'] = true;
         }
 
         return JWT::encode($data, Yii::$app->settings->get('secret'));
@@ -381,4 +409,68 @@ class Module extends \humhub\components\Module
         'xlsx' => 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
         'xltx' => 'application/vnd.openxmlformats-officedocument.spreadsheetml.template'
     ];
+
+    private function convertResponceError($errorCode) {
+        $errorMessage = "";
+
+        switch ($errorCode) {
+            case -20:
+                $errorMessage = "Error encrypt signature";
+                break;
+            case -8:
+                $errorMessage = "Invalid token";
+                break;
+            case -7:
+                $errorMessage = "Error document request";
+                break;
+            case -6:
+                $errorMessage = "Error while accessing the conversion result database";
+                break;
+            case -5:
+                $errorMessage = "Incorrect password";
+                break;
+            case -4:
+                $errorMessage = "Error while downloading the document file to be converted.";
+                break;
+            case -3:
+                $errorMessage = "Conversion error";
+                break;
+            case -2:
+                $errorMessage = "Timeout conversion error";
+                break;
+            case -1:
+                $errorMessage = "Unknown error";
+                break;
+            case 0:
+                break;
+            default:
+                $errorMessage = "ErrorCode = " . $errorCode;
+                break;
+        }
+
+        throw new \Exception($errorMessage);
+    }
+
+    private function commandResponceError($errorCode) {
+        $errorMessage = "";
+
+        switch ($errorCode) {
+            case 3:
+                $errorMessage = "Internal server error.";
+                break;
+            case 5:
+                $errorMessage = "Command not correct.";
+                break;
+            case 6:
+                $errorMessage = "Invalid token.";
+                break;
+            case 0:
+                return;
+            default:
+                $errorMessage = "ErrorCode = " . $errorCode;
+                break;
+        }
+
+        throw new \Exception($errorMessage);
+    }
 }

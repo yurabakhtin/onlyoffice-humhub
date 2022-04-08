@@ -62,4 +62,6 @@ return [
     'Display Feedback & Support menu button' => 'Отображать кнопку Обратной связи и поддержки',
     'Display Help menu button' => 'Отображать кнопку справки',
     'Display monochrome toolbar header' => 'Отображать монохромный заголовок панели инструментов',
+    'Error when trying to connect ({error})' => 'При попытке соединения возникла ошибка ({error})',
+    'Mixed Active Content is not allowed. HTTPS address for ONLYOFFICE Docs is required.' => 'Смешанное активное содержимое запрещено. Для ONLYOFFICE Docs необходимо использовать HTTPS-адрес.'
 ];
