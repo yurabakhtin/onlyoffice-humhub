@@ -14,7 +14,6 @@
 namespace humhub\modules\onlyoffice\controllers;
 
 use Yii;
-use humhub\modules\file\models\File;
 use humhub\modules\onlyoffice\models\ConfigureForm;
 use humhub\modules\admin\components\Controller;
 use yii\helpers\Url;
