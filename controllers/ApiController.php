@@ -14,7 +14,6 @@
 namespace humhub\modules\onlyoffice\controllers;
 
 use Yii;
-use yii\web\HttpException;
 use humhub\modules\file\models\File;
 use humhub\components\Controller;
 use \humhub\components\Module;
