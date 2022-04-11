@@ -127,7 +127,7 @@ class Module extends \humhub\components\Module
     public function isDemoServerEnabled() {
         if(boolval($this->getDemoServer())) {
             $trial = $this->getTrial();
-            if($trial != false)
+            if($trial !== false)
                 return true;
         }
         return false;
@@ -292,7 +292,7 @@ class Module extends \humhub\components\Module
         return $this->convertService($downloadUrl, $fromExt, $toExt, $key . $ts, $async);
     }
 
-    public function convertService($documentUrl, $fromExt, $toExt, $key, $async = false): array
+    public function convertService($documentUrl, $fromExt, $toExt, $key, $async = true): array
     {
         $url = $this->getInternalServerUrl() . '/ConvertService.ashx';
 
@@ -309,6 +309,7 @@ class Module extends \humhub\components\Module
             $headers = [];
             $headers['Accept'] = 'application/json';
             if ($this->isJwtEnabled() || $this->isDemoServerEnabled()) {
+                $data['token'] = JWT::encode($data, $this->getJwtSecret());
                 $str = $this->isDemoServerEnabled() ? 'AuthorizationJWT' : 'Authorization';
                 $headers[$str] = 'Bearer ' . JWT::encode(['payload' => $data], $this->getJwtSecret());
             }
@@ -494,13 +495,13 @@ class Module extends \humhub\components\Module
 
         switch ($errorCode) {
             case 3:
-                $errorMessage = "Internal server error.";
+                $errorMessage = "Internal server error";
                 break;
             case 5:
-                $errorMessage = "Command not correct.";
+                $errorMessage = "Command not correct";
                 break;
             case 6:
-                $errorMessage = "Invalid token.";
+                $errorMessage = "Invalid token";
                 break;
             case 0:
                 return;

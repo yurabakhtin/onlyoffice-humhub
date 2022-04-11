@@ -16,7 +16,7 @@ use yii\web\View;
 
     <div class="panel-body">
 
-        <?php if (empty($model->serverUrl)): ?>
+        <?php if (empty($model->serverUrl) && empty($trial)): ?>
             <div class="alert alert-warning" role="alert"><?= Yii::t('OnlyofficeModule.base', '<strong>ONLYOFFICE Docs</strong> not configured yet.'); ?></div>
         <?php elseif (!empty($error)): ?>
             <div class="alert alert-danger error" role="alert"><?= Yii::t('OnlyofficeModule.base', 'Error when trying to connect ({error})', ['error' => $error]); ?></div>
@@ -61,7 +61,7 @@ use yii\web\View;
         </div>
 
         <?php 
-            if(!empty($serverApiUrl)) {
+            if(isset($serverApiUrl)) {
                 View::registerJsFile($serverApiUrl);
                 View::registerJs('
                     if(typeof DocsAPI === "undefined") {

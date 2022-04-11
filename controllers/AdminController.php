@@ -36,8 +36,13 @@ class AdminController extends Controller
             $this->view->saved();
         }
 
-        $trial = $this->getTrial();
-        $serverApiUrl = $this->module->getServerApiUrl();
+        $trial = $serverApiUrl = null;
+        if($this->module->isDemoServerEnabled()) {
+            $trial = $this->module->getTrial();
+        } 
+        if(!empty($model->serverUrl) || $this->module->isDemoServerEnabled()) {
+            $serverApiUrl = $this->module->getServerApiUrl();
+        }
 
         list($error, $version) = $this->validation();
 
@@ -93,13 +98,6 @@ class AdminController extends Controller
         }
 
         return [];
-    }
-    private function getTrial()
-    {
-        $module = Yii::$app->getModule('onlyoffice');
-        if($module->isDemoServerEnabled())
-            return $module->getTrial();
-        return -1;
     }
 
     private function checkValidHttps()
