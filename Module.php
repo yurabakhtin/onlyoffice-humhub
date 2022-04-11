@@ -295,6 +295,14 @@ class Module extends \humhub\components\Module
     public function convertService($documentUrl, $fromExt, $toExt, $key, $async = true): array
     {
         $url = $this->getInternalServerUrl() . '/ConvertService.ashx';
+        
+        $user = Yii::$app->user->getIdentity();
+        $lang = ($user) && !empty($user->language) ? $user->language : Yii::$app->language;
+        if (!array_key_exists($lang, $this->languageCodes)) {
+            $region = 'en-US';
+        } else {
+            $region = $this->languageCodes[$lang];
+        }
 
         $data = [
             'async' => $async,
@@ -303,6 +311,7 @@ class Module extends \humhub\components\Module
             'outputtype' => $toExt,
             'key' => $key,
             'url' => $documentUrl,
+            'region' => $region
         ];
 
         try {
@@ -449,6 +458,33 @@ class Module extends \humhub\components\Module
         'xltx' => 'application/vnd.openxmlformats-officedocument.spreadsheetml.template'
     ];
 
+    public $languageCodes = [
+        "az" => "az-Latn-AZ",
+        "bg" => "bg-BG",
+        "cs" => "cs-CZ",
+        "de" => "de-DE",
+        "el" => "el-GR",
+        "en_GB" => "en-GB",
+        "en-US" => "en-US",
+        "es" => "es-ES",
+        "fr" => "fr-FR",
+        "it" => "it-IT",
+        "ja" => "ja-JP",
+        "ko" => "ko-KR",
+        "lv" => "lv-LV",
+        "nl" => "nl-NL",
+        "pl" => "pl-PL",
+        "pt_BR" => "pt-BR",
+        "pt" => "pt-PT",
+        "ru" => "ru-RU",
+        "sk" => "sk-SK",
+        "sv" => "sv-SE",
+        "tr" => "tr-TR",
+        "uk" => "uk-UA",
+        "vi" => "vi-VN",
+        "zh-CN" => "zh-CN",
+        "zh-TW" => "zh-CN"
+    ];
     private function convertResponceError($errorCode) {
         $errorMessage = "";
 
