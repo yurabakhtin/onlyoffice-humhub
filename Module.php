@@ -78,6 +78,12 @@ class Module extends \humhub\components\Module
         'odp' => 'pptx',
     ];
     
+    public $demoparam = [
+        'trial' => 30,
+        'header' => 'AuthorizationJWT',
+        'secret' => 'sn2puSUF7muF5Jas',
+        'serverUrl' => 'https://onlinedocs.onlyoffice.com'
+    ];
 
     public function isJwtEnabled() {
         return !empty($this->getJwtSecret());
@@ -85,7 +91,7 @@ class Module extends \humhub\components\Module
 
     public function getJwtSecret() {
         if($this->isDemoServerEnabled()) { 
-            return 'sn2puSUF7muF5Jas';
+            return $this->demoparam['secret'];
         }
         return $this->settings->get('jwtSecret');
     }
@@ -93,7 +99,7 @@ class Module extends \humhub\components\Module
     public function getServerUrl()
     {
         if($this->isDemoServerEnabled()) {
-            return $this->getDemoServerUrl();
+            return $this->demoparam['serverUrl'];
         }
 
         return $this->settings->get('serverUrl');
@@ -154,17 +160,14 @@ class Module extends \humhub\components\Module
         return $this->settings->get('compactToolbar');
     }
 
-    /**
-     * 
-     * @return type
-     */
-    public function getServerApiUrl()
+    public function getServerApiUrl(): string
     {
         return $this->getServerUrl() . '/web-apps/apps/api/documents/api.js';
     }
-    public function getDemoServerUrl()
+
+    public function getHeader(): string
     {
-        return 'https://onlinedocs.onlyoffice.com';
+        return $this->isDemoServerEnabled() ? $this->demoparam['header'] : 'Authorization';
     }
 
     public function getTrial()
@@ -174,10 +177,10 @@ class Module extends \humhub\components\Module
         
         if(empty($trial)) {
             $settings->set('trial', time());
-        } elseif(30 - round((time() - $trial) / 86400) < 0) {
+        } elseif($this->demoparam['trial'] - round( (time() - $trial) / (60*60*24) ) < 0) {
             return false;
         }
-        return 30 - round((time() - $trial) / 86400);
+        return $this->demoparam['trial'] - round( (time() - $trial) / (60*60*24) );
     }
     public function getDocumentType($file)
     {
@@ -246,8 +249,7 @@ class Module extends \humhub\components\Module
             $headers['Accept'] = 'application/json';
             if ($this->isJwtEnabled() || $this->isDemoServerEnabled()) {
                 $data['token'] = JWT::encode($data, $this->getJwtSecret());
-                $str = $this->isDemoServerEnabled() ? 'AuthorizationJWT' : 'Authorization';
-                $headers[$str] = 'Bearer ' . JWT::encode(['payload' => $data], $this->getJwtSecret());
+                $headers[$this->getHeader()] = 'Bearer ' . JWT::encode(['payload' => $data], $this->getJwtSecret());
             }
 
             $options = array(
@@ -310,8 +312,7 @@ class Module extends \humhub\components\Module
             $headers['Accept'] = 'application/json';
             if ($this->isJwtEnabled() || $this->isDemoServerEnabled()) {
                 $data['token'] = JWT::encode($data, $this->getJwtSecret());
-                $str = $this->isDemoServerEnabled() ? 'AuthorizationJWT' : 'Authorization';
-                $headers[$str] = 'Bearer ' . JWT::encode(['payload' => $data], $this->getJwtSecret());
+                $headers[$this->getHeader()] = 'Bearer ' . JWT::encode(['payload' => $data], $this->getJwtSecret());
             }
 
             $options = [

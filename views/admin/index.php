@@ -23,7 +23,10 @@ use yii\web\View;
         <?php elseif (!empty($version) && !$trial): ?>
             <div class="alert alert-success" role="alert"><?= Yii::t('OnlyofficeModule.base', '<strong>ONLYOFFICE Docs</strong> successfully connected! - Installed version: {version}', ['version' => $version]); ?></div>
         <?php elseif (!empty($version) && $trial): ?>
-            <div class="alert alert-success" role="alert"><?= Yii::t('OnlyofficeModule.base', '<strong>ONLYOFFICE Docs</strong> successfully connected! - Installed version: {version}', ['version' => $version]); ?> <?= Yii::t('OnlyofficeModule.base', 'Trial period: {trial} days', ['trial' => $trial]); ?></div>
+            <div class="alert alert-success" role="alert">
+                <?= Yii::t('OnlyofficeModule.base', '<strong>ONLYOFFICE Docs</strong> successfully connected! - Installed version: {version}', ['version' => $version]); ?> 
+                <p style = "color: #84be5e"><?= Yii::t('OnlyofficeModule.base', 'Trial period: {trial} days', ['trial' => $trial]); ?></p>
+            </div>
         <?php endif; ?>
 
         <div class="alert alert-danger invalid-server-url" role="alert" hidden></div>
