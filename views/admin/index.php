@@ -62,14 +62,16 @@ use yii\web\View;
             if(!empty($serverApiUrl)) {
                 View::registerJsFile($serverApiUrl);
                 View::registerJs('
-                    if(typeof DocsAPI === "undefined") {
-                        if ($(".error").length) {
-                            $(".error").append("<p style=\'color: #ff8989\'>' . Yii::t("OnlyofficeModule.base", "<strong>ONLYOFFICE Docs</strong> DocsAPI undefined.") . '</p>");
-                        } else {
-                            $(".invalid-server-url").html("' . Yii::t("OnlyofficeModule.base", "<strong>ONLYOFFICE Docs</strong> DocsAPI undefined.") . '");
-                            $(".invalid-server-url").show();
-                        }
-                    } 
+                    setTimeout(function(){
+                        if(typeof DocsAPI === "undefined") {
+                            if ($(".error").length) {
+                                $(".error").append("<p style=\'color: #ff8989\'>' . Yii::t("OnlyofficeModule.base", "<strong>ONLYOFFICE Docs</strong> DocsAPI undefined.") . '</p>");
+                            } else {
+                                $(".invalid-server-url").html("' . Yii::t("OnlyofficeModule.base", "<strong>ONLYOFFICE Docs</strong> DocsAPI undefined.") . '");
+                                $(".invalid-server-url").show();
+                            }
+                        } 
+                    }, 1000);
                 ');
             }
         ?>

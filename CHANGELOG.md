@@ -3,6 +3,7 @@
 ## Added
 - editor customization
 - validation of server settings on the settings page
+- force save
 
 ## 2.4.0
 ## Added
