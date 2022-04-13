@@ -115,7 +115,7 @@ class BackendController extends Controller
                 throw new \Exception('Could not parse json');
             }
 
-            if ($this->module->isJwtEnabled() || $this->module->isDemoServerEnabled()) {
+            if ($this->module->isJwtEnabled()) {
                 $token = null;
                 if (!empty($data["token"])) {
                     $token = $data["token"];
