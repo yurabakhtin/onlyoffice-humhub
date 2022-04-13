@@ -120,7 +120,7 @@ class BackendController extends Controller
                 if (!empty($data["token"])) {
                     $token = $data["token"];
                 } else {
-                    $header = Yii::$app->request->headers->get('Authorization');
+                    $header = Yii::$app->request->headers->get($this->getHeader());
                     if (!empty($header)) {
                         $token = substr($header, strlen('Bearer '));
                     }

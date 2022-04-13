@@ -16,21 +16,27 @@ use yii\web\View;
 
     <div class="panel-body">
 
-        <?php if (empty($model->serverUrl)): ?>
+        <?php if (empty($model->serverUrl) && empty($trial)): ?>
             <div class="alert alert-warning" role="alert"><?= Yii::t('OnlyofficeModule.base', '<strong>ONLYOFFICE Docs</strong> not configured yet.'); ?></div>
         <?php elseif (!empty($error)): ?>
             <div class="alert alert-danger error" role="alert"><?= Yii::t('OnlyofficeModule.base', 'Error when trying to connect ({error})', ['error' => $error]); ?></div>
-        <?php elseif (!empty($version)): ?>
+        <?php elseif (!empty($version) && !$trial): ?>
             <div class="alert alert-success" role="alert"><?= Yii::t('OnlyofficeModule.base', '<strong>ONLYOFFICE Docs</strong> successfully connected! - Installed version: {version}', ['version' => $version]); ?></div>
+        <?php elseif (!empty($version) && $trial): ?>
+            <div class="alert alert-success" role="alert">
+                <?= Yii::t('OnlyofficeModule.base', '<strong>ONLYOFFICE Docs</strong> successfully connected! - Installed version: {version}', ['version' => $version]); ?> 
+                <p style = "color: #84be5e"><?= Yii::t('OnlyofficeModule.base', 'Trial period: {trial} days', ['trial' => $trial]); ?></p>
+            </div>
         <?php endif; ?>
 
-        <div class="alert alert-danger invalid-server-url" role="alert" hidden><?= Yii::t('OnlyofficeModule.base', ''); ?></div>
+        <div class="alert alert-danger invalid-server-url" role="alert" hidden></div>
 
         <?php $form = ActiveForm::begin(['id' => 'configure-form']); ?>
         <div class="form-group">
             <?= $form->field($model, 'serverUrl'); ?>
             <?= $form->field($model, 'verifyPeerOff')->checkbox(); ?>
             <?= $form->field($model, 'forceSave')->checkbox(); ?>
+            <?= $form->field($model, 'demoServer')->checkbox(); ?>
         </div>
 
         <div class="form-group">
@@ -59,7 +65,7 @@ use yii\web\View;
         </div>
 
         <?php 
-            if(!empty($serverApiUrl)) {
+            if(isset($serverApiUrl)) {
                 View::registerJsFile($serverApiUrl);
                 View::registerJs('
                     setTimeout(function(){
@@ -78,3 +84,12 @@ use yii\web\View;
         <?php ActiveForm::end(); ?>
     </div>
 </div>
+<?php
+   if($trial === false) {
+    View::registerJs('
+        $("#configureform-demoserver").closest("label").css({"cursor":"default", "opacity":"0.5"});
+        $("#configureform-demoserver").attr("checked", false);
+        $("#configureform-demoserver").attr("disabled", true);
+    ');
+   } 
+?>

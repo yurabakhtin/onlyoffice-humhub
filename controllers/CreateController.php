@@ -16,7 +16,6 @@ namespace humhub\modules\onlyoffice\controllers;
 use humhub\components\access\ControllerAccess;
 use humhub\modules\onlyoffice\permissions\CanUseOnlyOffice;
 use Yii;
-use yii\web\HttpException;
 use yii\helpers\Url;
 use humhub\modules\file\libs\FileHelper;
 use humhub\modules\onlyoffice\Module;

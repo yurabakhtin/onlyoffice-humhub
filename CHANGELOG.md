@@ -4,6 +4,9 @@
 - editor customization
 - validation of server settings on the settings page
 - force save
+- connect to the demo server
+- trial period of 30 days for the demo server
+- transfer user region in conversion
 
 ## 2.4.0
 ## Added
