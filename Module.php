@@ -86,6 +86,8 @@ class Module extends \humhub\components\Module
     ];
 
     public function isJwtEnabled() {
+        if($this->isDemoServerEnabled())
+            return true;
         return !empty($this->getJwtSecret());
     }
 
@@ -247,7 +249,7 @@ class Module extends \humhub\components\Module
         try {
             $headers = [];
             $headers['Accept'] = 'application/json';
-            if ($this->isJwtEnabled() || $this->isDemoServerEnabled()) {
+            if ($this->isJwtEnabled()) {
                 $data['token'] = JWT::encode($data, $this->getJwtSecret());
                 $headers[$this->getHeader()] = 'Bearer ' . JWT::encode(['payload' => $data], $this->getJwtSecret());
             }
@@ -319,7 +321,7 @@ class Module extends \humhub\components\Module
         try {
             $headers = [];
             $headers['Accept'] = 'application/json';
-            if ($this->isJwtEnabled() || $this->isDemoServerEnabled()) {
+            if ($this->isJwtEnabled()) {
                 $data['token'] = JWT::encode($data, $this->getJwtSecret());
                 $headers[$this->getHeader()] = 'Bearer ' . JWT::encode(['payload' => $data], $this->getJwtSecret());
             }
