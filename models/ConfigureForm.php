@@ -26,6 +26,7 @@ class ConfigureForm extends \yii\base\Model
     public $help;
     public $compactToolbar;
     public $customLabel;
+    public $forceSave;
 
     /**
      * @inheritdoc
@@ -43,6 +44,7 @@ class ConfigureForm extends \yii\base\Model
             ['feedback', 'boolean'],
             ['help', 'boolean'],
             ['compactToolbar', 'boolean'],
+            ['forceSave', 'boolean'],
         ];
     }
 
@@ -63,6 +65,7 @@ class ConfigureForm extends \yii\base\Model
             'help' => Yii::t('OnlyofficeModule.base', 'Display Help menu button'),
             'compactToolbar' => Yii::t('OnlyofficeModule.base', 'Display monochrome toolbar header'),
             'customLabel' => Yii::t('OnlyofficeModule.base', 'The customization section allows personalizing the editor interface'),
+            'forceSave' => Yii::t('OnlyofficeModule.base', 'Keep intermediate versions when editing (forcesave)'),
         ];
     }
     
@@ -91,6 +94,7 @@ class ConfigureForm extends \yii\base\Model
         $this->feedback = (boolean)Yii::$app->getModule('onlyoffice')->settings->get('feedback');
         $this->help = (boolean)Yii::$app->getModule('onlyoffice')->settings->get('help');
         $this->compactToolbar = (boolean)Yii::$app->getModule('onlyoffice')->settings->get('compactToolbar');
+        $this->forceSave = (boolean)Yii::$app->getModule('onlyoffice')->settings->get('forceSave');
 
         return true;
     }
@@ -107,6 +111,7 @@ class ConfigureForm extends \yii\base\Model
         Yii::$app->getModule('onlyoffice')->settings->set('feedback', $this->feedback);
         Yii::$app->getModule('onlyoffice')->settings->set('help', $this->help);
         Yii::$app->getModule('onlyoffice')->settings->set('compactToolbar', $this->compactToolbar);
+        Yii::$app->getModule('onlyoffice')->settings->set('forceSave', $this->forceSave);
 
         return true;
     }

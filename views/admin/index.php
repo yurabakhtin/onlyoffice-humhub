@@ -30,6 +30,7 @@ use yii\web\View;
         <div class="form-group">
             <?= $form->field($model, 'serverUrl'); ?>
             <?= $form->field($model, 'verifyPeerOff')->checkbox(); ?>
+            <?= $form->field($model, 'forceSave')->checkbox(); ?>
         </div>
 
         <div class="form-group">

@@ -175,6 +175,13 @@ class BackendController extends Controller
                             $this->file->updateAttributes($newAttr);
                             //Yii::warning('Dosaved', 'onlyoffice');
                         } else {
+                            $newAttr = [
+                                'updated_at' => date("Y-m-d H:i:s"),
+                                'size' => strlen($newData),
+                            ];
+                            if (!empty($user)) $newAttr['updated_by'] = $user->getId();
+
+                            $this->file->updateAttributes($newAttr);
                             //Yii::warning('ForceSaved', 'onlyoffice');
                         }
                     } else {
