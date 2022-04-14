@@ -14,6 +14,9 @@ humhub.module('onlyoffice', function (module, require, $) {
     var ooJSLoadRetries = 0;
 
     var api = null;
+    var config = null;
+    var usersForMentions = null;
+    var docEditor = null;
 
     var Editor = function (node, options) {
         Widget.call(this, node, options);
@@ -83,8 +86,7 @@ humhub.module('onlyoffice', function (module, require, $) {
         }
 
         api = this.options.api;
-
-        var config = this.options.config;
+        config = this.options.config;
 
         var docsVersion = DocsAPI.DocEditor.version().split(".");
         if (docsVersion[0] < 6
@@ -102,6 +104,7 @@ humhub.module('onlyoffice', function (module, require, $) {
         config.height = "100%";
         config.events = {
             'onRequestClose': onRequestClose,
+            'onRequestUsers': onRequestUsers,
             //'onReady': onReady,
             //'onDocumentStateChange': onDocumentStateChange,
             //'onRequestEditRights': onRequestEditRights,
@@ -113,6 +116,9 @@ humhub.module('onlyoffice', function (module, require, $) {
         }
 
         this.docEditor = new DocsAPI.DocEditor('iframeContainer', config);
+
+        usersForMentions = this.options.usersForMentions;
+        docEditor = this.docEditor;
     }
 
     var Convert = function (node, options) {
@@ -179,6 +185,12 @@ humhub.module('onlyoffice', function (module, require, $) {
             event.trigger('humhub:file:created.cfiles', [response.file]);
         }).catch(function(e) {
             module.log.error(e, true);
+        });
+    }
+
+    function onRequestUsers() {
+        docEditor.setUsers({
+            "users": usersForMentions
         });
     }
 

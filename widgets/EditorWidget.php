@@ -23,6 +23,7 @@ use humhub\libs\Html;
 use humhub\modules\file\libs\FileHelper;
 use humhub\widgets\JsWidget;
 use \Firebase\JWT\JWT;
+use humhub\modules\user\models\User;
 
 /**
  * Description of EditorWidget
@@ -97,7 +98,8 @@ class EditorWidget extends JsWidget
             'edit-mode' => $this->mode,
             'file-info-url' => Url::to(['/onlyoffice/open/get-info', 'guid' => $this->file->guid]),
             'module-configured' => (empty($module->getServerUrl()) ? '0' : '1'),
-            'api' => $api
+            'api' => $api,
+            'users-for-mentions' => $this->getUsersForMentions()
         ];
     }
 
@@ -188,5 +190,22 @@ class EditorWidget extends JsWidget
         }
 
         return $config;
+    }
+
+    protected function getUsersForMentions()
+    {
+        $usersForMentions = [];
+        $curUser = Yii::$app->user->getIdentity();
+        $users = User::find()->all();
+
+        foreach ($users as $user) {
+            if ($user->id != $curUser->id && $user->profile->firstname != null && $user->profile->lastname != null && $user->email != null) {
+                array_push($usersForMentions,[
+                    "name" => $user->profile->firstname . " " . $user->profile->lastname,
+                    "email" => $user->email
+                ]);
+            }
+        }
+        return $usersForMentions;
     }
 }
