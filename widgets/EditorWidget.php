@@ -84,11 +84,21 @@ class EditorWidget extends JsWidget
         $module = Yii::$app->getModule('onlyoffice');
 
         $api = [];
+        
+        $api['renameUrl'] = Url::to(['/onlyoffice/api/rename'], true);
+        
+        if (!empty($module->getStorageUrl())) {
+            $api['renameUrl'] = $module->getStorageUrl() . Url::to(['/onlyoffice/api/rename'], false);
+        }
+
         if ($this->file->object_model === cFile::class) {
             $cfile = cFile::findOne($this->file->object_id);
             $cfolder = cFolder::findOne($cfile->parent_folder_id);
             if (!$cfolder->isAllPostedFiles()) {
                 $api['saveasUrl'] = Url::to(['/onlyoffice/api/saveas'], true);
+                if (!empty($module->getStorageUrl())) {
+                    $api['saveasUrl'] = $module->getStorageUrl() . Url::to(['/onlyoffice/api/saveas'], false);
+                }
             }
         }
 

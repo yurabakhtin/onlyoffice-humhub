@@ -13,6 +13,7 @@ humhub.module('onlyoffice', function (module, require, $) {
     var loader = require('ui.loader');
     var ooJSLoadRetries = 0;
 
+    var config = null;
     var api = null;
 
     var Editor = function (node, options) {
@@ -84,7 +85,7 @@ humhub.module('onlyoffice', function (module, require, $) {
 
         api = this.options.api;
 
-        var config = this.options.config;
+        config = this.options.config;
 
         var docsVersion = DocsAPI.DocEditor.version().split(".");
         if (docsVersion[0] < 6
@@ -102,6 +103,8 @@ humhub.module('onlyoffice', function (module, require, $) {
         config.height = "100%";
         config.events = {
             'onRequestClose': onRequestClose,
+            'onRequestRename': onRequestRename,
+            'onMetaChange': onMetaChange,
             //'onReady': onReady,
             //'onDocumentStateChange': onDocumentStateChange,
             //'onRequestEditRights': onRequestEditRights,
@@ -180,6 +183,23 @@ humhub.module('onlyoffice', function (module, require, $) {
         }).catch(function(e) {
             module.log.error(e, true);
         });
+    }
+
+    function onRequestRename(evt) {
+        var renameData = {
+            newFileName: evt.data,
+            key: config.document.key,
+        };
+
+        client.post(api.renameUrl, {data: JSON.stringify(renameData), dataType: 'json'}).then((response) => {
+            event.trigger('humhub:file:modified', [response.file]);
+        }).catch(function(e) {
+            module.log.error(e, true);
+        });
+    }
+
+    function onMetaChange(evt) {
+        console.log("onMetaChange: " + JSON.stringify(evt.data));
     }
 
     var onRequestCloseObj = null;
