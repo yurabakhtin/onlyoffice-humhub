@@ -14,7 +14,6 @@
 namespace humhub\modules\onlyoffice\controllers;
 
 use Yii;
-use humhub\modules\file\models\File;
 use humhub\modules\onlyoffice\models\ConfigureForm;
 use humhub\modules\admin\components\Controller;
 use yii\helpers\Url;
@@ -36,7 +35,13 @@ class AdminController extends Controller
             $this->view->saved();
         }
 
-        $serverApiUrl = $this->module->getServerApiUrl();
+        $trial = $serverApiUrl = null;
+        if($this->module->isDemoServerEnabled()) {
+            $trial = $this->module->getTrial();
+        } 
+        if(!empty($model->serverUrl) || $this->module->isDemoServerEnabled()) {
+            $serverApiUrl = $this->module->getServerApiUrl();
+        }
 
         list($error, $version) = $this->validation();
 
@@ -44,7 +49,8 @@ class AdminController extends Controller
                                         'model' => $model,
                                         'serverApiUrl' => $serverApiUrl,
                                         'error' => $error,
-                                        'version' => $version
+                                        'version' => $version,
+                                        'trial' => $trial
                                       ]);
     }
 

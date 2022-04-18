@@ -5,7 +5,6 @@
  *  http://www.onlyoffice.com
  */
 
-use humhub\modules\onlyoffice\Module;
 use yii\helpers\Url;
 
 $modal = \humhub\widgets\ModalDialog::begin([
