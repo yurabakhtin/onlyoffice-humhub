@@ -3,6 +3,8 @@
 ## Added
 - editor customization
 - validation of server settings on the settings page
+- connect to the demo server
+- trial period of 30 days for the demo server
 
 ## 2.4.0
 ## Added

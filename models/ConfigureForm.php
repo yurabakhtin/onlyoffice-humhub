@@ -20,6 +20,8 @@ class ConfigureForm extends \yii\base\Model
     public $jwtSecret;
     public $internalServerUrl;
     public $storageUrl;
+    public $demoServer;
+
     public $chat;
     public $compactHeader;
     public $feedback;
@@ -38,6 +40,7 @@ class ConfigureForm extends \yii\base\Model
             ['jwtSecret', 'string'],
             ['internalServerUrl', 'string'],
             ['storageUrl', 'string'],
+            ['demoServer', 'boolean'],
             ['chat', 'boolean'],
             ['compactHeader', 'boolean'],
             ['feedback', 'boolean'],
@@ -57,6 +60,7 @@ class ConfigureForm extends \yii\base\Model
             'jwtSecret' => Yii::t('OnlyofficeModule.base', 'JWT Secret'),
             'internalServerUrl' => Yii::t('OnlyofficeModule.base', 'ONLYOFFICE Docs address for internal requests from the server'),
             'storageUrl' => Yii::t('OnlyofficeModule.base', 'Server address for internal requests from ONLYOFFICE Docs'),
+            'demoServer' => Yii::t('OnlyofficeModule.base', 'Connect to demo server'),
             'chat' => Yii::t('OnlyofficeModule.base', 'Display Chat menu button'),
             'compactHeader' => Yii::t('OnlyofficeModule.base', 'Display the header more compact'),
             'feedback' => Yii::t('OnlyofficeModule.base', 'Display Feedback & Support menu button'),
@@ -86,6 +90,7 @@ class ConfigureForm extends \yii\base\Model
         $this->jwtSecret = Yii::$app->getModule('onlyoffice')->settings->get('jwtSecret');
         $this->internalServerUrl = Yii::$app->getModule('onlyoffice')->settings->get('internalServerUrl');
         $this->storageUrl = Yii::$app->getModule('onlyoffice')->settings->get('storageUrl');
+        $this->demoServer = (boolean)Yii::$app->getModule('onlyoffice')->settings->get('demoServer');
         $this->chat = (boolean)Yii::$app->getModule('onlyoffice')->settings->get('chat');
         $this->compactHeader = (boolean)Yii::$app->getModule('onlyoffice')->settings->get('compactHeader');
         $this->feedback = (boolean)Yii::$app->getModule('onlyoffice')->settings->get('feedback');
@@ -102,6 +107,7 @@ class ConfigureForm extends \yii\base\Model
         Yii::$app->getModule('onlyoffice')->settings->set('jwtSecret', $this->jwtSecret);
         Yii::$app->getModule('onlyoffice')->settings->set('internalServerUrl', rtrim($this->internalServerUrl, '/'));
         Yii::$app->getModule('onlyoffice')->settings->set('storageUrl', rtrim($this->storageUrl, '/'));
+        Yii::$app->getModule('onlyoffice')->settings->set('demoServer', $this->demoServer);
         Yii::$app->getModule('onlyoffice')->settings->set('chat', $this->chat);
         Yii::$app->getModule('onlyoffice')->settings->set('compactHeader', $this->compactHeader);
         Yii::$app->getModule('onlyoffice')->settings->set('feedback', $this->feedback);

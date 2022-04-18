@@ -78,17 +78,32 @@ class Module extends \humhub\components\Module
         'odp' => 'pptx',
     ];
     
+    public $demoparam = [
+        'trial' => 30,
+        'header' => 'AuthorizationJWT',
+        'secret' => 'sn2puSUF7muF5Jas',
+        'serverUrl' => 'https://onlinedocs.onlyoffice.com'
+    ];
 
     public function isJwtEnabled() {
+        if($this->isDemoServerEnabled())
+            return true;
         return !empty($this->getJwtSecret());
     }
 
     public function getJwtSecret() {
+        if($this->isDemoServerEnabled()) { 
+            return $this->demoparam['secret'];
+        }
         return $this->settings->get('jwtSecret');
     }
 
     public function getServerUrl()
     {
+        if($this->isDemoServerEnabled()) {
+            return $this->demoparam['serverUrl'];
+        }
+
         return $this->settings->get('serverUrl');
     }
 
@@ -112,6 +127,20 @@ class Module extends \humhub\components\Module
     {
         return $this->settings->get('verifyPeerOff');
     }
+
+    public function getDemoServer()
+    {
+        return $this->settings->get('demoServer');
+    }
+    public function isDemoServerEnabled() {
+        if(boolval($this->getDemoServer())) {
+            $trial = $this->getTrial();
+            if($trial !== false)
+                return true;
+        }
+        return false;
+    }
+
     public function getChat()
     {
         return $this->settings->get('chat');
@@ -133,15 +162,28 @@ class Module extends \humhub\components\Module
         return $this->settings->get('compactToolbar');
     }
 
-    /**
-     * 
-     * @return type
-     */
-    public function getServerApiUrl()
+    public function getServerApiUrl(): string
     {
         return $this->getServerUrl() . '/web-apps/apps/api/documents/api.js';
     }
 
+    public function getHeader(): string
+    {
+        return $this->isDemoServerEnabled() ? $this->demoparam['header'] : 'Authorization';
+    }
+
+    public function getTrial()
+    {
+        $settings =  Yii::$app->getModule('onlyoffice')->settings;
+        $trial = $settings->get('trial');
+        
+        if(empty($trial)) {
+            $settings->set('trial', time());
+        } elseif($this->demoparam['trial'] - round( (time() - $trial) / (60*60*24) ) < 0) {
+            return false;
+        }
+        return $this->demoparam['trial'] - round( (time() - $trial) / (60*60*24) );
+    }
     public function getDocumentType($file)
     {
         $fileExtension = strtolower(FileHelper::getExtension($file));
@@ -209,7 +251,7 @@ class Module extends \humhub\components\Module
             $headers['Accept'] = 'application/json';
             if ($this->isJwtEnabled()) {
                 $data['token'] = JWT::encode($data, $this->getJwtSecret());
-                $headers['Authorization'] = 'Bearer ' . JWT::encode(['payload' => $data], $this->getJwtSecret());
+                $headers[$this->getHeader()] = 'Bearer ' . JWT::encode(['payload' => $data], $this->getJwtSecret());
             }
 
             $options = array(
@@ -254,7 +296,7 @@ class Module extends \humhub\components\Module
         return $this->convertService($downloadUrl, $fromExt, $toExt, $key . $ts, $async);
     }
 
-    public function convertService($documentUrl, $fromExt, $toExt, $key, $async = false): array
+    public function convertService($documentUrl, $fromExt, $toExt, $key, $async = true): array
     {
         $url = $this->getInternalServerUrl() . '/ConvertService.ashx';
 
@@ -272,7 +314,7 @@ class Module extends \humhub\components\Module
             $headers['Accept'] = 'application/json';
             if ($this->isJwtEnabled()) {
                 $data['token'] = JWT::encode($data, $this->getJwtSecret());
-                $headers['Authorization'] = 'Bearer ' . JWT::encode(['payload' => $data], $this->getJwtSecret());
+                $headers[$this->getHeader()] = 'Bearer ' . JWT::encode(['payload' => $data], $this->getJwtSecret());
             }
 
             $options = [
@@ -456,13 +498,13 @@ class Module extends \humhub\components\Module
 
         switch ($errorCode) {
             case 3:
-                $errorMessage = "Internal server error.";
+                $errorMessage = "Internal server error";
                 break;
             case 5:
-                $errorMessage = "Command not correct.";
+                $errorMessage = "Command not correct";
                 break;
             case 6:
-                $errorMessage = "Invalid token.";
+                $errorMessage = "Invalid token";
                 break;
             case 0:
                 return;
