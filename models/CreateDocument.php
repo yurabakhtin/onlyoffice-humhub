@@ -15,7 +15,6 @@ namespace humhub\modules\onlyoffice\models;
 
 use Yii;
 use yii\base\Model;
-use humhub\modules\onlyoffice\Module;
 use humhub\modules\file\models\File;
 use humhub\modules\cfiles\models\Folder;
 
