@@ -20,6 +20,7 @@ use humhub\modules\user\models\User;
 use humhub\components\Controller;
 use \humhub\components\Module;
 use \Firebase\JWT\JWT;
+use humhub\modules\file\libs\FileHelper;
 
 class BackendController extends Controller
 {
@@ -152,7 +153,22 @@ class BackendController extends Controller
                 case "Corrupted":
                 case "ForceSave":
 
-                    $newData = $this->module->request($data["url"])->getContent();
+                    $url = $data["url"];
+                    $originExt = strtolower(FileHelper::getExtension($this->file));
+                    $currentExt = strtolower($data['filetype']);
+
+                    if($originExt !== $currentExt) {
+                        $result = $this->module->convertService(
+                            $data["url"], 
+                            $currentExt, 
+                            $originExt, 
+                            $this->module->generateDocumentKey($this->file) . time(), 
+                            false
+                        );
+                        $url = $result['fileUrl'];
+                    }
+
+                    $newData = $this->module->request($url)->getContent();
 
                     if (!empty($newData)) {
 

@@ -162,6 +162,24 @@ class Module extends \humhub\components\Module
         return $this->settings->get('compactToolbar');
     }
 
+    public function addExtForEditing()
+    {
+        $exts = [
+            'csv' => boolval($this->settings->get('editCSV')),
+            'odp' => boolval($this->settings->get('editODP')),
+            'ods' => boolval($this->settings->get('editODP')),
+            'odt' => boolval($this->settings->get('editODT')),
+            'rtf' => boolval($this->settings->get('editRTF')),
+            'txt' => boolval($this->settings->get('editTXT'))
+        ];
+        foreach($exts as $ext => $enabled) {
+            if($enabled) {
+                array_push($this->editableExtensions, $ext);
+            }
+        }
+        
+    }
+
     public function getServerApiUrl(): string
     {
         return $this->getServerUrl() . '/web-apps/apps/api/documents/api.js';
@@ -201,6 +219,7 @@ class Module extends \humhub\components\Module
 
     public function canEdit($file)
     {
+        $this->addExtForEditing();
         $fileExtension = strtolower(FileHelper::getExtension($file));
         return in_array($fileExtension, $this->editableExtensions);
     }
