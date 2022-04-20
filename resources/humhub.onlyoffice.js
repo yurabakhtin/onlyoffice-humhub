@@ -85,7 +85,6 @@ humhub.module('onlyoffice', function (module, require, $) {
 
         api = this.options.api;
         config = this.options.config;
-        var canRename = this.options.canRename;
 
         var docsVersion = DocsAPI.DocEditor.version().split(".");
         if (docsVersion[0] < 6
@@ -114,7 +113,7 @@ humhub.module('onlyoffice', function (module, require, $) {
             config.events.onRequestSaveAs = onRequestSaveAs;
         }
 
-        if(canRename) {
+        if(api.renameUrl) {
             config.events.onRequestRename = onRequestRename;
         }
 

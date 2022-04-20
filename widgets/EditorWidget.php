@@ -87,8 +87,6 @@ class EditorWidget extends JsWidget
         $module = Yii::$app->getModule('onlyoffice');
 
         $api = [];
-        
-        $api['renameUrl'] = Url::to(['/onlyoffice/api/rename'], true);
 
         if ($this->file->object_model === cFile::class) {
             $cfile = cFile::findOne($this->file->object_id);
@@ -98,24 +96,22 @@ class EditorWidget extends JsWidget
             }
         }
 
-        $response = [
-            'config' => $this->getConfig(),
-            'edit-mode' => $this->mode,
-            'file-info-url' => Url::to(['/onlyoffice/open/get-info', 'guid' => $this->file->guid]),
-            'module-configured' => (empty($module->getServerUrl()) ? '0' : '1'),
-            'api' => $api
-        ];
-
         $owner = User::findOne($this->file->created_by);
         $containerRecord = ContentContainer::findOne(['id' => $owner->contentcontainer_id]);
         $container = $containerRecord->getPolymorphicRelation();
 
         $canRename = $container->can(ManageFiles::class);
         if($canRename) {
-            $response['can-rename'] = true;
+            $api['renameUrl'] = Url::to(['/onlyoffice/api/rename'], true);
         }
 
-        return $response;
+        return [
+            'config' => $this->getConfig(),
+            'edit-mode' => $this->mode,
+            'file-info-url' => Url::to(['/onlyoffice/open/get-info', 'guid' => $this->file->guid]),
+            'module-configured' => (empty($module->getServerUrl()) ? '0' : '1'),
+            'api' => $api
+        ];
     }
 
     /**
