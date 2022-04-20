@@ -63,4 +63,5 @@ return [
     'Display monochrome toolbar header' => 'モノクローム・ツールバーヘッダーを表示する',
     'Error when trying to connect ({error})' => '接続時にエラーが発生しました ({error})',
     'Mixed Active Content is not allowed. HTTPS address for ONLYOFFICE Docs is required.' => 'アクティブコンテンツの混在は許可されていません。ONLYOFFICE DocsにはHTTPSアドレスが必要です',
+    'Open the file for editing (due to format restrictions, the data might be lost when saving to the formats from the list below)' => '編集できるファイルフォーマット (フォーマットの制限により、以下のフォーマットを保存する時にデータが失われる可能性があります)',
 ];

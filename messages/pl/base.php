@@ -63,4 +63,5 @@ return [
     'Display monochrome toolbar header' => 'Wyświetl monochromatyczny nagłówek paska narzędzi',
     'Error when trying to connect ({error})' => 'Błąd przy próbie połączenia ({error})',
     'Mixed Active Content is not allowed. HTTPS address for ONLYOFFICE Docs is required.' => 'Aktywna Zawartość Mieszana nie jest dozwolona. Adres HTTPS jest wymagany dla ONLYOFFICE Docs.',
+    'Open the file for editing (due to format restrictions, the data might be lost when saving to the formats from the list below)' => 'Otwórz plik do edycji (ze względu na ograniczenia formatów, dane mogą zostac utracone przy zapisie do formatów podanych poniżej)',
 ];

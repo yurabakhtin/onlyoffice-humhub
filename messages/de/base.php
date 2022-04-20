@@ -63,4 +63,5 @@ return [
     'Display monochrome toolbar header' => 'Monochromen Kopfbereich der Symbolleiste anzeigen',
     'Error when trying to connect ({error})' => 'Fehler beim Anschließen ({error})',
     'Mixed Active Content is not allowed. HTTPS address for ONLYOFFICE Docs is required.' => 'Mixed Active Content ist nicht möglich. HTTPS-Adresse für ONLYOFFICE Docs ist erforderlich.',
+    'Open the file for editing (due to format restrictions, the data might be lost when saving to the formats from the list below)' => 'Öffne die Datei zum Bearbeiten (aufgrund von Formateinschränkungen können die Daten beim Speichern in den Formaten aus der folgenden Liste verloren gehen)',
 ];
