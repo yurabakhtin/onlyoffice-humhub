@@ -23,6 +23,9 @@ use humhub\libs\Html;
 use humhub\modules\file\libs\FileHelper;
 use humhub\widgets\JsWidget;
 use \Firebase\JWT\JWT;
+use humhub\modules\cfiles\permissions\ManageFiles;
+use humhub\modules\content\models\ContentContainer;
+use humhub\modules\user\models\User;
 
 /**
  * Description of EditorWidget
@@ -95,13 +98,24 @@ class EditorWidget extends JsWidget
             }
         }
 
-        return [
+        $response = [
             'config' => $this->getConfig(),
             'edit-mode' => $this->mode,
             'file-info-url' => Url::to(['/onlyoffice/open/get-info', 'guid' => $this->file->guid]),
             'module-configured' => (empty($module->getServerUrl()) ? '0' : '1'),
             'api' => $api
         ];
+
+        $owner = User::findOne($this->file->created_by);
+        $containerRecord = ContentContainer::findOne(['id' => $owner->contentcontainer_id]);
+        $container = $containerRecord->getPolymorphicRelation();
+
+        $canRename = $container->can(ManageFiles::class);
+        if($canRename) {
+            $response['can-rename'] = true;
+        }
+
+        return $response;
     }
 
     /**

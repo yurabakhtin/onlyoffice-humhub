@@ -84,8 +84,8 @@ humhub.module('onlyoffice', function (module, require, $) {
         }
 
         api = this.options.api;
-
         config = this.options.config;
+        var canRename = this.options.canRename;
 
         var docsVersion = DocsAPI.DocEditor.version().split(".");
         if (docsVersion[0] < 6
@@ -103,7 +103,6 @@ humhub.module('onlyoffice', function (module, require, $) {
         config.height = "100%";
         config.events = {
             'onRequestClose': onRequestClose,
-            'onRequestRename': onRequestRename,
             'onMetaChange': onMetaChange,
             //'onReady': onReady,
             //'onDocumentStateChange': onDocumentStateChange,
@@ -113,6 +112,10 @@ humhub.module('onlyoffice', function (module, require, $) {
 
         if (api.saveasUrl && location.search.indexOf('?r=cfiles') === 0) {
             config.events.onRequestSaveAs = onRequestSaveAs;
+        }
+
+        if(canRename) {
+            config.events.onRequestRename = onRequestRename;
         }
 
         this.docEditor = new DocsAPI.DocEditor('iframeContainer', config);
