@@ -64,4 +64,7 @@ return [
     'Error when trying to connect ({error})' => '接続時にエラーが発生しました ({error})',
     'Mixed Active Content is not allowed. HTTPS address for ONLYOFFICE Docs is required.' => 'アクティブコンテンツの混在は許可されていません。ONLYOFFICE DocsにはHTTPSアドレスが必要です',
     'Open the file for editing (due to format restrictions, the data might be lost when saving to the formats from the list below)' => '編集できるファイルフォーマット (フォーマットの制限により、以下のフォーマットを保存する時にデータが失われる可能性があります)',
+    'Connect to demo ONLYOFFICE Docs server' => 'ONLYOFFICE Docsのデモサーバーに接続する',
+    'This is a public test server, please do not use it for private sensitive data. The server will be available during a 30-day period.' => 'これはパブリックテストサーバーです。プライベートな機密データには使用しないでください。サーバーを30日間、利用できます。',
+    'The 30-day test period is over, you can no longer connect to demo ONLYOFFICE Docs server.' => '30日間のテスト期間が終了したら、ONLYOFFICE Docs デモサーバーには繋がらなくなります。',
 ];

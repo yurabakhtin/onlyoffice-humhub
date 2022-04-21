@@ -97,6 +97,7 @@ use yii\web\View;
         $("#configureform-demoserver").closest("label").css({"cursor":"default", "opacity":"0.5"});
         $("#configureform-demoserver").attr("checked", false);
         $("#configureform-demoserver").attr("disabled", true);
+        $("#configureform-demoserver").closest("div").children()[2].innerText = "' . Yii::t("OnlyofficeModule.base", "The 30-day test period is over, you can no longer connect to demo ONLYOFFICE Docs server.") . '";
     ');
    } 
 ?>

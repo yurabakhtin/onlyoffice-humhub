@@ -64,4 +64,7 @@ return [
     'Error when trying to connect ({error})' => 'Fehler beim Anschließen ({error})',
     'Mixed Active Content is not allowed. HTTPS address for ONLYOFFICE Docs is required.' => 'Mixed Active Content ist nicht möglich. HTTPS-Adresse für ONLYOFFICE Docs ist erforderlich.',
     'Open the file for editing (due to format restrictions, the data might be lost when saving to the formats from the list below)' => 'Öffne die Datei zum Bearbeiten (aufgrund von Formateinschränkungen können die Daten beim Speichern in den Formaten aus der folgenden Liste verloren gehen)',
+    'Connect to demo ONLYOFFICE Docs server' => 'Verbindung zu Demo ONLYOFFICE Docs Server herstellen',
+    'This is a public test server, please do not use it for private sensitive data. The server will be available during a 30-day period.' => 'Dies ist ein öffentlicher Testserver. Bitte verwende beim Testen keine privaten sensiblen Daten. Der Server ist 30 Tage lang verfügbar.',
+    'The 30-day test period is over, you can no longer connect to demo ONLYOFFICE Docs server.' => 'Der 30-tägige Testzeitraum ist abgelaufen. Du kannst keine Verbindung mehr zu Demo ONLYOFFICE Docs Server herstellen.',
 ];

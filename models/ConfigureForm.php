@@ -73,7 +73,7 @@ class ConfigureForm extends \yii\base\Model
             'jwtSecret' => Yii::t('OnlyofficeModule.base', 'JWT Secret'),
             'internalServerUrl' => Yii::t('OnlyofficeModule.base', 'ONLYOFFICE Docs address for internal requests from the server'),
             'storageUrl' => Yii::t('OnlyofficeModule.base', 'Server address for internal requests from ONLYOFFICE Docs'),
-            'demoServer' => Yii::t('OnlyofficeModule.base', 'Connect to demo server'),
+            'demoServer' => Yii::t('OnlyofficeModule.base', 'Connect to demo ONLYOFFICE Docs server'),
             'chat' => Yii::t('OnlyofficeModule.base', 'Display Chat menu button'),
             'compactHeader' => Yii::t('OnlyofficeModule.base', 'Display the header more compact'),
             'feedback' => Yii::t('OnlyofficeModule.base', 'Display Feedback & Support menu button'),
@@ -94,6 +94,7 @@ class ConfigureForm extends \yii\base\Model
             'jwtSecret' => Yii::t('OnlyofficeModule.base', 'JWT Secret key (leave blank to disable)'),
             'internalServerUrl' => Yii::t('OnlyofficeModule.base', 'e.g. http://documentserver'),
             'storageUrl' => Yii::t('OnlyofficeModule.base', 'e.g. http://storage'),
+            'demoServer' => Yii::t('OnlyofficeModule.base', 'This is a public test server, please do not use it for private sensitive data. The server will be available during a 30-day period.'),
         ];
     }
 
