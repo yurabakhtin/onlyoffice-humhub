@@ -18,6 +18,9 @@ use humhub\modules\file\models\File;
 use humhub\components\Controller;
 use \humhub\components\Module;
 use humhub\modules\file\libs\FileHelper;
+use humhub\modules\content\models\ContentContainer;
+use humhub\modules\user\models\User;
+use humhub\modules\cfiles\permissions\ManageFiles;
 
 class ApiController extends Controller
 {
@@ -81,23 +84,31 @@ class ApiController extends Controller
             throw new \Exception('Could not parse json');
         }
 
+        $file = File::findOne(['onlyoffice_key' => $data['key']]);
+        
+        $owner = User::findOne($file->created_by);
+        $containerRecord = ContentContainer::findOne(['id' => $owner->contentcontainer_id]);
+        $container = $containerRecord->getPolymorphicRelation();
+        $canRename = $container->can(ManageFiles::class);
+        if(!$canRename) {
+            throw new \Exception('Permission denied');
+        }
+
+        $ext = strtolower(FileHelper::getExtension($file));
+        $file->updateAttributes(['file_name' => $data['newFileName'] . "." . $ext]);
+
         $meta = [
             "c" => "meta",
             "key" => $data['key'],
             "meta"=> [
-                "title" => $data['newFileName']
+                "title" => $data['newFileName'] . '.' .$ext
             ]
         ];
-
         $response = $this->module->commandService($meta);
 
         if($response['error'] !== 0){
             throw new \Exception('Error from command Service: ' . $response['error']);
         }
-
-        $file = File::findOne(['onlyoffice_key' => $data['key']]);
-        $ext = strtolower(FileHelper::getExtension($file));
-        $file->updateAttributes(['file_name' => $data['newFileName'] . "." . $ext]);
 
         return $this->asJson([
             'file' => FileHelper::getFileInfos($file)

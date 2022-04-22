@@ -102,7 +102,6 @@ humhub.module('onlyoffice', function (module, require, $) {
         config.height = "100%";
         config.events = {
             'onRequestClose': onRequestClose,
-            'onMetaChange': onMetaChange,
             //'onReady': onReady,
             //'onDocumentStateChange': onDocumentStateChange,
             //'onRequestEditRights': onRequestEditRights,
@@ -198,10 +197,6 @@ humhub.module('onlyoffice', function (module, require, $) {
         }).catch(function(e) {
             module.log.error(e, true);
         });
-    }
-
-    function onMetaChange(evt) {
-        console.log("onMetaChange: " + JSON.stringify(evt.data));
     }
 
     var onRequestCloseObj = null;
