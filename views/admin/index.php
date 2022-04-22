@@ -61,12 +61,11 @@ use yii\web\View;
 
         <div class="form-group">
             <?= Html::activeLabel($model,'editLabel', ['class' => 'control-label']); ?>
-            <?= $form->field($model, 'editCSV', ['options' => ['class' => 'checkbox-inline']])->checkbox(['label' => 'csv']); ?>
-            <?= $form->field($model, 'editODP', ['options' => ['class' => 'checkbox-inline']])->checkbox(['label' => 'odp']); ?>
-            <?= $form->field($model, 'editODS', ['options' => ['class' => 'checkbox-inline']])->checkbox(['label' => 'ods']); ?>
-            <?= $form->field($model, 'editODT', ['options' => ['class' => 'checkbox-inline']])->checkbox(['label' => 'odt']); ?>
-            <?= $form->field($model, 'editRTF', ['options' => ['class' => 'checkbox-inline']])->checkbox(['label' => 'rtf']); ?>
-            <?= $form->field($model, 'editTXT', ['options' => ['class' => 'checkbox-inline']])->checkbox(['label' => 'txt']); ?>
+            <?php 
+                foreach($forceEditExt as $key => $ext) {
+                    echo $form->field($model, 'forceEditTypes[' . $key . ']', ['options' => ['class' => 'checkbox-inline']])->checkbox(['label' => $ext]);
+                }
+            ?>
         </div>
 
         <div class="form-group">

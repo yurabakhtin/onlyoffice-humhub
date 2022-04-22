@@ -29,12 +29,7 @@ class ConfigureForm extends \yii\base\Model
     public $compactToolbar;
     public $customLabel;
 
-    public $editCSV;
-    public $editODP;
-    public $editODS;
-    public $editODT;
-    public $editRTF;
-    public $editTXT;
+    public $forceEditTypes;
 
     /**
      * @inheritdoc
@@ -53,12 +48,7 @@ class ConfigureForm extends \yii\base\Model
             ['feedback', 'boolean'],
             ['help', 'boolean'],
             ['compactToolbar', 'boolean'],
-            ['editCSV', 'boolean'],
-            ['editODP', 'boolean'],
-            ['editODS', 'boolean'],
-            ['editODT', 'boolean'],
-            ['editRTF', 'boolean'],
-            ['editTXT', 'boolean'],
+            ['forceEditTypes', 'string'],
         ];
     }
 
@@ -111,12 +101,7 @@ class ConfigureForm extends \yii\base\Model
         $this->feedback = (boolean)Yii::$app->getModule('onlyoffice')->settings->get('feedback');
         $this->help = (boolean)Yii::$app->getModule('onlyoffice')->settings->get('help');
         $this->compactToolbar = (boolean)Yii::$app->getModule('onlyoffice')->settings->get('compactToolbar');
-        $this->editCSV = (boolean)Yii::$app->getModule('onlyoffice')->settings->get('editCSV');
-        $this->editODP = (boolean)Yii::$app->getModule('onlyoffice')->settings->get('editODP');
-        $this->editODS = (boolean)Yii::$app->getModule('onlyoffice')->settings->get('editODS');
-        $this->editODT = (boolean)Yii::$app->getModule('onlyoffice')->settings->get('editODT');
-        $this->editRTF = (boolean)Yii::$app->getModule('onlyoffice')->settings->get('editRTF');
-        $this->editTXT = (boolean)Yii::$app->getModule('onlyoffice')->settings->get('editTXT');
+        $this->forceEditTypes = explode("," , Yii::$app->getModule('onlyoffice')->settings->get("forceEditTypes"));
 
         return true;
     }
@@ -133,13 +118,8 @@ class ConfigureForm extends \yii\base\Model
         Yii::$app->getModule('onlyoffice')->settings->set('compactHeader', $this->compactHeader);
         Yii::$app->getModule('onlyoffice')->settings->set('feedback', $this->feedback);
         Yii::$app->getModule('onlyoffice')->settings->set('help', $this->help);
-        Yii::$app->getModule('onlyoffice')->settings->set('compactToolbar', $this->compactToolbar);
-        Yii::$app->getModule('onlyoffice')->settings->set('editCSV', $this->editCSV);
-        Yii::$app->getModule('onlyoffice')->settings->set('editODP', $this->editODP);
-        Yii::$app->getModule('onlyoffice')->settings->set('editODS', $this->editODS);
-        Yii::$app->getModule('onlyoffice')->settings->set('editODT', $this->editODT);
-        Yii::$app->getModule('onlyoffice')->settings->set('editRTF', $this->editRTF);
-        Yii::$app->getModule('onlyoffice')->settings->set('editTXT', $this->editTXT);
+        Yii::$app->getModule('onlyoffice')->settings->set('compactToolbar', $this->compactToolbar); 
+        Yii::$app->getModule('onlyoffice')->settings->set("forceEditTypes", implode("," , $this->forceEditTypes));
 
         return true;
     }

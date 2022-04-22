@@ -50,7 +50,8 @@ class AdminController extends Controller
                                         'serverApiUrl' => $serverApiUrl,
                                         'error' => $error,
                                         'version' => $version,
-                                        'trial' => $trial
+                                        'trial' => $trial,
+                                        'forceEditExt' => $this->module->forceEditableExtensions
                                       ]);
     }
 

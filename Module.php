@@ -65,8 +65,8 @@ class Module extends \humhub\components\Module
      */
     public $editableExtensions = ['xlsx', 'ppsx', 'pptx', 'docx', 'docxf', 'oform' ];
     public $convertableExtensions = ['doc','odt','xls','ods','ppt','odp','txt','csv'];
+    public $forceEditableExtensions = ['csv', 'odp', 'ods', 'odt', 'rtf', 'txt'];
 
-    
     public $convertsTo = [
         'doc' => 'docx',
         'odt' => 'docx',
@@ -164,14 +164,8 @@ class Module extends \humhub\components\Module
 
     public function addExtForEditing()
     {
-        $exts = [
-            'csv' => boolval($this->settings->get('editCSV')),
-            'odp' => boolval($this->settings->get('editODP')),
-            'ods' => boolval($this->settings->get('editODP')),
-            'odt' => boolval($this->settings->get('editODT')),
-            'rtf' => boolval($this->settings->get('editRTF')),
-            'txt' => boolval($this->settings->get('editTXT'))
-        ];
+        $values = explode("," , $this->settings->get('forceEditTypes'));
+        $exts = array_combine($this->forceEditableExtensions, $values);
         foreach($exts as $ext => $enabled) {
             if($enabled) {
                 array_push($this->editableExtensions, $ext);
