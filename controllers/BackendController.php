@@ -168,14 +168,14 @@ class BackendController extends Controller
                             'updated_at' => date("Y-m-d H:i:s"),
                             'size' => strlen($newData),
                         ];
-                        
+
                         if ($status != 'ForceSave') {
                             $newAttr['onlyoffice_key'] = new \yii\db\Expression('NULL');
                         }
-                        
+
                         if (!empty($user)) $newAttr['updated_by'] = $user->getId();
                         $this->file->updateAttributes($newAttr);
-                        
+
                     } else {
                         throw new \Exception('Could not save onlyoffice document: ' . $data["url"]);
                     }

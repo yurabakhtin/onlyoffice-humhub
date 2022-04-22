@@ -132,7 +132,7 @@ class Module extends \humhub\components\Module
     {
         return $this->settings->get('demoServer');
     }
-    
+
     public function isDemoServerEnabled() {
         if(boolval($this->getDemoServer())) {
             $trial = $this->getTrial();
@@ -309,7 +309,7 @@ class Module extends \humhub\components\Module
     public function convertService($documentUrl, $fromExt, $toExt, $key, $async = true): array
     {
         $url = $this->getInternalServerUrl() . '/ConvertService.ashx';
-        
+
         $user = Yii::$app->user->getIdentity();
         $lang = ($user) && !empty($user->language) ? $user->language : Yii::$app->language;
         if (!array_key_exists($lang, $this->languageCodes)) {
