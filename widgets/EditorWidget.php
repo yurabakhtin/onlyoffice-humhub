@@ -85,6 +85,9 @@ class EditorWidget extends JsWidget
         $module = Yii::$app->getModule('onlyoffice');
 
         $api = [];
+
+        $api['sendNotifyUrl'] = Url::to(['/onlyoffice/api/send-notify'], true);
+
         if ($this->file->object_model === cFile::class) {
             $cfile = cFile::findOne($this->file->object_id);
             $cfolder = cFolder::findOne($cfile->parent_folder_id);

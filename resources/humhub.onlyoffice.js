@@ -105,6 +105,7 @@ humhub.module('onlyoffice', function (module, require, $) {
         config.events = {
             'onRequestClose': onRequestClose,
             'onRequestUsers': onRequestUsers,
+            'onRequestSendNotify': onRequestSendNotify,
             //'onReady': onReady,
             //'onDocumentStateChange': onDocumentStateChange,
             //'onRequestEditRights': onRequestEditRights,
@@ -117,6 +118,10 @@ humhub.module('onlyoffice', function (module, require, $) {
 
         this.docEditor = new DocsAPI.DocEditor('iframeContainer', config);
 
+        var loc = location.search;
+        if(loc.indexOf('actionLink') + 1) {
+            this.docEditor.setActionLink(location.href)
+        }
         usersForMentions = this.options.usersForMentions;
         docEditor = this.docEditor;
     }
@@ -192,6 +197,25 @@ humhub.module('onlyoffice', function (module, require, $) {
         docEditor.setUsers({
             "users": usersForMentions
         });
+    }
+
+    function onRequestSendNotify(evt) {
+
+        var notifyData = {
+            ACTION_DATA: evt.data.actionLink,
+            comment: evt.data.message,
+            emails: evt.data.emails,
+            doc_key: config.document.key
+        };
+
+        client.post(api.sendNotifyUrl, {data: JSON.stringify(notifyData), dataType: 'json'}).then((response) => {
+            debugger;
+            var link = response.url + "&actionLink=" + encodeURIComponent(JSON.stringify(evt.data.actionLink));
+            // event.trigger('humhub:file:created.cfiles', [response.file]);
+        }).catch(function(e) {
+            module.log.error(e, true);
+        });
+
     }
 
     var onRequestCloseObj = null;
