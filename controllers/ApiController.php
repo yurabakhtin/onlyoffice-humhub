@@ -67,7 +67,7 @@ class ApiController extends Controller
         ]);
     }
 
-        /**
+    /**
      * Rename action
      */
     public function actionRename()
