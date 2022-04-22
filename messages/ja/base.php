@@ -67,4 +67,5 @@ return [
     'Connect to demo ONLYOFFICE Docs server' => 'ONLYOFFICE Docsのデモサーバーに接続する',
     'This is a public test server, please do not use it for private sensitive data. The server will be available during a 30-day period.' => 'これはパブリックテストサーバーです。プライベートな機密データには使用しないでください。サーバーを30日間、利用できます。',
     'The 30-day test period is over, you can no longer connect to demo ONLYOFFICE Docs server.' => '30日間のテスト期間が終了したら、ONLYOFFICE Docs デモサーバーには繋がらなくなります。',
+    'Keep intermediate versions when editing (forcesave)' => '編集時に、中間バージョンを保持する (強制保存)',
 ];

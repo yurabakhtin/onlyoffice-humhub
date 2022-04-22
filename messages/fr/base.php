@@ -67,4 +67,5 @@ return [
     'Connect to demo ONLYOFFICE Docs server' => 'Se connecter à la version démo de ONLYOFFICE Docs',
     'This is a public test server, please do not use it for private sensitive data. The server will be available during a 30-day period.' => 'C’est un serveur public proposé à des fins de tests, veuillez ne pas l’utiliser pour vos données personnelles sensibles. Le serveur est disponible pendant 30 jours.',
     'The 30-day test period is over, you can no longer connect to demo ONLYOFFICE Docs server.' => 'La période d’essai de 30 jours est expirée, vous n’êtes plus en mesure de vous connecter à la version démo de ONLYOFFICE Docs.',
+    'Keep intermediate versions when editing (forcesave)' => 'Sauvegarder les versions intermédiaires lors de l\'édition (enregistrement obligatoire)',
 ];

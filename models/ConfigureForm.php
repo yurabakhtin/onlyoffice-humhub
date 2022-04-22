@@ -28,6 +28,7 @@ class ConfigureForm extends \yii\base\Model
     public $help;
     public $compactToolbar;
     public $customLabel;
+    public $forceSave;
 
     public $forceEditTypes;
 
@@ -48,6 +49,7 @@ class ConfigureForm extends \yii\base\Model
             ['feedback', 'boolean'],
             ['help', 'boolean'],
             ['compactToolbar', 'boolean'],
+            ['forceSave', 'boolean'],
             ['forceEditTypes', 'string'],
         ];
     }
@@ -70,6 +72,7 @@ class ConfigureForm extends \yii\base\Model
             'help' => Yii::t('OnlyofficeModule.base', 'Display Help menu button'),
             'compactToolbar' => Yii::t('OnlyofficeModule.base', 'Display monochrome toolbar header'),
             'customLabel' => Yii::t('OnlyofficeModule.base', 'The customization section allows personalizing the editor interface'),
+            'forceSave' => Yii::t('OnlyofficeModule.base', 'Keep intermediate versions when editing (forcesave)'),
             'editLabel' => Yii::t('OnlyofficeModule.base', 'Open the file for editing (due to format restrictions, the data might be lost when saving to the formats from the list below)'),
         ];
     }
@@ -101,6 +104,7 @@ class ConfigureForm extends \yii\base\Model
         $this->feedback = (boolean)Yii::$app->getModule('onlyoffice')->settings->get('feedback');
         $this->help = (boolean)Yii::$app->getModule('onlyoffice')->settings->get('help');
         $this->compactToolbar = (boolean)Yii::$app->getModule('onlyoffice')->settings->get('compactToolbar');
+        $this->forceSave = (boolean)Yii::$app->getModule('onlyoffice')->settings->get('forceSave');
         $this->forceEditTypes = explode("," , Yii::$app->getModule('onlyoffice')->settings->get("forceEditTypes"));
 
         return true;
@@ -118,7 +122,8 @@ class ConfigureForm extends \yii\base\Model
         Yii::$app->getModule('onlyoffice')->settings->set('compactHeader', $this->compactHeader);
         Yii::$app->getModule('onlyoffice')->settings->set('feedback', $this->feedback);
         Yii::$app->getModule('onlyoffice')->settings->set('help', $this->help);
-        Yii::$app->getModule('onlyoffice')->settings->set('compactToolbar', $this->compactToolbar); 
+        Yii::$app->getModule('onlyoffice')->settings->set('compactToolbar', $this->compactToolbar);
+        Yii::$app->getModule('onlyoffice')->settings->set('forceSave', $this->forceSave);
         Yii::$app->getModule('onlyoffice')->settings->set("forceEditTypes", implode("," , $this->forceEditTypes));
 
         return true;
