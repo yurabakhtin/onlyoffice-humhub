@@ -65,19 +65,17 @@ use yii\web\View;
         </div>
 
         <?php 
-            if(isset($serverApiUrl)) {
+            if (isset($serverApiUrl)) {
                 View::registerJsFile($serverApiUrl);
                 View::registerJs('
-                    setTimeout(function(){
-                        if(typeof DocsAPI === "undefined") {
-                            if ($(".error").length) {
-                                $(".error").append("<p style=\'color: #ff8989\'>' . Yii::t("OnlyofficeModule.base", "<strong>ONLYOFFICE Docs</strong> DocsAPI undefined.") . '</p>");
-                            } else {
-                                $(".invalid-server-url").html("' . Yii::t("OnlyofficeModule.base", "<strong>ONLYOFFICE Docs</strong> DocsAPI undefined.") . '");
-                                $(".invalid-server-url").show();
-                            }
-                        } 
-                    }, 1000);
+                    if (typeof DocsAPI === "undefined") {
+                        if ($(".error").length) {
+                            $(".error").append("<p style=\'color: #ff8989\'>' . Yii::t("OnlyofficeModule.base", "<strong>ONLYOFFICE Docs</strong> DocsAPI undefined.") . '</p>");
+                        } else {
+                            $(".invalid-server-url").html("' . Yii::t("OnlyofficeModule.base", "<strong>ONLYOFFICE Docs</strong> DocsAPI undefined.") . '");
+                            $(".invalid-server-url").show();
+                        }
+                    }
                 ');
             }
         ?>
@@ -91,5 +89,5 @@ use yii\web\View;
         $("#configureform-demoserver").attr("checked", false);
         $("#configureform-demoserver").attr("disabled", true);
     ');
-   } 
+   }
 ?>
