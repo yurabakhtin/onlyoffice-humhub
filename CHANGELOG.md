@@ -3,7 +3,7 @@
 ## Added
 - editor customization
 - validation of server settings on the settings page
-- force save
+- keep intermediate versions when editing (forcesave)
 - connect to the demo server
 - trial period of 30 days for the demo server
 - transfer user region in conversion
