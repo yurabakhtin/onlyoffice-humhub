@@ -112,7 +112,7 @@ humhub.module('onlyoffice', function (module, require, $) {
             config.events.onRequestSaveAs = onRequestSaveAs;
         }
 
-        if(api.renameUrl) {
+        if (api.renameUrl) {
             config.events.onRequestRename = onRequestRename;
         }
 

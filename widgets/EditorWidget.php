@@ -101,7 +101,7 @@ class EditorWidget extends JsWidget
         $container = $containerRecord->getPolymorphicRelation();
 
         $canRename = $container->can(ManageFiles::class);
-        if($canRename) {
+        if ($canRename) {
             $api['renameUrl'] = Url::to(['/onlyoffice/api/rename'], true);
         }
 
