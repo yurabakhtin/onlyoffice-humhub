@@ -190,6 +190,7 @@ humhub.module('onlyoffice', function (module, require, $) {
         var renameData = {
             newFileName: evt.data,
             key: config.document.key,
+            ext: config.document.fileType
         };
 
         client.post(api.renameUrl, {data: JSON.stringify(renameData), dataType: 'json'}).then((response) => {

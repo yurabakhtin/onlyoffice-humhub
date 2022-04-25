@@ -94,14 +94,22 @@ class ApiController extends Controller
             throw new \Exception('Permission denied');
         }
 
-        $ext = strtolower(FileHelper::getExtension($file));
-        $file->updateAttributes(['file_name' => $data['newFileName'] . "." . $ext]);
+        $newFileName = $data['newFileName'];
+        $origExt = $data['ext'];
+        $arrayName = explode(".", $newFileName);
+        $curExt = end($arrayName);
+
+        if($origExt !== $curExt) {
+            $newFileName .= "." . $origExt;
+        }
+
+        $file->updateAttributes(['file_name' => $newFileName]);
 
         $meta = [
             "c" => "meta",
             "key" => $data['key'],
             "meta"=> [
-                "title" => $data['newFileName'] . '.' .$ext
+                "title" => $newFileName
             ]
         ];
         $response = $this->module->commandService($meta);
