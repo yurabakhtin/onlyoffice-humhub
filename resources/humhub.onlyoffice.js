@@ -213,11 +213,14 @@ humhub.module('onlyoffice', function (module, require, $) {
     }
 
     function onMakeActionLink(evt){
+        var ACTION_DATA = evt.data;
         var anchorData = {
             doc_key: config.document.key
         };
 
         client.post(api.makeAnchorUrl, {data: JSON.stringify(anchorData), dataType: 'json'}).then((response) => {
+            var link = location.origin + response.url + "&anchor=" + encodeURIComponent(JSON.stringify(ACTION_DATA));
+            docEditor.setActionLink(link);
         }).catch(function(e) {
             module.log.error(e, true);
         });

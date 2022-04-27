@@ -18,6 +18,7 @@ use yii\web\HttpException;
 use yii\helpers\Url;
 use humhub\modules\file\libs\FileHelper;
 use humhub\modules\onlyoffice\components\BaseFileController;
+use humhub\modules\notification\models\Notification;
 
 class OpenController extends BaseFileController
 {
@@ -28,7 +29,7 @@ class OpenController extends BaseFileController
     public $access = \humhub\components\access\ControllerAccess::class;
     public $anchor;
     public $actionDataUrl;
-    public $actionData;
+
     /**
      * Opens the document in modal
      * 
@@ -37,17 +38,17 @@ class OpenController extends BaseFileController
      */
     public function actionIndex()
     {
-        $url = Yii::$app->request->url;
-        if(str_contains($url, 'anchor')) {
-            $this->actionDataUrl = str_replace('anchor=', '', strstr($url, 'anchor'));
-            $this->actionData = urldecode($this->actionDataUrl);
-            $this->anchor = json_decode($this->actionData, true);
-            do {
-                $this->actionData = urldecode($this->actionData);
-                $this->anchor = json_decode($this->actionData, true);
-            } while (!$this->anchor);
+        // $url = Yii::$app->request->url;
+        if(isset($_GET['anchor'])) {
+            $this->actionDataUrl = $_GET['anchor'];
+            $this->anchor = json_decode(urldecode($this->actionDataUrl), true);
         }
-        if (!Yii::$app->request->isAjax || str_contains($url, 'notify')) {
+
+        if(!empty($_GET['seen'])) {
+            Notification::findOne($_GET['notify'])->getBaseModel()->markAsSeen();
+        }
+
+        if (!Yii::$app->request->isAjax || isset($_GET['notify'])) {
             return $this->redirectToModal();
         }
 
@@ -85,7 +86,7 @@ class OpenController extends BaseFileController
         if ($this->shareSecret) {
             $openUrl = Url::to(['/onlyoffice/open', 'share' => $this->shareSecret]);
         } elseif($this->anchor) {
-            $openUrl = Url::to(['/onlyoffice/open', 'guid' => $this->file->guid, 'mode' => $this->mode, 'anchor' => $this->actionData]);
+            $openUrl = Url::to(['/onlyoffice/open', 'guid' => $this->file->guid, 'mode' => $this->mode, 'anchor' => $this->actionDataUrl]);
         } else {
             $openUrl = Url::to(['/onlyoffice/open', 'guid' => $this->file->guid, 'mode' => $this->mode]);
         }

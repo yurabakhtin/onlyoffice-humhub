@@ -8,7 +8,6 @@ use yii\bootstrap\Html;
 use humhub\modules\notification\components\BaseNotification;
 use yii\helpers\Url;
 use yii\helpers\ArrayHelper;
-use humhub\modules\file\models\File;
 use humhub\components\SocialActivity;
 
 class Mention extends BaseNotification
@@ -44,12 +43,14 @@ class Mention extends BaseNotification
         $url = Url::to(['/onlyoffice/open',
                 'guid' => $this->file->guid,
                 'mode' => 'view',
-                'notify' => 'true',
+                'seen' => !$this->record->seen,
+                'notify' => $this->record->id,
                 'anchor' => $this->source->anchor]);
         $relativeUrl = Url::to(['/onlyoffice/open',
                 'guid' => $this->file->guid,
                 'mode' => 'view',
-                'notify' => 'true',
+                'seen' => !$this->record->seen,
+                'notify' => $this->record->id,
                 'anchor' => $this->source->anchor]);
 
         $result = [
