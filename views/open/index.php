@@ -11,7 +11,8 @@
         <?=
         \humhub\modules\onlyoffice\widgets\EditorWidget::widget([
             'file' => $file,
-            'mode' => $mode
+            'mode' => $mode,
+            'anchor' => $anchor
         ]);
         ?>
     </div>

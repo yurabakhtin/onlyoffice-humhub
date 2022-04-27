@@ -53,6 +53,8 @@ class EditorWidget extends JsWidget
      */
     public $init = true;
 
+    public $anchor;
+
     /**
      * @inheritdoc
      */
@@ -86,7 +88,8 @@ class EditorWidget extends JsWidget
 
         $api = [];
 
-        $api['sendNotifyUrl'] = Url::to(['/onlyoffice/api/send-notify'], true);
+        $api['sendNotifyUrl'] = Url::to(['/onlyoffice/mention/send-notify'], true);
+        $api['makeAnchorUrl'] = Url::to(['/onlyoffice/api/make-anchor'], true);
 
         if ($this->file->object_model === cFile::class) {
             $cfile = cFile::findOne($this->file->object_id);
@@ -164,6 +167,7 @@ class EditorWidget extends JsWidget
                 ]
             ],
             'editorConfig' => [
+                'actionLink' => $this->anchor,
                 'mode' => $this->mode,
                 'lang' => ($user) && !empty($user->language) ? $user->language : Yii::$app->language,
                 'callbackUrl' => $callbackUrl,

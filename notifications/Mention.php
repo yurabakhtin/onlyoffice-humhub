@@ -21,10 +21,11 @@ class Mention extends BaseNotification
 
     public function html()
     {
-        return Yii::t('UserModule.notification', '{displayName} mentioned you in {contentTitle}.', [
-                    'displayName' => Html::tag('strong', Html::encode($this->originator->displayName)),
-                    'contentTitle' => $this->source->file_name
-        ]);
+        return Yii::t('UserModule.notification', '{displayName} mentioned you in {contentTitle}.', 
+        [
+            'displayName' => Html::tag('strong', Html::encode($this->originator->displayName)),
+            'contentTitle' => $this->source->file->file_name,
+        ]) . ' ' . $this->source->message;
     }
 
     public function getViewParams($params = [])
@@ -38,10 +39,18 @@ class Mention extends BaseNotification
             $date = null;
         }
 
-        $this->file = File::findOne($this->record->source_pk);
+        $this->file = $this->source->file;
 
-        $url = Url::to(['/onlyoffice/open', 'guid' => $this->file->guid, 'mode' => 'view']);
-        $relativeUrl = Url::to(['/onlyoffice/open', 'guid' => $this->file->guid, 'mode' => 'view']);
+        $url = Url::to(['/onlyoffice/open',
+                'guid' => $this->file->guid,
+                'mode' => 'view',
+                'notify' => 'true',
+                'anchor' => $this->source->anchor]);
+        $relativeUrl = Url::to(['/onlyoffice/open',
+                'guid' => $this->file->guid,
+                'mode' => 'view',
+                'notify' => 'true',
+                'anchor' => $this->source->anchor]);
 
         $result = [
             'url' => $url,

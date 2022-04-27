@@ -26,7 +26,9 @@ class OpenController extends BaseFileController
      * Allow access to this controller without any authentication (guest access)
      */
     public $access = \humhub\components\access\ControllerAccess::class;
-
+    public $anchor;
+    public $actionDataUrl;
+    public $actionData;
     /**
      * Opens the document in modal
      * 
@@ -35,13 +37,24 @@ class OpenController extends BaseFileController
      */
     public function actionIndex()
     {
-        if (!Yii::$app->request->isAjax) {
+        $url = Yii::$app->request->url;
+        if(str_contains($url, 'anchor')) {
+            $this->actionDataUrl = str_replace('anchor=', '', strstr($url, 'anchor'));
+            $this->actionData = urldecode($this->actionDataUrl);
+            $this->anchor = json_decode($this->actionData, true);
+            do {
+                $this->actionData = urldecode($this->actionData);
+                $this->anchor = json_decode($this->actionData, true);
+            } while (!$this->anchor);
+        }
+        if (!Yii::$app->request->isAjax || str_contains($url, 'notify')) {
             return $this->redirectToModal();
         }
 
         return $this->renderAjax('index', [
                     'file' => $this->file,
-                    'mode' => $this->mode
+                    'mode' => $this->mode,
+                    'anchor' => $this->anchor
         ]);
     }
 
@@ -71,6 +84,8 @@ class OpenController extends BaseFileController
 
         if ($this->shareSecret) {
             $openUrl = Url::to(['/onlyoffice/open', 'share' => $this->shareSecret]);
+        } elseif($this->anchor) {
+            $openUrl = Url::to(['/onlyoffice/open', 'guid' => $this->file->guid, 'mode' => $this->mode, 'anchor' => $this->actionData]);
         } else {
             $openUrl = Url::to(['/onlyoffice/open', 'guid' => $this->file->guid, 'mode' => $this->mode]);
         }

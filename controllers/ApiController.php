@@ -18,8 +18,7 @@ use humhub\modules\file\models\File;
 use humhub\components\Controller;
 use \humhub\components\Module;
 use humhub\modules\file\libs\FileHelper;
-use humhub\modules\onlyoffice\notifications\Mention;
-use humhub\modules\user\models\User;
+use Exception;
 use yii\helpers\Url;
 
 class ApiController extends Controller
@@ -70,7 +69,7 @@ class ApiController extends Controller
         ]);
     }
 
-    public function actionSendNotify()
+    public function actionMakeAnchor()
     {
         if (($body_data = file_get_contents('php://input')) === FALSE) {
             throw new \Exception('Empty body');
@@ -81,18 +80,9 @@ class ApiController extends Controller
             throw new \Exception('Could not parse json');
         }
 
-        $originator = Yii::$app->user->getIdentity();
-        $users = User::find()->where(['email' => $data['emails']])->all();
-
-        $comment = $data['comment'];
-        $action = $data['ACTION_DATA'];
-
         $file = File::findOne(['onlyoffice_key' => $data['doc_key']]);
-
-        Mention::instance()->from($originator)->about($file)->sendBulk($users);
-
         $url = Url::to(['/onlyoffice/open', 'guid' => $file->guid, 'mode' => 'view']);
-
+        
         return $this->asJson([
             'url' => $url
         ]);
