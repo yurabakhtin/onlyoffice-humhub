@@ -78,17 +78,32 @@ class Module extends \humhub\components\Module
         'odp' => 'pptx',
     ];
     
+    public $demoparam = [
+        'trial' => 30,
+        'header' => 'AuthorizationJWT',
+        'secret' => 'sn2puSUF7muF5Jas',
+        'serverUrl' => 'https://onlinedocs.onlyoffice.com'
+    ];
 
     public function isJwtEnabled() {
+        if($this->isDemoServerEnabled())
+            return true;
         return !empty($this->getJwtSecret());
     }
 
     public function getJwtSecret() {
+        if($this->isDemoServerEnabled()) { 
+            return $this->demoparam['secret'];
+        }
         return $this->settings->get('jwtSecret');
     }
 
     public function getServerUrl()
     {
+        if($this->isDemoServerEnabled()) {
+            return $this->demoparam['serverUrl'];
+        }
+
         return $this->settings->get('serverUrl');
     }
 
@@ -112,36 +127,73 @@ class Module extends \humhub\components\Module
     {
         return $this->settings->get('verifyPeerOff');
     }
-    public function getChat()
+
+    public function getDemoServer()
     {
-        return $this->settings->get('chat');
-    }
-    public function getCompactHeader()
-    {
-        return $this->settings->get('compactHeader');
-    }
-    public function getFeedback()
-    {
-        return $this->settings->get('feedback');
-    }
-    public function getHelp()
-    {
-        return $this->settings->get('help');
-    }
-    public function getCompactToolbar()
-    {
-        return $this->settings->get('compactToolbar');
+        return $this->settings->get('demoServer');
     }
 
-    /**
-     * 
-     * @return type
-     */
-    public function getServerApiUrl()
+    public function isDemoServerEnabled() {
+        if(boolval($this->getDemoServer())) {
+            $trial = $this->getTrial();
+            if($trial !== false)
+                return true;
+        }
+        return false;
+    }
+
+    public function getChat()
+    {
+        return boolval($this->settings->get('chat'));
+    }
+
+    public function getCompactHeader()
+    {
+        return boolval($this->settings->get('compactHeader'));
+    }
+
+    public function getFeedback()
+    {
+        return boolval($this->settings->get('feedback'));
+    }
+
+    public function getHelp()
+    {
+        return boolval($this->settings->get('help'));
+    }
+
+    public function getCompactToolbar()
+    {
+        return boolval($this->settings->get('compactToolbar'));
+    }
+
+    public function getForceSave()
+    {
+        return boolval($this->settings->get('forceSave'));
+    }
+
+    public function getServerApiUrl(): string
     {
         return $this->getServerUrl() . '/web-apps/apps/api/documents/api.js';
     }
 
+    public function getHeader(): string
+    {
+        return $this->isDemoServerEnabled() ? $this->demoparam['header'] : 'Authorization';
+    }
+
+    public function getTrial()
+    {
+        $settings =  Yii::$app->getModule('onlyoffice')->settings;
+        $trial = $settings->get('trial');
+        
+        if(empty($trial)) {
+            $settings->set('trial', time());
+        } elseif($this->demoparam['trial'] - round( (time() - $trial) / (60*60*24) ) < 0) {
+            return false;
+        }
+        return $this->demoparam['trial'] - round( (time() - $trial) / (60*60*24) );
+    }
     public function getDocumentType($file)
     {
         $fileExtension = strtolower(FileHelper::getExtension($file));
@@ -209,7 +261,7 @@ class Module extends \humhub\components\Module
             $headers['Accept'] = 'application/json';
             if ($this->isJwtEnabled()) {
                 $data['token'] = JWT::encode($data, $this->getJwtSecret());
-                $headers['Authorization'] = 'Bearer ' . JWT::encode(['payload' => $data], $this->getJwtSecret());
+                $headers[$this->getHeader()] = 'Bearer ' . JWT::encode(['payload' => $data], $this->getJwtSecret());
             }
 
             $options = array(
@@ -254,9 +306,17 @@ class Module extends \humhub\components\Module
         return $this->convertService($downloadUrl, $fromExt, $toExt, $key . $ts, $async);
     }
 
-    public function convertService($documentUrl, $fromExt, $toExt, $key, $async = false): array
+    public function convertService($documentUrl, $fromExt, $toExt, $key, $async = true): array
     {
         $url = $this->getInternalServerUrl() . '/ConvertService.ashx';
+
+        $user = Yii::$app->user->getIdentity();
+        $lang = ($user) && !empty($user->language) ? $user->language : Yii::$app->language;
+        if (!array_key_exists($lang, $this->languageCodes)) {
+            $region = 'en-US';
+        } else {
+            $region = $this->languageCodes[$lang];
+        }
 
         $data = [
             'async' => $async,
@@ -265,6 +325,7 @@ class Module extends \humhub\components\Module
             'outputtype' => $toExt,
             'key' => $key,
             'url' => $documentUrl,
+            'region' => $region
         ];
 
         try {
@@ -272,7 +333,7 @@ class Module extends \humhub\components\Module
             $headers['Accept'] = 'application/json';
             if ($this->isJwtEnabled()) {
                 $data['token'] = JWT::encode($data, $this->getJwtSecret());
-                $headers['Authorization'] = 'Bearer ' . JWT::encode(['payload' => $data], $this->getJwtSecret());
+                $headers[$this->getHeader()] = 'Bearer ' . JWT::encode(['payload' => $data], $this->getJwtSecret());
             }
 
             $options = [
@@ -410,6 +471,33 @@ class Module extends \humhub\components\Module
         'xltx' => 'application/vnd.openxmlformats-officedocument.spreadsheetml.template'
     ];
 
+    public $languageCodes = [
+        "az" => "az-Latn-AZ",
+        "bg" => "bg-BG",
+        "cs" => "cs-CZ",
+        "de" => "de-DE",
+        "el" => "el-GR",
+        "en_GB" => "en-GB",
+        "en-US" => "en-US",
+        "es" => "es-ES",
+        "fr" => "fr-FR",
+        "it" => "it-IT",
+        "ja" => "ja-JP",
+        "ko" => "ko-KR",
+        "lv" => "lv-LV",
+        "nl" => "nl-NL",
+        "pl" => "pl-PL",
+        "pt_BR" => "pt-BR",
+        "pt" => "pt-PT",
+        "ru" => "ru-RU",
+        "sk" => "sk-SK",
+        "sv" => "sv-SE",
+        "tr" => "tr-TR",
+        "uk" => "uk-UA",
+        "vi" => "vi-VN",
+        "zh-CN" => "zh-CN",
+        "zh-TW" => "zh-CN"
+    ];
     private function convertResponceError($errorCode) {
         $errorMessage = "";
 
@@ -456,13 +544,13 @@ class Module extends \humhub\components\Module
 
         switch ($errorCode) {
             case 3:
-                $errorMessage = "Internal server error.";
+                $errorMessage = "Internal server error";
                 break;
             case 5:
-                $errorMessage = "Command not correct.";
+                $errorMessage = "Command not correct";
                 break;
             case 6:
-                $errorMessage = "Invalid token.";
+                $errorMessage = "Invalid token";
                 break;
             case 0:
                 return;
