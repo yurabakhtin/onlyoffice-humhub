@@ -27,6 +27,15 @@ class Mention extends BaseNotification
         ]) . ' ' . $this->source->message;
     }
 
+    public function getMailSubject()
+    {
+        return Yii::t('UserModule.notification', "{displayName} just mentioned you in {contentTitle} \"{preview}\"", [
+                    'displayName' => $this->originator->displayName,
+                    'contentTitle' => $this->source->file->file_name,
+                    'preview' => $this->source->message
+        ]);
+    }
+
     public function getViewParams($params = [])
     {
         if ($this->hasContent() && $this->getContent()->updated_at instanceof Expression) {
