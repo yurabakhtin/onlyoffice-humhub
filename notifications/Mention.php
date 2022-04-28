@@ -55,16 +55,10 @@ class Mention extends BaseNotification
                 'seen' => !$this->record->seen,
                 'notify' => $this->record->id,
                 'anchor' => $this->source->anchor]);
-        $relativeUrl = Url::to(['/onlyoffice/open',
-                'guid' => $this->file->guid,
-                'mode' => 'view',
-                'seen' => !$this->record->seen,
-                'notify' => $this->record->id,
-                'anchor' => $this->source->anchor]);
 
         $result = [
             'url' => $url,
-            'relativeUrl' => $relativeUrl,
+            'relativeUrl' => $url,
             'date' => $date,
             'isNew' => !$this->record->seen,
         ];
