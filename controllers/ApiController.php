@@ -20,6 +20,9 @@ use \humhub\components\Module;
 use humhub\modules\file\libs\FileHelper;
 use Exception;
 use yii\helpers\Url;
+use humhub\modules\user\models\User;
+use humhub\modules\onlyoffice\notifications\Mention as Notify;
+use humhub\modules\onlyoffice\models\Mention;
 
 class ApiController extends Controller
 {
@@ -69,6 +72,26 @@ class ApiController extends Controller
         ]);
     }
 
+    public function actionUsersForMentions()
+    {
+        $usersForMentions = [];
+        $curUser = Yii::$app->user->getIdentity();
+        $users = User::find()->all();
+
+        foreach ($users as $user) {
+            if ($user->id != $curUser->id && $user->profile->firstname != null && $user->profile->lastname != null && $user->email != null) {
+                array_push($usersForMentions,[
+                    "name" => $user->profile->firstname . " " . $user->profile->lastname,
+                    "email" => $user->email
+                ]);
+            }
+        }
+
+        return $this->asJson([
+            'usersForMentions' => $usersForMentions
+        ]);
+    }
+
     public function actionMakeAnchor()
     {
         if (($body_data = file_get_contents('php://input')) === FALSE) {
@@ -85,6 +108,38 @@ class ApiController extends Controller
         
         return $this->asJson([
             'url' => $url
+        ]);
+    }
+
+     public function actionSendNotify()
+    {
+        if (($body_data = file_get_contents('php://input')) === FALSE) {
+            throw new \Exception('Empty body');
+        }
+
+        $data = json_decode($body_data, TRUE);
+        if ($data === NULL) {
+            throw new \Exception('Could not parse json');
+        }
+
+        $originator = Yii::$app->user->getIdentity();
+        $users = User::find()->where(['email' => $data['emails']])->all();
+
+        $message = $data['comment'];
+        $anchor = $data['ACTION_DATA'];
+
+        $file = File::findOne(['onlyoffice_key' => $data['doc_key']]);
+
+        $mention = Mention::generateMention($file, $message, $anchor);
+
+        try{
+            Notify::instance()->from($originator)->about($mention)->sendBulk($users);
+        } catch(Exception $exeption) {
+            throw new Exception("Mention error.");
+        }
+
+        return $this->asJson([
+            'file' => $file
         ]);
     }
 }

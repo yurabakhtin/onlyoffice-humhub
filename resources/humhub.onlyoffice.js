@@ -15,7 +15,6 @@ humhub.module('onlyoffice', function (module, require, $) {
 
     var api = null;
     var config = null;
-    var usersForMentions = null;
     var docEditor = null;
 
     var Editor = function (node, options) {
@@ -119,7 +118,6 @@ humhub.module('onlyoffice', function (module, require, $) {
 
         this.docEditor = new DocsAPI.DocEditor('iframeContainer', config);
 
-        usersForMentions = this.options.usersForMentions;
         docEditor = this.docEditor;
     }
 
@@ -191,9 +189,14 @@ humhub.module('onlyoffice', function (module, require, $) {
     }
 
     function onRequestUsers() {
-        docEditor.setUsers({
-            "users": usersForMentions
+        client.post(api.usersForMentionsUrl).then((response) => {
+            docEditor.setUsers({
+                "users": response.usersForMentions
+            });
+        }).catch(function(e) {
+            module.log.error(e, true);
         });
+        
     }
 
     function onRequestSendNotify(evt) {
