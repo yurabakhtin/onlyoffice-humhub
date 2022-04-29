@@ -103,8 +103,6 @@ humhub.module('onlyoffice', function (module, require, $) {
         config.height = "100%";
         config.events = {
             'onRequestClose': onRequestClose,
-            'onRequestUsers': onRequestUsers,
-            'onRequestSendNotify': onRequestSendNotify,
             'onMakeActionLink': onMakeActionLink
             //'onReady': onReady,
             //'onDocumentStateChange': onDocumentStateChange,
@@ -116,6 +114,10 @@ humhub.module('onlyoffice', function (module, require, $) {
             config.events.onRequestSaveAs = onRequestSaveAs;
         }
 
+        if (api.usersForMentionsUrl) {
+            config.events.onRequestUsers = onRequestUsers;
+            config.events.onRequestSendNotify = onRequestSendNotify;  
+        }
         this.docEditor = new DocsAPI.DocEditor('iframeContainer', config);
 
         docEditor = this.docEditor;
