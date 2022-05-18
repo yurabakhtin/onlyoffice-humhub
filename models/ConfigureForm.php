@@ -105,7 +105,7 @@ class ConfigureForm extends \yii\base\Model
         $this->help = (boolean)Yii::$app->getModule('onlyoffice')->settings->get('help');
         $this->compactToolbar = (boolean)Yii::$app->getModule('onlyoffice')->settings->get('compactToolbar');
         $this->forceSave = (boolean)Yii::$app->getModule('onlyoffice')->settings->get('forceSave');
-        $this->forceEditTypes = explode("," , Yii::$app->getModule('onlyoffice')->settings->get("forceEditTypes"));
+        $this->forceEditTypes = $this->deserializeForceEditTypes();
 
         return true;
     }
@@ -124,9 +124,23 @@ class ConfigureForm extends \yii\base\Model
         Yii::$app->getModule('onlyoffice')->settings->set('help', $this->help);
         Yii::$app->getModule('onlyoffice')->settings->set('compactToolbar', $this->compactToolbar);
         Yii::$app->getModule('onlyoffice')->settings->set('forceSave', $this->forceSave);
-        Yii::$app->getModule('onlyoffice')->settings->set("forceEditTypes", implode("," , $this->forceEditTypes));
+        Yii::$app->getModule('onlyoffice')->settings->set("forceEditTypes", $this->serializeForceEditTypes());
 
         return true;
     }
 
+    public function deserializeForceEditTypes() {
+        $result = [];
+        foreach (explode(",", Yii::$app->getModule('onlyoffice')->settings->get("forceEditTypes") ?? "") as $ext) {
+            $result[$ext] = 1;
+        }
+        return $result;
+    }
+
+    public function serializeForceEditTypes() {
+        return implode(",", array_keys(array_filter($this->forceEditTypes, function ($ext) {
+                return $ext == true;
+            }
+        )));
+    }
 }

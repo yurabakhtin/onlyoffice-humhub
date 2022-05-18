@@ -172,16 +172,9 @@ class Module extends \humhub\components\Module
         return boolval($this->settings->get('forceSave'));
     }
 
-    public function addExtForEditing()
+    public function getforceEditTypes()
     {
-        $values = explode("," , $this->settings->get('forceEditTypes'));
-        $exts = array_combine($this->forceEditableExtensions, $values);
-        foreach($exts as $ext => $enabled) {
-            if($enabled) {
-                array_push($this->editableExtensions, $ext);
-            }
-        }
-        
+        return explode("," , $this->settings->get('forceEditTypes'));
     }
 
     public function getServerApiUrl(): string
@@ -223,9 +216,8 @@ class Module extends \humhub\components\Module
 
     public function canEdit($file)
     {
-        $this->addExtForEditing();
         $fileExtension = strtolower(FileHelper::getExtension($file));
-        return in_array($fileExtension, $this->editableExtensions);
+        return in_array($fileExtension, array_merge($this->getforceEditTypes(), $this->editableExtensions));
     }
 
     public function canConvert($file)
