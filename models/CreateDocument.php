@@ -80,8 +80,9 @@ class CreateDocument extends Model
             throw new Exception("File extension cannot be empty");
         }
 
-        $folder = Folder::findOne($this->fid);
-        if (!is_null($folder)) {
+        $cfiles = Yii::$app->getModule('cfiles');
+        $folder = isset($cfiles) ? Folder::findOne($this->fid) : null;
+        if (isset($folder)) {
             $canEdit = $folder->canEdit();
             if (!$canEdit) {
                 return false;
