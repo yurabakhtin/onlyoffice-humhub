@@ -14,6 +14,8 @@ humhub.module('onlyoffice', function (module, require, $) {
     var ooJSLoadRetries = 0;
 
     var api = null;
+    var config = null;
+    var docEditor = null;
 
     var Editor = function (node, options) {
         Widget.call(this, node, options);
@@ -83,8 +85,7 @@ humhub.module('onlyoffice', function (module, require, $) {
         }
 
         api = this.options.api;
-
-        var config = this.options.config;
+        config = this.options.config;
 
         var docsVersion = DocsAPI.DocEditor.version().split(".");
         if (docsVersion[0] < 6
@@ -102,6 +103,7 @@ humhub.module('onlyoffice', function (module, require, $) {
         config.height = "100%";
         config.events = {
             'onRequestClose': onRequestClose,
+            'onMakeActionLink': onMakeActionLink
             //'onReady': onReady,
             //'onDocumentStateChange': onDocumentStateChange,
             //'onRequestEditRights': onRequestEditRights,
@@ -112,7 +114,13 @@ humhub.module('onlyoffice', function (module, require, $) {
             config.events.onRequestSaveAs = onRequestSaveAs;
         }
 
+        if (api.usersForMentionsUrl) {
+            config.events.onRequestUsers = onRequestUsers;
+            config.events.onRequestSendNotify = onRequestSendNotify;  
+        }
         this.docEditor = new DocsAPI.DocEditor('iframeContainer', config);
+
+        docEditor = this.docEditor;
     }
 
     var Convert = function (node, options) {
@@ -181,6 +189,49 @@ humhub.module('onlyoffice', function (module, require, $) {
             module.log.error(e, true);
         });
     }
+
+    function onRequestUsers() {
+        client.post(api.usersForMentionsUrl).then((response) => {
+            docEditor.setUsers({
+                "users": response.usersForMentions
+            });
+        }).catch(function(e) {
+            module.log.error(e, true);
+        });
+        
+    }
+
+    function onRequestSendNotify(evt) {
+
+        var notifyData = {
+            ACTION_DATA: encodeURIComponent(JSON.stringify(evt.data.actionLink)),
+            comment: evt.data.message,
+            emails: evt.data.emails,
+            doc_key: config.document.key
+        };
+
+        client.post(api.sendNotifyUrl, {data: JSON.stringify(notifyData), dataType: 'json'}).then((response) => {
+        }).catch(function(e) {
+            module.log.error(e, true);
+        });
+
+    }
+
+    function onMakeActionLink(evt){
+        var ACTION_DATA = evt.data;
+        var anchorData = {
+            doc_key: config.document.key
+        };
+
+        client.post(api.makeAnchorUrl, {data: JSON.stringify(anchorData), dataType: 'json'}).then((response) => {
+            var link = location.origin + response.url + "&anchor=" + encodeURIComponent(JSON.stringify(ACTION_DATA));
+            docEditor.setActionLink(link);
+        }).catch(function(e) {
+            module.log.error(e, true);
+        });
+
+        
+    };
 
     var onRequestCloseObj = null;
     function onRequestClose() {

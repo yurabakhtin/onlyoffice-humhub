@@ -8,6 +8,8 @@
 - trial period of 30 days for the demo server
 - transfer user region in conversion
 - editable extensions on the settings page
+- mentioning users in comments
+- bookmarks
 
 ## 2.4.0
 ## Added

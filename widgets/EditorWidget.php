@@ -23,6 +23,7 @@ use humhub\libs\Html;
 use humhub\modules\file\libs\FileHelper;
 use humhub\widgets\JsWidget;
 use \Firebase\JWT\JWT;
+use humhub\modules\user\models\User;
 
 /**
  * Description of EditorWidget
@@ -51,6 +52,8 @@ class EditorWidget extends JsWidget
      * @inheritdoc
      */
     public $init = true;
+
+    public $anchor;
 
     /**
      * @inheritdoc
@@ -83,7 +86,11 @@ class EditorWidget extends JsWidget
     {
         $module = Yii::$app->getModule('onlyoffice');
 
-        $api = [];
+        $api = [
+            'sendNotifyUrl' => Url::to(['/onlyoffice/api/send-notify'], true),
+            'makeAnchorUrl' => Url::to(['/onlyoffice/api/make-anchor'], true),
+        ];
+
         if ($this->file->object_model === cFile::class) {
             $cfile = cFile::findOne($this->file->object_id);
             $cfolder = cFolder::findOne($cfile->parent_folder_id);
@@ -92,12 +99,16 @@ class EditorWidget extends JsWidget
             }
         }
 
+        if(!Yii::$app->user->isGuest) {
+            $api['usersForMentionsUrl'] = Url::to(['/onlyoffice/api/users-for-mentions'], true);
+        }
+
         return [
             'config' => $this->getConfig(),
             'edit-mode' => $this->mode,
             'file-info-url' => Url::to(['/onlyoffice/open/get-info', 'guid' => $this->file->guid]),
             'module-configured' => (empty($module->getServerUrl()) ? '0' : '1'),
-            'api' => $api
+            'api' => $api,
         ];
     }
 
@@ -159,6 +170,7 @@ class EditorWidget extends JsWidget
                 ]
             ],
             'editorConfig' => [
+                'actionLink' => $this->anchor,
                 'mode' => $this->mode,
                 'lang' => ($user) && !empty($user->language) ? $user->language : Yii::$app->language,
                 'callbackUrl' => $callbackUrl,
