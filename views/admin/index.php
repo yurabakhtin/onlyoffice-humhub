@@ -61,6 +61,15 @@ use yii\web\View;
         </div>
 
         <div class="form-group">
+            <?= Html::activeLabel($model,'editLabel', ['class' => 'control-label']); ?>
+            <?php 
+                foreach($forceEditExt as $key => $ext) {
+                    echo $form->field($model, 'forceEditTypes[' . $ext . ']', ['options' => ['class' => 'checkbox-inline']])->checkbox(['label' => $ext]);
+                }
+            ?>
+        </div>
+
+        <div class="form-group">
             <?= Html::submitButton('Submit', ['class' => 'btn btn-primary', 'data-ui-loader' => '']) ?>
         </div>
 
@@ -88,6 +97,7 @@ use yii\web\View;
         $("#configureform-demoserver").closest("label").css({"cursor":"default", "opacity":"0.5"});
         $("#configureform-demoserver").attr("checked", false);
         $("#configureform-demoserver").attr("disabled", true);
+        $("#configureform-demoserver").closest("div").children()[2].innerText = "' . Yii::t("OnlyofficeModule.base", "The 30-day test period is over, you can no longer connect to demo ONLYOFFICE Docs server.") . '";
     ');
    }
 ?>

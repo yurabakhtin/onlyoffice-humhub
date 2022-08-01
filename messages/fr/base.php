@@ -63,5 +63,9 @@ return [
     'Display monochrome toolbar header' => 'Afficher un en-tête monochrome de la barre d\'outils',
     'Error when trying to connect ({error})' => 'Erreur durant la tentative de connexion ({error})',
     'Mixed Active Content is not allowed. HTTPS address for ONLYOFFICE Docs is required.' => 'Le contenu mixte actif n\'est pas autorisé. Une adresse HTTPS pour le ONLYOFFICE Docs est requise',
+    'Open the file for editing (due to format restrictions, the data might be lost when saving to the formats from the list below)' => 'Ouvrir le fichier pour édition (en raison de restrictions de format, des données peuvent être perdues lors de l\'enregistrement dans les formats de la liste ci-dessous)',
+    'Connect to demo ONLYOFFICE Docs server' => 'Se connecter à la version démo de ONLYOFFICE Docs',
+    'This is a public test server, please do not use it for private sensitive data. The server will be available during a 30-day period.' => 'C’est un serveur public proposé à des fins de tests, veuillez ne pas l’utiliser pour vos données personnelles sensibles. Le serveur est disponible pendant 30 jours.',
+    'The 30-day test period is over, you can no longer connect to demo ONLYOFFICE Docs server.' => 'La période d’essai de 30 jours est expirée, vous n’êtes plus en mesure de vous connecter à la version démo de ONLYOFFICE Docs.',
     'Keep intermediate versions when editing (forcesave)' => 'Sauvegarder les versions intermédiaires lors de l\'édition (enregistrement obligatoire)',
 ];

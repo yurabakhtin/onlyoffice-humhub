@@ -30,6 +30,8 @@ class ConfigureForm extends \yii\base\Model
     public $customLabel;
     public $forceSave;
 
+    public $forceEditTypes;
+
     /**
      * @inheritdoc
      */
@@ -48,6 +50,7 @@ class ConfigureForm extends \yii\base\Model
             ['help', 'boolean'],
             ['compactToolbar', 'boolean'],
             ['forceSave', 'boolean'],
+            ['forceEditTypes', 'string'],
         ];
     }
 
@@ -62,7 +65,7 @@ class ConfigureForm extends \yii\base\Model
             'jwtSecret' => Yii::t('OnlyofficeModule.base', 'JWT Secret'),
             'internalServerUrl' => Yii::t('OnlyofficeModule.base', 'ONLYOFFICE Docs address for internal requests from the server'),
             'storageUrl' => Yii::t('OnlyofficeModule.base', 'Server address for internal requests from ONLYOFFICE Docs'),
-            'demoServer' => Yii::t('OnlyofficeModule.base', 'Connect to demo server'),
+            'demoServer' => Yii::t('OnlyofficeModule.base', 'Connect to demo ONLYOFFICE Docs server'),
             'chat' => Yii::t('OnlyofficeModule.base', 'Display Chat menu button'),
             'compactHeader' => Yii::t('OnlyofficeModule.base', 'Display the header more compact'),
             'feedback' => Yii::t('OnlyofficeModule.base', 'Display Feedback & Support menu button'),
@@ -70,6 +73,7 @@ class ConfigureForm extends \yii\base\Model
             'compactToolbar' => Yii::t('OnlyofficeModule.base', 'Display monochrome toolbar header'),
             'customLabel' => Yii::t('OnlyofficeModule.base', 'The customization section allows personalizing the editor interface'),
             'forceSave' => Yii::t('OnlyofficeModule.base', 'Keep intermediate versions when editing (forcesave)'),
+            'editLabel' => Yii::t('OnlyofficeModule.base', 'Open the file for editing (due to format restrictions, the data might be lost when saving to the formats from the list below)'),
         ];
     }
     
@@ -83,6 +87,7 @@ class ConfigureForm extends \yii\base\Model
             'jwtSecret' => Yii::t('OnlyofficeModule.base', 'JWT Secret key (leave blank to disable)'),
             'internalServerUrl' => Yii::t('OnlyofficeModule.base', 'e.g. http://documentserver'),
             'storageUrl' => Yii::t('OnlyofficeModule.base', 'e.g. http://storage'),
+            'demoServer' => Yii::t('OnlyofficeModule.base', 'This is a public test server, please do not use it for private sensitive data. The server will be available during a 30-day period.'),
         ];
     }
 
@@ -100,6 +105,7 @@ class ConfigureForm extends \yii\base\Model
         $this->help = (boolean)Yii::$app->getModule('onlyoffice')->settings->get('help');
         $this->compactToolbar = (boolean)Yii::$app->getModule('onlyoffice')->settings->get('compactToolbar');
         $this->forceSave = (boolean)Yii::$app->getModule('onlyoffice')->settings->get('forceSave');
+        $this->forceEditTypes = $this->deserializeForceEditTypes();
 
         return true;
     }
@@ -118,8 +124,23 @@ class ConfigureForm extends \yii\base\Model
         Yii::$app->getModule('onlyoffice')->settings->set('help', $this->help);
         Yii::$app->getModule('onlyoffice')->settings->set('compactToolbar', $this->compactToolbar);
         Yii::$app->getModule('onlyoffice')->settings->set('forceSave', $this->forceSave);
+        Yii::$app->getModule('onlyoffice')->settings->set("forceEditTypes", $this->serializeForceEditTypes());
 
         return true;
     }
 
+    public function deserializeForceEditTypes() {
+        $result = [];
+        foreach (explode(",", Yii::$app->getModule('onlyoffice')->settings->get("forceEditTypes") ?? "") as $ext) {
+            $result[$ext] = 1;
+        }
+        return $result;
+    }
+
+    public function serializeForceEditTypes() {
+        return implode(",", array_keys(array_filter($this->forceEditTypes, function ($ext) {
+                return $ext == true;
+            }
+        )));
+    }
 }

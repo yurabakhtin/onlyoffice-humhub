@@ -65,8 +65,8 @@ class Module extends \humhub\components\Module
      */
     public $editableExtensions = ['xlsx', 'ppsx', 'pptx', 'docx', 'docxf', 'oform' ];
     public $convertableExtensions = ['doc','odt','xls','ods','ppt','odp','txt','csv'];
+    public $forceEditableExtensions = ['csv', 'odp', 'ods', 'odt', 'rtf', 'txt'];
 
-    
     public $convertsTo = [
         'doc' => 'docx',
         'odt' => 'docx',
@@ -172,6 +172,11 @@ class Module extends \humhub\components\Module
         return boolval($this->settings->get('forceSave'));
     }
 
+    public function getforceEditTypes()
+    {
+        return explode("," , $this->settings->get('forceEditTypes'));
+    }
+
     public function getServerApiUrl(): string
     {
         return $this->getServerUrl() . '/web-apps/apps/api/documents/api.js';
@@ -212,7 +217,7 @@ class Module extends \humhub\components\Module
     public function canEdit($file)
     {
         $fileExtension = strtolower(FileHelper::getExtension($file));
-        return in_array($fileExtension, $this->editableExtensions);
+        return in_array($fileExtension, array_merge($this->getforceEditTypes(), $this->editableExtensions));
     }
 
     public function canConvert($file)
