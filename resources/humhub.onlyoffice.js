@@ -13,6 +13,7 @@ humhub.module('onlyoffice', function (module, require, $) {
     var loader = require('ui.loader');
     var ooJSLoadRetries = 0;
 
+    var config = null;
     var api = null;
     var config = null;
     var docEditor = null;
@@ -118,6 +119,10 @@ humhub.module('onlyoffice', function (module, require, $) {
             config.events.onRequestUsers = onRequestUsers;
             config.events.onRequestSendNotify = onRequestSendNotify;  
         }
+        if (api.renameUrl) {
+            config.events.onRequestRename = onRequestRename;
+        }
+
         this.docEditor = new DocsAPI.DocEditor('iframeContainer', config);
 
         docEditor = this.docEditor;
@@ -185,6 +190,20 @@ humhub.module('onlyoffice', function (module, require, $) {
 
         client.post(api.saveasUrl, {data: JSON.stringify(saveData), dataType: 'json'}).then((response) => {
             event.trigger('humhub:file:created.cfiles', [response.file]);
+        }).catch(function(e) {
+            module.log.error(e, true);
+        });
+    }
+
+    function onRequestRename(evt) {
+        var renameData = {
+            newFileName: evt.data,
+            key: config.document.key,
+            ext: config.document.fileType
+        };
+
+        client.post(api.renameUrl, {data: JSON.stringify(renameData), dataType: 'json'}).then((response) => {
+            event.trigger('humhub:file:modified', [response.file]);
         }).catch(function(e) {
             module.log.error(e, true);
         });

@@ -23,6 +23,8 @@ use humhub\libs\Html;
 use humhub\modules\file\libs\FileHelper;
 use humhub\widgets\JsWidget;
 use \Firebase\JWT\JWT;
+use humhub\modules\cfiles\permissions\ManageFiles;
+use humhub\modules\content\models\ContentContainer;
 use humhub\modules\user\models\User;
 
 /**
@@ -91,6 +93,7 @@ class EditorWidget extends JsWidget
             'makeAnchorUrl' => Url::to(['/onlyoffice/api/make-anchor'], true),
         ];
 
+
         if ($this->file->object_model === cFile::class) {
             $cfile = cFile::findOne($this->file->object_id);
             $cfolder = cFolder::findOne($cfile->parent_folder_id);
@@ -101,6 +104,15 @@ class EditorWidget extends JsWidget
 
         if(!Yii::$app->user->isGuest) {
             $api['usersForMentionsUrl'] = Url::to(['/onlyoffice/api/users-for-mentions'], true);
+        }
+
+        $owner = User::findOne($this->file->created_by);
+        $containerRecord = ContentContainer::findOne(['id' => $owner->contentcontainer_id]);
+        $container = $containerRecord->getPolymorphicRelation();
+
+        $canRename = $container->can(ManageFiles::class);
+        if ($canRename) {
+            $api['renameUrl'] = Url::to(['/onlyoffice/api/rename'], true);
         }
 
         return [
