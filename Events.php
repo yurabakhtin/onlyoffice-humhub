@@ -13,9 +13,9 @@
 
 namespace humhub\modules\onlyoffice;
 
+use Yii;
 use humhub\modules\file\handler\FileHandlerCollection;
 use humhub\modules\onlyoffice\permissions\CanUseOnlyOffice;
-use Yii;
 
 /**
  * @author luke

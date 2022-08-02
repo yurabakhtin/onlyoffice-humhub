@@ -19,8 +19,8 @@ use humhub\modules\file\models\File;
 use humhub\modules\user\models\User;
 use humhub\components\Controller;
 use \humhub\components\Module;
-use \Firebase\JWT\JWT;
 use humhub\modules\file\libs\FileHelper;
+use \Firebase\JWT\JWT;
 
 class BackendController extends Controller
 {
@@ -83,6 +83,7 @@ class BackendController extends Controller
         //Yii::warning("Downloading file guid: " . $this->file->guid, 'onlyoffice');
         return Yii::$app->response->sendFile($this->file->store->get(), $this->file->file_name);
     }
+
     /**
      * Download empty file
      */

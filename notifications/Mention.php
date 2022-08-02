@@ -2,12 +2,11 @@
 
 namespace humhub\modules\onlyoffice\notifications;
 
-
 use Yii;
-use yii\bootstrap\Html;
-use humhub\modules\notification\components\BaseNotification;
 use yii\helpers\Url;
 use yii\helpers\ArrayHelper;
+use yii\bootstrap\Html;
+use humhub\modules\notification\components\BaseNotification;
 use humhub\components\SocialActivity;
 
 class Mention extends BaseNotification

@@ -16,11 +16,11 @@ namespace humhub\modules\onlyoffice;
 use Yii;
 use yii\helpers\Url;
 use yii\helpers\Json;
+use yii\httpclient\Client;
+use yii\httpclient\Response;
 use humhub\modules\file\libs\FileHelper;
 use humhub\libs\CURLHelper;
 use \Firebase\JWT\JWT;
-use yii\httpclient\Client;
-use yii\httpclient\Response;
 
 /**
  * File Module

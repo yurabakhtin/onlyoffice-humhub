@@ -13,8 +13,8 @@
 
 namespace humhub\modules\onlyoffice\permissions;
 
-use humhub\libs\BasePermission;
 use Yii;
+use humhub\libs\BasePermission;
 
 /**
  * CanUseOnlyOffice Permissions

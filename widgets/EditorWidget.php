@@ -14,18 +14,18 @@
 namespace humhub\modules\onlyoffice\widgets;
 
 use Yii;
+use yii\helpers\Url;
 use yii\web\HttpException;
 use humhub\modules\file\models\File;
 use humhub\modules\cfiles\models\File as cFile;
 use humhub\modules\cfiles\models\Folder as cFolder;
-use yii\helpers\Url;
 use humhub\libs\Html;
 use humhub\modules\file\libs\FileHelper;
 use humhub\widgets\JsWidget;
-use \Firebase\JWT\JWT;
 use humhub\modules\cfiles\permissions\ManageFiles;
 use humhub\modules\content\models\ContentContainer;
 use humhub\modules\user\models\User;
+use \Firebase\JWT\JWT;
 
 /**
  * Description of EditorWidget

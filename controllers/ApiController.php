@@ -14,17 +14,16 @@
 namespace humhub\modules\onlyoffice\controllers;
 
 use Yii;
-use humhub\modules\file\models\File;
-use humhub\components\Controller;
-use \humhub\components\Module;
-use humhub\modules\file\libs\FileHelper;
 use Exception;
 use yii\helpers\Url;
+use humhub\components\Controller;
+use \humhub\components\Module;
+use humhub\modules\file\models\File;
+use humhub\modules\file\libs\FileHelper;
 use humhub\modules\user\models\User;
 use humhub\modules\onlyoffice\notifications\Mention as Notify;
 use humhub\modules\onlyoffice\models\Mention;
 use humhub\modules\content\models\ContentContainer;
-use humhub\modules\user\models\User;
 use humhub\modules\cfiles\permissions\ManageFiles;
 
 class ApiController extends Controller
@@ -137,7 +136,7 @@ class ApiController extends Controller
 
         try{
             Notify::instance()->from($originator)->about($mention)->sendBulk($users);
-        } catch(Exception $exeption) {
+        } catch(Exception $exception) {
             throw new Exception("Mention error.");
         }
 

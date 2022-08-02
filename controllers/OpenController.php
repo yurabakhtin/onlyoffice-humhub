@@ -72,7 +72,7 @@ class OpenController extends BaseFileController
 
     /**
      * If not opened in ajax mode - redirect to the correct page and open modal
-
+     *
      * @return type
      * @throws HttpException
      */
@@ -85,7 +85,7 @@ class OpenController extends BaseFileController
 
         if ($this->shareSecret) {
             $openUrl = Url::to(['/onlyoffice/open', 'share' => $this->shareSecret]);
-        } elseif($this->anchor) {
+        } elseif ($this->anchor) {
             $openUrl = Url::to(['/onlyoffice/open', 'guid' => $this->file->guid, 'mode' => $this->mode, 'anchor' => $this->actionDataUrl]);
         } else {
             $openUrl = Url::to(['/onlyoffice/open', 'guid' => $this->file->guid, 'mode' => $this->mode]);

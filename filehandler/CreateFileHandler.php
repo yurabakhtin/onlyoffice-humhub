@@ -14,8 +14,8 @@
 namespace humhub\modules\onlyoffice\filehandler;
 
 use Yii;
-use humhub\modules\file\handler\BaseFileHandler;
 use yii\helpers\Url;
+use humhub\modules\file\handler\BaseFileHandler;
 
 /**
  * Description of ViewHandler
