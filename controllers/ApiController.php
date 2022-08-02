@@ -24,7 +24,7 @@ use humhub\modules\user\models\User;
 use humhub\modules\onlyoffice\notifications\Mention as Notify;
 use humhub\modules\onlyoffice\models\Mention;
 use humhub\modules\content\models\ContentContainer;
-use humhub\modules\cfiles\permissions\ManageFiles;
+use humhub\modules\content\permissions\ManageContent;
 
 class ApiController extends Controller
 {
@@ -164,7 +164,7 @@ class ApiController extends Controller
         $owner = User::findOne($file->created_by);
         $containerRecord = ContentContainer::findOne(['id' => $owner->contentcontainer_id]);
         $container = $containerRecord->getPolymorphicRelation();
-        $canRename = $container->can(ManageFiles::class);
+        $canRename = $container->can(ManageContent::class);
         if(!$canRename) {
             throw new \Exception('Permission denied');
         }

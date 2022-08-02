@@ -22,7 +22,7 @@ use humhub\modules\cfiles\models\Folder as cFolder;
 use humhub\libs\Html;
 use humhub\modules\file\libs\FileHelper;
 use humhub\widgets\JsWidget;
-use humhub\modules\cfiles\permissions\ManageFiles;
+use humhub\modules\content\permissions\ManageContent;
 use humhub\modules\content\models\ContentContainer;
 use humhub\modules\user\models\User;
 use \Firebase\JWT\JWT;
@@ -110,7 +110,7 @@ class EditorWidget extends JsWidget
         $containerRecord = ContentContainer::findOne(['id' => $owner->contentcontainer_id]);
         $container = $containerRecord->getPolymorphicRelation();
 
-        $canRename = $container->can(ManageFiles::class);
+        $canRename = $container->can(ManageContent::class);
         if ($canRename) {
             $api['renameUrl'] = Url::to(['/onlyoffice/api/rename'], true);
         }
