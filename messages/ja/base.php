@@ -55,6 +55,7 @@ return [
     'Fill in form in ONLYOFFICE' => 'ONLYOFFICEでフォームを記入する',
     'Please update ONLYOFFICE Docs to version 7.0 to work on fillable forms online' => 'オンラインで入力可能なフォームを作成するには、ONLYOFFICE Docs 7.0版まで更新してください',
     'Disable certificate verification (insecure)' => '証明書の検証を無効にする（安全でない',
+    'Not supported version' => 'サポートされていないバージョン',	
     'The customization section allows personalizing the editor interface'=> 'カスタマイズセクションでは、エディターインターフェイスをパーソナライズできます',
     'Display Chat menu button' => 'チャットメニューホタンを表示',
     'Display the header more compact' => 'ヘッダーをよりコンパクトに表示',

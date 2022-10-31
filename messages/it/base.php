@@ -55,6 +55,7 @@ return [
     'Fill in form in ONLYOFFICE' => 'Compilare il modulo in ONLYOFFICE',
     'Please update ONLYOFFICE Docs to version 7.0 to work on fillable forms online' => 'Si prega di aggiornare ONLYOFFICE Docs alla versione 7.0 per lavorare su moduli compilabili online',
     'Disable certificate verification (insecure)' => 'Disattiva la verifica del certificato (non sicuro)',
+    'Not supported version' => 'Versione non supportata',
     'The customization section allows personalizing the editor interface'=> 'La sezione di personalizzazione permette di personalizzare l\'interfaccia dell\'editor',
     'Display Chat menu button' => 'Pulsante del menu Mostra chat',
     'Display the header more compact' => 'Mostra l\'intestazione più compatta',
