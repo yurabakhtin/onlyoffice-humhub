@@ -72,32 +72,43 @@ use yii\web\View;
         <div class="form-group">
             <?= Html::submitButton('Submit', ['class' => 'btn btn-primary', 'data-ui-loader' => '']) ?>
         </div>
-
-        <?php 
-            if (isset($serverApiUrl)) {
-                View::registerJsFile($serverApiUrl);
-                View::registerJs('
-                    if (typeof DocsAPI === "undefined") {
-                        if ($(".error").length) {
-                            $(".error").append("<p style=\'color: #ff8989\'>' . Yii::t("OnlyofficeModule.base", "<strong>ONLYOFFICE Docs</strong> DocsAPI undefined.") . '</p>");
-                        } else {
-                            $(".invalid-server-url").html("' . Yii::t("OnlyofficeModule.base", "<strong>ONLYOFFICE Docs</strong> DocsAPI undefined.") . '");
-                            $(".invalid-server-url").show();
-                        }
-                    }
-                ');
-            }
-        ?>
         <?php ActiveForm::end(); ?>
     </div>
 </div>
-<?php
-   if($trial === false) {
+<?php 
+    if (isset($serverApiUrl)) {
+        View::registerJs('
+
+        var js = document.createElement("script");
+        js.setAttribute("type", "text/javascript");
+        js.setAttribute("id", "scripDocServiceAddress");
+        document.getElementsByTagName("head")[0].appendChild(js);
+
+        var scriptAddress = $("#scripDocServiceAddress");
+
+        scriptAddress.on("load", testApiResult).on("error", testApiResult);
+        scriptAddress.attr("src", "' . $serverApiUrl . '");
+
+
+        var testApiResult = function(){
+            if (typeof DocsAPI === "undefined") {
+                if ($(".error").length) {
+                    $(".error").append("<p style=\'color: #ff8989\'>' . Yii::t("OnlyofficeModule.base", "<strong>ONLYOFFICE Docs</strong> DocsAPI undefined.") . '</p>");
+                } else {
+                    $(".invalid-server-url").html("' . Yii::t("OnlyofficeModule.base", "<strong>ONLYOFFICE Docs</strong> DocsAPI undefined.") . '");
+                    $(".invalid-server-url").show();
+                }
+            }
+            delete DocsAPI;
+        }');
+    }
+
+    if($trial === false) {
     View::registerJs('
         $("#configureform-demoserver").closest("label").css({"cursor":"default", "opacity":"0.5"});
         $("#configureform-demoserver").attr("checked", false);
         $("#configureform-demoserver").attr("disabled", true);
         $("#configureform-demoserver").closest("div").children()[2].innerText = "' . Yii::t("OnlyofficeModule.base", "The 30-day test period is over, you can no longer connect to demo ONLYOFFICE Docs server.") . '";
     ');
-   }
+    }
 ?>
