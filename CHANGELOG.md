@@ -11,7 +11,7 @@
 - editable extensions on the settings page
 - mentioning users in comments
 - bookmarks
-- Chinese (Traditional, Taiwan), Basque (Spain), Armenian and Malay (Malaysia) empty file templates
+- Chinese (Traditional, Taiwan) empty file templates
 
 ## 2.4.0
 ## Added
