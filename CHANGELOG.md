@@ -11,6 +11,7 @@
 - editable extensions on the settings page
 - mentioning users in comments
 - bookmarks
+- `es`, `zh` translations
 
 ## 2.4.0
 ## Added
