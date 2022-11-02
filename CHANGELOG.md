@@ -12,6 +12,7 @@
 - mentioning users in comments
 - bookmarks
 - `es`, `zh` translations
+- Chinese (Traditional, Taiwan) empty file templates
 
 ## 2.4.0
 ## Added
