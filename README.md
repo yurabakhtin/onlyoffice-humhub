@@ -36,6 +36,10 @@ Either install it from [HumHub Marketplace](https://www.humhub.com/en/marketplac
 
 Navigate to `Administration` -> `Modules` find the plugin under Installed tab and click `Configure`.
 
+Starting from version 7.2, JWT is enabled by default and the secret key is generated automatically to restrict the access to ONLYOFFICE Docs and for security reasons and data integrity. 
+Specify your own **JWT Secret** on the HumHub configuration page. 
+In the ONLYOFFICE Docs [config file](https://api.onlyoffice.com/editors/signature/), specify the same secret key and enable the validation.
+
 ## How it works
 
 The ONLYOFFICE integration follows the API documented [here](https://api.onlyoffice.com/editors/basic):
