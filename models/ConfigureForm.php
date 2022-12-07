@@ -18,6 +18,7 @@ class ConfigureForm extends \yii\base\Model
     public $serverUrl;
     public $verifyPeerOff;
     public $jwtSecret;
+    public $jwtHeader;
     public $internalServerUrl;
     public $storageUrl;
     public $demoServer;
@@ -41,6 +42,7 @@ class ConfigureForm extends \yii\base\Model
             ['serverUrl', 'string'],
             ['verifyPeerOff', 'boolean'],
             ['jwtSecret', 'string'],
+            ['jwtHeader', 'string'],
             ['internalServerUrl', 'string'],
             ['storageUrl', 'string'],
             ['demoServer', 'boolean'],
@@ -63,6 +65,7 @@ class ConfigureForm extends \yii\base\Model
             'serverUrl' => Yii::t('OnlyofficeModule.base', 'Hostname'),
             'verifyPeerOff' => Yii::t('OnlyofficeModule.base', 'Disable certificate verification (insecure)'),
             'jwtSecret' => Yii::t('OnlyofficeModule.base', 'JWT Secret'),
+            'jwtHeader' => Yii::t('OnlyofficeModule.base', 'JWT Header'),
             'internalServerUrl' => Yii::t('OnlyofficeModule.base', 'ONLYOFFICE Docs address for internal requests from the server'),
             'storageUrl' => Yii::t('OnlyofficeModule.base', 'Server address for internal requests from ONLYOFFICE Docs'),
             'demoServer' => Yii::t('OnlyofficeModule.base', 'Connect to demo ONLYOFFICE Docs server'),
@@ -85,6 +88,7 @@ class ConfigureForm extends \yii\base\Model
         return [
             'serverUrl' => Yii::t('OnlyofficeModule.base', 'e.g. http://documentserver'),
             'jwtSecret' => Yii::t('OnlyofficeModule.base', 'JWT Secret key (leave blank to disable)'),
+            'jwtHeader' => Yii::t('OnlyofficeModule.base', 'e.g. Authorization'),
             'internalServerUrl' => Yii::t('OnlyofficeModule.base', 'e.g. http://documentserver'),
             'storageUrl' => Yii::t('OnlyofficeModule.base', 'e.g. http://storage'),
             'demoServer' => Yii::t('OnlyofficeModule.base', 'This is a public test server, please do not use it for private sensitive data. The server will be available during a 30-day period.'),
@@ -96,6 +100,7 @@ class ConfigureForm extends \yii\base\Model
         $this->serverUrl = Yii::$app->getModule('onlyoffice')->settings->get('serverUrl');
         $this->verifyPeerOff = (boolean)Yii::$app->getModule('onlyoffice')->settings->get('verifyPeerOff');
         $this->jwtSecret = Yii::$app->getModule('onlyoffice')->settings->get('jwtSecret');
+        $this->jwtHeader = Yii::$app->getModule('onlyoffice')->settings->get('jwtHeader');
         $this->internalServerUrl = Yii::$app->getModule('onlyoffice')->settings->get('internalServerUrl');
         $this->storageUrl = Yii::$app->getModule('onlyoffice')->settings->get('storageUrl');
         $this->demoServer = (boolean)Yii::$app->getModule('onlyoffice')->settings->get('demoServer');
@@ -115,6 +120,7 @@ class ConfigureForm extends \yii\base\Model
         Yii::$app->getModule('onlyoffice')->settings->set('serverUrl', rtrim($this->serverUrl, '/'));
         Yii::$app->getModule('onlyoffice')->settings->set('verifyPeerOff', $this->verifyPeerOff);
         Yii::$app->getModule('onlyoffice')->settings->set('jwtSecret', $this->jwtSecret);
+        Yii::$app->getModule('onlyoffice')->settings->set('jwtHeader', $this->jwtHeader);
         Yii::$app->getModule('onlyoffice')->settings->set('internalServerUrl', rtrim($this->internalServerUrl, '/'));
         Yii::$app->getModule('onlyoffice')->settings->set('storageUrl', rtrim($this->storageUrl, '/'));
         Yii::$app->getModule('onlyoffice')->settings->set('demoServer', $this->demoServer);
