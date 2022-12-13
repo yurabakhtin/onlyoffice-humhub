@@ -65,7 +65,7 @@ class ConfigureForm extends \yii\base\Model
             'serverUrl' => Yii::t('OnlyofficeModule.base', 'Hostname'),
             'verifyPeerOff' => Yii::t('OnlyofficeModule.base', 'Disable certificate verification (insecure)'),
             'jwtSecret' => Yii::t('OnlyofficeModule.base', 'JWT Secret'),
-            'jwtHeader' => Yii::t('OnlyofficeModule.base', 'JWT Header'),
+            'jwtHeader' => Yii::t('OnlyofficeModule.base', 'Authorization header'),
             'internalServerUrl' => Yii::t('OnlyofficeModule.base', 'ONLYOFFICE Docs address for internal requests from the server'),
             'storageUrl' => Yii::t('OnlyofficeModule.base', 'Server address for internal requests from ONLYOFFICE Docs'),
             'demoServer' => Yii::t('OnlyofficeModule.base', 'Connect to demo ONLYOFFICE Docs server'),
@@ -88,7 +88,7 @@ class ConfigureForm extends \yii\base\Model
         return [
             'serverUrl' => Yii::t('OnlyofficeModule.base', 'e.g. http://documentserver'),
             'jwtSecret' => Yii::t('OnlyofficeModule.base', 'JWT Secret key (leave blank to disable)'),
-            'jwtHeader' => Yii::t('OnlyofficeModule.base', 'e.g. Authorization'),
+            'jwtHeader' => Yii::t('OnlyofficeModule.base', 'Leave blank to use default header'),
             'internalServerUrl' => Yii::t('OnlyofficeModule.base', 'e.g. http://documentserver'),
             'storageUrl' => Yii::t('OnlyofficeModule.base', 'e.g. http://storage'),
             'demoServer' => Yii::t('OnlyofficeModule.base', 'This is a public test server, please do not use it for private sensitive data. The server will be available during a 30-day period.'),

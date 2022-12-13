@@ -69,4 +69,6 @@ return [
     'This is a public test server, please do not use it for private sensitive data. The server will be available during a 30-day period.' => 'Dies ist ein öffentlicher Testserver. Bitte verwende beim Testen keine privaten sensiblen Daten. Der Server ist 30 Tage lang verfügbar.',
     'The 30-day test period is over, you can no longer connect to demo ONLYOFFICE Docs server.' => 'Der 30-tägige Testzeitraum ist abgelaufen. Du kannst keine Verbindung mehr zu Demo ONLYOFFICE Docs Server herstellen.',
     'Keep intermediate versions when editing (forcesave)' => 'Zwischenversionen bei der Bearbeitung aufbewahren (force save)',
+    'Authorization header' => 'Authorization-Header',
+    'Leave blank to use default header' => 'Leer lassen, um die standardmäßige Kopfzeile zu verwenden',
 ];

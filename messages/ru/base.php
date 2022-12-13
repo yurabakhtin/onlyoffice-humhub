@@ -69,6 +69,6 @@ return [
     'This is a public test server, please do not use it for private sensitive data. The server will be available during a 30-day period.' => 'Это публичный тестовый сервер, пожалуйста, не используйте его для личных конфиденциальных данных. Сервер будет доступен в течение 30 дней.',
     'The 30-day test period is over, you can no longer connect to demo ONLYOFFICE Docs server.' => '30-дневный тестовый период закончен, вы больше не можете подключаться к демонстрационному серверу ONLYOFFICE Docs',
     'Keep intermediate versions when editing (forcesave)' => 'Хранить промежуточные версии при редактировании (принудительное сохранение)',
-    'JWT Header' => 'Заголовок JWT',
-    'e.g. Authorization' => 'например, Authorization',
+    'Authorization header' => 'Заголовок авторизации',
+    'Leave blank to use default header' => 'Оставьте пустым, чтобы использовать заголовок по умолчанию',
 ];
