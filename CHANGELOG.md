@@ -13,6 +13,7 @@
 - bookmarks
 - `es`, `zh` translations
 - Chinese (Traditional, Taiwan) empty file templates
+- the ability to change the JWT header
 
 ## 2.4.0
 ## Added

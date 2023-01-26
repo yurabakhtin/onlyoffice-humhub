@@ -44,6 +44,10 @@ use yii\web\View;
         </div>
 
         <div class="form-group">
+            <?= $form->field($model, 'jwtHeader'); ?>
+        </div>
+
+        <div class="form-group">
             <?= $form->field($model, 'internalServerUrl'); ?>
         </div>
 

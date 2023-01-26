@@ -184,7 +184,12 @@ class Module extends \humhub\components\Module
 
     public function getHeader(): string
     {
-        return $this->isDemoServerEnabled() ? $this->demoparam['header'] : 'Authorization';
+        $header = $this->settings->get('jwtHeader');
+        if ($this->isDemoServerEnabled()) {
+            $header = $this->demoparam['header'];
+        }
+
+        return !empty($header) ? $header : 'Authorization';
     }
 
     public function getTrial()
