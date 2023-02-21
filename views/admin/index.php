@@ -7,7 +7,8 @@
 
 use yii\bootstrap\ActiveForm;
 use yii\helpers\Html;
-use yii\web\View; 
+use yii\helpers\Url;
+use yii\web\View;
 ?>
 
 <div class="panel panel-default">
@@ -64,7 +65,7 @@ use yii\web\View;
             <?= $form->field($model, 'compactToolbar')->checkbox(); ?>
         </div>
 
-        <div class="form-group">
+        <div id="forceEditTypes" class="form-group">
             <?= Html::activeLabel($model,'editLabel', ['class' => 'control-label']); ?>
             <?php 
                 foreach($forceEditExt as $key => $ext) {
@@ -74,38 +75,73 @@ use yii\web\View;
         </div>
 
         <div class="form-group">
-            <?= Html::submitButton('Submit', ['class' => 'btn btn-primary', 'data-ui-loader' => '']) ?>
+            <?= Html::Button('Submit', ['id' => 'saveBtn', 'class' => 'btn btn-primary']) ?>
         </div>
         <?php ActiveForm::end(); ?>
     </div>
 </div>
-<?php 
-    if (isset($serverApiUrl)) {
-        View::registerJs('
+<?php
+    View::registerJs('
+        humhub.module("onlyoffice", function (module, require, $) {
 
-        var js = document.createElement("script");
-        js.setAttribute("type", "text/javascript");
-        js.setAttribute("id", "scripDocServiceAddress");
-        document.getElementsByTagName("head")[0].appendChild(js);
+            $("#saveBtn").click(function(evt) {
 
-        var scriptAddress = $("#scripDocServiceAddress");
+                var serverUrl = $("#configureform-serverurl").val();
+                var verifyPeerOff = $("#configureform-verifypeeroff").prop("checked") ? 1 : 0;
+                var forceSave = $("#configureform-forcesave").prop("checked") ? 1 : 0;
+                var demoServer = $("#configureform-demoserver").prop("checked") ? 1 : 0;
+                
+                var jwtSecret = $("#configureform-jwtsecret").val();
+                var jwtHeader = $("#configureform-jwtheader").val();
+                var internalServerUrl = $("#configureform-internalserverurl").val();
+                var storageUrl = $("#configureform-storageurl").val();
 
-        scriptAddress.on("load", testApiResult).on("error", testApiResult);
-        scriptAddress.attr("src", "' . $serverApiUrl . '");
+                var chat = $("#configureform-chat").prop("checked") ? 1 : 0;
+                var compactHeader = $("#configureform-compactheader").prop("checked") ? 1 : 0;
+                var feedback = $("#configureform-feedback").prop("checked") ? 1 : 0;
+                var help = $("#configureform-help").prop("checked") ? 1 : 0;
+                var compactToolbar = $("#configureform-compacttoolbar").prop("checked") ? 1 : 0;
 
+                var forceEditTypes = {};
+                var forceEditTypesNodes = $("#forceEditTypes").find("input[type=checkbox]");
+                $.each(forceEditTypesNodes, function(i, node){
+                    forceEditTypes[$(node).attr("id").replace("configureform-forceedittypes-", "")] = $(node).prop("checked") ? 1 : 0;
+                });
 
-        var testApiResult = function(){
-            if (typeof DocsAPI === "undefined") {
-                if ($(".error").length) {
-                    $(".error").append("<p style=\'color: #ff8989\'>' . Yii::t("OnlyofficeModule.base", "<strong>ONLYOFFICE Docs</strong> DocsAPI undefined.") . '</p>");
-                } else {
-                    $(".invalid-server-url").html("' . Yii::t("OnlyofficeModule.base", "<strong>ONLYOFFICE Docs</strong> DocsAPI undefined.") . '");
-                    $(".invalid-server-url").show();
-                }
-            }
-            delete DocsAPI;
-        }');
-    }
+                $.ajax({
+                    url: "' . Url::to(["/onlyoffice/admin/save"]) . '",
+                    cache: false,
+                    type: "POST",
+                    data: { 
+                        "ConfigureForm": {
+                            serverUrl: serverUrl,
+                            verifyPeerOff: verifyPeerOff,
+                            forceSave: forceSave,
+                            demoServer: demoServer,
+                            jwtSecret: jwtSecret,
+                            jwtHeader: jwtHeader,
+                            internalServerUrl: internalServerUrl,
+                            storageUrl: storageUrl,
+                            chat: chat,
+                            compactHeader: compactHeader,
+                            feedback: feedback,
+                            help: help,
+                            compactToolbar: compactToolbar,
+                            forceEditTypes: forceEditTypes
+                        }
+                    },
+                    dataType: "json",
+                    success: function (json) {
+                        if (json.error) {
+                            module.log.error(json.error, true);
+                            return;
+                        }
+                        module.log.success("success.saved", true);
+                    }
+                });
+            });
+        });
+    ');
 
     if($trial === false) {
     View::registerJs('

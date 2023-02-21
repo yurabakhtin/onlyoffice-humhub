@@ -55,6 +55,16 @@ class AdminController extends Controller
                                       ]);
     }
 
+    public function actionSave()
+    {
+        $model = new ConfigureForm();
+        if (!($model->load(Yii::$app->request->post()) && $model->save())) {
+            return $this->asJson(['error' => Yii::t('base', 'Error')]);
+        }
+
+        return $this->asJson($model);
+    }
+
     private function validation()
     {
         $version = null;
