@@ -66,6 +66,7 @@ use yii\web\View;
 
         <div class="form-group">
             <?= Html::activeLabel($model,'editLabel', ['class' => 'control-label']); ?>
+            <br/>
             <?php 
                 foreach($forceEditExt as $key => $ext) {
                     echo $form->field($model, 'forceEditTypes[' . $ext . ']', ['options' => ['class' => 'checkbox-inline']])->checkbox(['label' => $ext]);
