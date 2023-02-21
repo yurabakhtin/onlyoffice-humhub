@@ -18,6 +18,7 @@ use yii\base\Model;
 use humhub\modules\onlyoffice\Module;
 use humhub\modules\file\models\File;
 use humhub\modules\cfiles\models\Folder;
+use humhub\modules\cfiles\permissions\WriteAccess;
 
 /**
  * Description of CreateDocument
@@ -82,11 +83,8 @@ class CreateDocument extends Model
         }
 
         $folder = Folder::findOne($this->fid);
-        if (!is_null($folder)) {
-            $canEdit = $folder->canEdit();
-            if (!$canEdit) {
-                return false;
-            }
+        if ($folder && !$folder->content->container->permissionManager->can(WriteAccess::class)) {
+            return false;
         }
 
         if ($this->validate()) {
