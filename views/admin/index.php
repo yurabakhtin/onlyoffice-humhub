@@ -83,6 +83,31 @@ use yii\web\View;
 <?php
     View::registerJs('
         humhub.module("onlyoffice", function (module, require, $) {
+            var serverApiUrl = "' . $serverApiUrl . '";
+
+            var testApiResult = function(){
+                if (typeof DocsAPI === "undefined") {
+                    if ($(".error").length) {
+                        $(".error").append("<p style=\'color: #ff8989\'>' . Yii::t("OnlyofficeModule.base", "<strong>ONLYOFFICE Docs</strong> DocsAPI undefined.") . '</p>");
+                    } else {
+                        $(".invalid-server-url").html("' . Yii::t("OnlyofficeModule.base", "<strong>ONLYOFFICE Docs</strong> DocsAPI undefined.") . '");
+                        $(".invalid-server-url").show();
+                    }
+                }
+                delete DocsAPI;
+            }
+
+            if (serverApiUrl.length > 0) {
+                var js = document.createElement("script");
+                js.setAttribute("type", "text/javascript");
+                js.setAttribute("id", "scripDocServiceAddress");
+                document.getElementsByTagName("head")[0].appendChild(js);
+
+                var scriptAddress = $("#scripDocServiceAddress");
+
+                scriptAddress.on("load", testApiResult).on("error", testApiResult);
+                scriptAddress.attr("src", serverApiUrl);
+            }
 
             $("#saveBtn").click(function(evt) {
                 var saveBtnClone = $("#saveBtn").clone(true, false);
@@ -91,7 +116,7 @@ use yii\web\View;
                 var verifyPeerOff = $("#configureform-verifypeeroff").prop("checked") ? 1 : 0;
                 var forceSave = $("#configureform-forcesave").prop("checked") ? 1 : 0;
                 var demoServer = $("#configureform-demoserver").prop("checked") ? 1 : 0;
-                
+
                 var jwtSecret = $("#configureform-jwtsecret").val();
                 var jwtHeader = $("#configureform-jwtheader").val();
                 var internalServerUrl = $("#configureform-internalserverurl").val();
