@@ -75,7 +75,7 @@ use yii\web\View;
         </div>
 
         <div class="form-group">
-            <?= Html::Button('Submit', ['id' => 'saveBtn', 'class' => 'btn btn-primary']) ?>
+            <?= Html::Button('Submit', ['id' => 'saveBtn', 'class' => 'btn btn-primary', 'data-ui-loader' => '']) ?>
         </div>
         <?php ActiveForm::end(); ?>
     </div>
@@ -85,7 +85,7 @@ use yii\web\View;
         humhub.module("onlyoffice", function (module, require, $) {
 
             $("#saveBtn").click(function(evt) {
-                $("#saveBtn").attr("disabled",true);
+                var saveBtnClone = $("#saveBtn").clone(true, false);
 
                 var serverUrl = $("#configureform-serverurl").val();
                 var verifyPeerOff = $("#configureform-verifypeeroff").prop("checked") ? 1 : 0;
@@ -133,7 +133,7 @@ use yii\web\View;
                     },
                     dataType: "json"
                 }).catch(function (e) {
-                    $("#saveBtn").attr("disabled", false);
+                    $("#saveBtn").replaceWith(saveBtnClone);
                     module.log.error(e, true);
                 })
             });
