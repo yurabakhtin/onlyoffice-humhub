@@ -84,6 +84,7 @@ use yii\web\View;
     View::registerJs('
         humhub.module("onlyoffice", function (module, require, $) {
             var serverApiUrl = "' . $serverApiUrl . '";
+            var trial = "' . json_encode($trial) . '";
 
             var testApiResult = function(){
                 if (typeof DocsAPI === "undefined") {
@@ -95,6 +96,13 @@ use yii\web\View;
                     }
                 }
                 delete DocsAPI;
+            }
+
+            if (trial == "false") {
+                $("#configureform-demoserver").closest("label").css({"cursor":"default", "opacity":"0.5"});
+                $("#configureform-demoserver").attr("checked", false);
+                $("#configureform-demoserver").attr("disabled", true);
+                $("#configureform-demoserver").closest("div").children()[2].innerText = "' . Yii::t("OnlyofficeModule.base", "The 30-day test period is over, you can no longer connect to demo ONLYOFFICE Docs server.") . '";
             }
 
             if (serverApiUrl.length > 0) {
