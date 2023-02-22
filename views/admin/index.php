@@ -19,13 +19,13 @@ use yii\web\View;
 
         <?php if (empty($model->serverUrl) && empty($trial)): ?>
             <div class="alert alert-warning" role="alert"><?= Yii::t('OnlyofficeModule.base', '<strong>ONLYOFFICE Docs</strong> not configured yet.'); ?></div>
-        <?php elseif (!empty($error)): ?>
-            <div class="alert alert-danger error" role="alert"><?= Yii::t('OnlyofficeModule.base', 'Error when trying to connect ({error})', ['error' => $error]); ?></div>
-        <?php elseif (!empty($version) && !$trial): ?>
-            <div class="alert alert-success" role="alert"><?= Yii::t('OnlyofficeModule.base', '<strong>ONLYOFFICE Docs</strong> successfully connected! - Installed version: {version}', ['version' => $version]); ?></div>
-        <?php elseif (!empty($version) && $trial): ?>
+        <?php elseif (!empty($model->settingError)): ?>
+            <div class="alert alert-danger error" role="alert"><?= Yii::t('OnlyofficeModule.base', 'Error when trying to connect ({error})', ['error' => $model->settingError]); ?></div>
+        <?php elseif (!empty($model->instaledVersion) && !$trial): ?>
+            <div class="alert alert-success" role="alert"><?= Yii::t('OnlyofficeModule.base', '<strong>ONLYOFFICE Docs</strong> successfully connected! - Installed version: {version}', ['version' => $model->instaledVersion]); ?></div>
+        <?php elseif (!empty($model->instaledVersion) && $trial): ?>
             <div class="alert alert-success" role="alert">
-                <?= Yii::t('OnlyofficeModule.base', '<strong>ONLYOFFICE Docs</strong> successfully connected! - Installed version: {version}', ['version' => $version]); ?> 
+                <?= Yii::t('OnlyofficeModule.base', '<strong>ONLYOFFICE Docs</strong> successfully connected! - Installed version: {version}', ['version' => $model->instaledVersion]); ?> 
                 <p style = "color: #84be5e"><?= Yii::t('OnlyofficeModule.base', 'Trial period: {trial} days', ['trial' => $trial]); ?></p>
             </div>
         <?php endif; ?>
@@ -85,6 +85,7 @@ use yii\web\View;
         humhub.module("onlyoffice", function (module, require, $) {
 
             $("#saveBtn").click(function(evt) {
+                $("#saveBtn").attr("disabled",true);
 
                 var serverUrl = $("#configureform-serverurl").val();
                 var verifyPeerOff = $("#configureform-verifypeeroff").prop("checked") ? 1 : 0;
@@ -130,25 +131,12 @@ use yii\web\View;
                             forceEditTypes: forceEditTypes
                         }
                     },
-                    dataType: "json",
-                    success: function (json) {
-                        if (json.error) {
-                            module.log.error(json.error, true);
-                            return;
-                        }
-                        module.log.success("success.saved", true);
-                    }
-                });
+                    dataType: "json"
+                }).catch(function (e) {
+                    $("#saveBtn").attr("disabled", false);
+                    module.log.error(e, true);
+                })
             });
         });
     ');
-
-    if($trial === false) {
-    View::registerJs('
-        $("#configureform-demoserver").closest("label").css({"cursor":"default", "opacity":"0.5"});
-        $("#configureform-demoserver").attr("checked", false);
-        $("#configureform-demoserver").attr("disabled", true);
-        $("#configureform-demoserver").closest("div").children()[2].innerText = "' . Yii::t("OnlyofficeModule.base", "The 30-day test period is over, you can no longer connect to demo ONLYOFFICE Docs server.") . '";
-    ');
-    }
 ?>

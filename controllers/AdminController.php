@@ -14,6 +14,7 @@
 namespace humhub\modules\onlyoffice\controllers;
 
 use Yii;
+use yii\web\HttpException;
 use humhub\modules\onlyoffice\models\ConfigureForm;
 use humhub\modules\admin\components\Controller;
 use yii\helpers\Url;
@@ -28,12 +29,9 @@ class AdminController extends Controller
     public function actionIndex()
     {
         $this->module = Yii::$app->getModule('onlyoffice');
+
         $model = new ConfigureForm();
         $model->loadSettings();
-
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            $this->view->saved();
-        }
 
         $trial = $serverApiUrl = null;
         if($this->module->isDemoServerEnabled()) {
@@ -43,13 +41,9 @@ class AdminController extends Controller
             $serverApiUrl = $this->module->getServerApiUrl();
         }
 
-        list($error, $version) = $this->validation();
-
         return $this->render('index', [
                                         'model' => $model,
                                         'serverApiUrl' => $serverApiUrl,
-                                        'error' => $error,
-                                        'version' => $version,
                                         'trial' => $trial,
                                         'forceEditExt' => $this->module->forceEditableExtensions
                                       ]);
@@ -57,12 +51,34 @@ class AdminController extends Controller
 
     public function actionSave()
     {
+        $this->module = Yii::$app->getModule('onlyoffice');
         $model = new ConfigureForm();
-        if (!($model->load(Yii::$app->request->post()) && $model->save())) {
-            return $this->asJson(['error' => Yii::t('base', 'Error')]);
+
+        if (!$model->load(Yii::$app->request->post())) {
+            throw new HttpException(400, 'Invalid post data');
         }
 
-        return $this->asJson($model);
+        if ($model->demoServer == true) {
+            $model->serverUrl = '';
+            $model->verifyPeerOff = 0;
+            $model->jwtSecret = '';
+            $model->internalServerUrl = '';
+            $model->jwtHeader = '';
+        }
+
+        if (!$model->save()) {
+            throw new HttpException(500, 'Error occurred when save');
+        }
+
+        $model->loadSettings();
+
+        list($error, $version) = $this->validation();
+
+        $model->settingError = $error;
+        $model->instaledVersion = $version;
+        $model->saveConnectionInfo();
+
+        $this->redirect(Url::to(['/onlyoffice/admin']));
     }
 
     private function validation()
