@@ -80,7 +80,23 @@ class BackendController extends Controller
      */
     public function actionDownload()
     {
-        //Yii::warning("Downloading file guid: " . $this->file->guid, 'onlyoffice');
+        if ($this->module->isJwtEnabled()) {
+            $header = Yii::$app->request->headers->get($this->module->getHeader());
+            if (!empty($header)) {
+                $token = substr($header, strlen('Bearer '));
+            }
+
+            if (empty($token)) {
+                throw new \Exception('Expected JWT');
+            }
+
+            try {
+                $ds = JWT::decode($token, $this->module->getJwtSecret(), array('HS256'));
+            } catch (\Exception $ex) {
+                throw new \Exception('Invalid JWT signature');
+            }
+        }
+
         return Yii::$app->response->sendFile($this->file->store->get(), $this->file->file_name);
     }
 
@@ -89,6 +105,23 @@ class BackendController extends Controller
      */
     public function actionEmptyFile()
     {
+        if ($this->module->isJwtEnabled()) {
+            $header = Yii::$app->request->headers->get($this->module->getHeader());
+            if (!empty($header)) {
+                $token = substr($header, strlen('Bearer '));
+            }
+
+            if (empty($token)) {
+                throw new \Exception('Expected JWT');
+            }
+
+            try {
+                $ds = JWT::decode($token, $this->module->getJwtSecret(), array('HS256'));
+            } catch (\Exception $ex) {
+                throw new \Exception('Invalid JWT signature');
+            }
+        }
+
         return Yii::$app->response->sendFile($this->module->getAssetPath() . '/templates/en-US/new.docx');
     }
 
