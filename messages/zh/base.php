@@ -69,4 +69,6 @@ return [
     'This is a public test server, please do not use it for private sensitive data. The server will be available during a 30-day period.' => '这是公开的测试服务器，请勿用于隐私数据。服务器试用期限为30天。',
     'The 30-day test period is over, you can no longer connect to demo ONLYOFFICE Docs server.' => '30天试用期已结束，无法连接ONLYOFFICE Docs 服务器的演示。',
     'Keep intermediate versions when editing (forcesave)' => '编辑时保留中间版本 (强制保存)',
+    'Authorization header' => '授权标头',
+    'Leave blank to use default header' => '留空以使用默认的标头',
 ];
