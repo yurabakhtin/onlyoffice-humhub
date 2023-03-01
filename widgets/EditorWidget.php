@@ -91,16 +91,8 @@ class EditorWidget extends JsWidget
         $api = [
             'sendNotifyUrl' => Url::to(['/onlyoffice/api/send-notify'], true),
             'makeAnchorUrl' => Url::to(['/onlyoffice/api/make-anchor'], true),
+            'saveasUrl' => Url::to(['/onlyoffice/api/saveas'], true)
         ];
-
-
-        if ($this->file->object_model === cFile::class) {
-            $cfile = cFile::findOne($this->file->object_id);
-            $cfolder = cFolder::findOne($cfile->parent_folder_id);
-            if (!$cfolder->isAllPostedFiles()) {
-                $api['saveasUrl'] = Url::to(['/onlyoffice/api/saveas'], true);
-            }
-        }
 
         if(!Yii::$app->user->isGuest) {
             $api['usersForMentionsUrl'] = Url::to(['/onlyoffice/api/users-for-mentions'], true);

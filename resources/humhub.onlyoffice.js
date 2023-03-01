@@ -111,8 +111,7 @@ humhub.module('onlyoffice', function (module, require, $) {
             //'onError': onError,
         };
 
-        if (api.saveasUrl
-            && (location.search.indexOf('?r=cfiles') === 0 || location.search.indexOf('/cfiles/') === 0)) {
+        if (api.saveasUrl && $('#cfilesUploadFiles').length > 0) {
             config.events.onRequestSaveAs = onRequestSaveAs;
         }
 
