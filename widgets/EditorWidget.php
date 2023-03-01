@@ -107,12 +107,18 @@ class EditorWidget extends JsWidget
             $api['renameUrl'] = Url::to(['/onlyoffice/api/rename'], true);
         }
 
+        $infoMsg = null;
+        if ($module->isDemoServerEnabled()) {
+            $infoMsg = Yii::t('OnlyofficeModule.base', 'This is a public test server, please do not use it for private sensitive data. The server will be available during a 30-day period.');
+        }
+
         return [
             'config' => $this->getConfig(),
             'edit-mode' => $this->mode,
             'file-info-url' => Url::to(['/onlyoffice/open/get-info', 'guid' => $this->file->guid]),
             'module-configured' => (empty($module->getServerUrl()) ? '0' : '1'),
             'api' => $api,
+            'info-msg' => $infoMsg
         ];
     }
 
