@@ -87,13 +87,13 @@ class BackendController extends Controller
             }
 
             if (empty($token)) {
-                throw new \Exception('Expected JWT');
+                throw new HttpException(403, 'Expected JWT');
             }
 
             try {
                 $ds = JWT::decode($token, $this->module->getJwtSecret(), array('HS256'));
             } catch (\Exception $ex) {
-                throw new \Exception('Invalid JWT signature');
+                throw new HttpException(403, 'Invalid JWT signature');
             }
         }
 
@@ -112,13 +112,13 @@ class BackendController extends Controller
             }
 
             if (empty($token)) {
-                throw new \Exception('Expected JWT');
+                throw new HttpException(403, 'Expected JWT');
             }
 
             try {
                 $ds = JWT::decode($token, $this->module->getJwtSecret(), array('HS256'));
             } catch (\Exception $ex) {
-                throw new \Exception('Invalid JWT signature');
+                throw new HttpException(403, 'Invalid JWT signature');
             }
         }
 
