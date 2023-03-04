@@ -48,22 +48,16 @@ class ApiController extends Controller
      */
     public function actionSaveas()
     {
-        if (($body_data = file_get_contents('php://input')) === FALSE) {
-            throw new \Exception('Empty body');
-        }
+        $url = Yii::$app->request->post('url');
+        $filename = Yii::$app->request->post('name');
 
-        $data = json_decode($body_data, TRUE);
-        if ($data === NULL) {
-            throw new \Exception('Could not parse json');
-        }
-
-        $response = $this->module->request($data['url']);
+        $response = $this->module->request($url);
 
         $newContent = $response->getContent();
-        $fileExt = pathinfo($data['name'], PATHINFO_EXTENSION);
+        $fileExt = pathinfo($filename, PATHINFO_EXTENSION);
 
         $file = new File();
-        $file->file_name = $data['name'];
+        $file->file_name = $filename;
         $file->size = mb_strlen($newContent, '8bit');
         $file->mime_type = $this->module->mimes[$fileExt];
         $file->save();
@@ -96,16 +90,9 @@ class ApiController extends Controller
 
     public function actionMakeAnchor()
     {
-        if (($body_data = file_get_contents('php://input')) === FALSE) {
-            throw new \Exception('Empty body');
-        }
+        $doc_key = Yii::$app->request->post('doc_key');
 
-        $data = json_decode($body_data, TRUE);
-        if ($data === NULL) {
-            throw new \Exception('Could not parse json');
-        }
-
-        $file = File::findOne(['onlyoffice_key' => $data['doc_key']]);
+        $file = File::findOne(['onlyoffice_key' => $doc_key]);
         $url = Url::to(['/onlyoffice/open', 'guid' => $file->guid, 'mode' => 'view']);
         
         return $this->asJson([
@@ -115,22 +102,15 @@ class ApiController extends Controller
 
      public function actionSendNotify()
     {
-        if (($body_data = file_get_contents('php://input')) === FALSE) {
-            throw new \Exception('Empty body');
-        }
-
-        $data = json_decode($body_data, TRUE);
-        if ($data === NULL) {
-            throw new \Exception('Could not parse json');
-        }
+        $emails = Yii::$app->request->post('emails');
+        $message = Yii::$app->request->post('comment');
+        $anchor = Yii::$app->request->post('ACTION_DATA');
+        $doc_key = Yii::$app->request->post('doc_key');
 
         $originator = Yii::$app->user->getIdentity();
-        $users = User::find()->where(['email' => $data['emails']])->all();
+        $users = User::find()->where(['email' => $emails])->all();
 
-        $message = $data['comment'];
-        $anchor = $data['ACTION_DATA'];
-
-        $file = File::findOne(['onlyoffice_key' => $data['doc_key']]);
+        $file = File::findOne(['onlyoffice_key' => $doc_key]);
 
         $mention = Mention::generateMention($file, $message, $anchor);
 
@@ -150,16 +130,11 @@ class ApiController extends Controller
      */
     public function actionRename()
     {
-        if (($body_data = file_get_contents('php://input')) === FALSE) {
-            throw new \Exception('Empty body');
-        }
+        $key = Yii::$app->request->post('key');
+        $newFileName = Yii::$app->request->post('newFileName');
+        $ext = Yii::$app->request->post('ext');
 
-        $data = json_decode($body_data, TRUE);
-        if ($data === NULL) {
-            throw new \Exception('Could not parse json');
-        }
-
-        $file = File::findOne(['onlyoffice_key' => $data['key']]);
+        $file = File::findOne(['onlyoffice_key' => $key]);
         
         $owner = User::findOne($file->created_by);
         $containerRecord = ContentContainer::findOne(['id' => $owner->contentcontainer_id]);
@@ -169,20 +144,18 @@ class ApiController extends Controller
             throw new \Exception('Permission denied');
         }
 
-        $newFileName = $data['newFileName'];
-        $origExt = $data['ext'];
         $arrayName = explode(".", $newFileName);
         $curExt = end($arrayName);
 
-        if($origExt !== $curExt) {
-            $newFileName .= "." . $origExt;
+        if($ext !== $curExt) {
+            $newFileName .= "." . $ext;
         }
 
         $file->updateAttributes(['file_name' => $newFileName]);
 
         $meta = [
             "c" => "meta",
-            "key" => $data['key'],
+            "key" => $key,
             "meta"=> [
                 "title" => $newFileName
             ]

@@ -195,7 +195,7 @@ humhub.module('onlyoffice', function (module, require, $) {
             url: evt.data.url
         };
 
-        client.post(api.saveasUrl, {data: JSON.stringify(saveData), dataType: 'json'}).then((response) => {
+        client.post(api.saveasUrl, {data: saveData, dataType: 'json'}).then((response) => {
             event.trigger('humhub:file:created.cfiles', [response.file]);
         }).catch(function(e) {
             module.log.error(e, true);
@@ -209,7 +209,7 @@ humhub.module('onlyoffice', function (module, require, $) {
             ext: config.document.fileType
         };
 
-        client.post(api.renameUrl, {data: JSON.stringify(renameData), dataType: 'json'}).then((response) => {
+        client.post(api.renameUrl, {data: renameData, dataType: 'json'}).then((response) => {
             event.trigger('humhub:file:modified', [response.file]);
         }).catch(function(e) {
             module.log.error(e, true);
@@ -230,13 +230,13 @@ humhub.module('onlyoffice', function (module, require, $) {
     function onRequestSendNotify(evt) {
 
         var notifyData = {
-            ACTION_DATA: encodeURIComponent(JSON.stringify(evt.data.actionLink)),
+            ACTION_DATA: JSON.stringify(evt.data.actionLink),
             comment: evt.data.message,
             emails: evt.data.emails,
             doc_key: config.document.key
         };
 
-        client.post(api.sendNotifyUrl, {data: JSON.stringify(notifyData), dataType: 'json'}).then((response) => {
+        client.post(api.sendNotifyUrl, {data: notifyData, dataType: 'json'}).then((response) => {
         }).catch(function(e) {
             module.log.error(e, true);
         });
@@ -249,7 +249,7 @@ humhub.module('onlyoffice', function (module, require, $) {
             doc_key: config.document.key
         };
 
-        client.post(api.makeAnchorUrl, {data: JSON.stringify(anchorData), dataType: 'json'}).then((response) => {
+        client.post(api.makeAnchorUrl, {data: anchorData, dataType: 'json'}).then((response) => {
             var link = location.origin + response.url + "&anchor=" + encodeURIComponent(JSON.stringify(ACTION_DATA));
             docEditor.setActionLink(link);
         }).catch(function(e) {
