@@ -59,7 +59,7 @@ class ApiController extends Controller
         $file = new File();
         $file->file_name = $filename;
         $file->size = mb_strlen($newContent, '8bit');
-        $file->mime_type = $this->module->mimes[$fileExt];
+        $file->mime_type = isset($this->module->mimes[$fileExt]) ? $this->module->mimes[$fileExt] : 'application/octet-stream';
         $file->save();
         $file->getStore()->setContent($newContent);
 

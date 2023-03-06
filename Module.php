@@ -461,6 +461,7 @@ class Module extends \humhub\components\Module
         'oform' => 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
         'dotx' => 'application/vnd.openxmlformats-officedocument.wordprocessingml.template',
         'epub' => 'application/epub+zip',
+        'fb2' => 'text/fb2+xml',
         'html' => 'text/html',
         'odp' => 'application/vnd.oasis.opendocument.presentation',
         'ods' => 'application/vnd.oasis.opendocument.spreadsheet',
