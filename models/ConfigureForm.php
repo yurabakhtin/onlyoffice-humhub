@@ -33,6 +33,9 @@ class ConfigureForm extends \yii\base\Model
 
     public $forceEditTypes;
 
+    public $settingError;
+    public $instaledVersion;
+
     /**
      * @inheritdoc
      */
@@ -112,6 +115,9 @@ class ConfigureForm extends \yii\base\Model
         $this->forceSave = (boolean)Yii::$app->getModule('onlyoffice')->settings->get('forceSave');
         $this->forceEditTypes = $this->deserializeForceEditTypes();
 
+        $this->settingError = Yii::$app->getModule('onlyoffice')->settings->get('settingError');
+        $this->instaledVersion = Yii::$app->getModule('onlyoffice')->settings->get('instaledVersion');
+
         return true;
     }
 
@@ -133,6 +139,12 @@ class ConfigureForm extends \yii\base\Model
         Yii::$app->getModule('onlyoffice')->settings->set("forceEditTypes", $this->serializeForceEditTypes());
 
         return true;
+    }
+
+    public function saveConnectionInfo()
+    {
+        Yii::$app->getModule('onlyoffice')->settings->set('settingError', $this->settingError);
+        Yii::$app->getModule('onlyoffice')->settings->set('instaledVersion', $this->instaledVersion);
     }
 
     public function deserializeForceEditTypes() {

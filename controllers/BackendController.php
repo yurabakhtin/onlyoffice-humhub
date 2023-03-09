@@ -80,7 +80,23 @@ class BackendController extends Controller
      */
     public function actionDownload()
     {
-        //Yii::warning("Downloading file guid: " . $this->file->guid, 'onlyoffice');
+        if ($this->module->isJwtEnabled()) {
+            $header = Yii::$app->request->headers->get($this->module->getHeader());
+            if (!empty($header)) {
+                $token = substr($header, strlen('Bearer '));
+            }
+
+            if (empty($token)) {
+                throw new HttpException(403, 'Expected JWT');
+            }
+
+            try {
+                $ds = JWT::decode($token, $this->module->getJwtSecret(), array('HS256'));
+            } catch (\Exception $ex) {
+                throw new HttpException(403, 'Invalid JWT signature');
+            }
+        }
+
         return Yii::$app->response->sendFile($this->file->store->get(), $this->file->file_name);
     }
 
@@ -89,6 +105,23 @@ class BackendController extends Controller
      */
     public function actionEmptyFile()
     {
+        if ($this->module->isJwtEnabled()) {
+            $header = Yii::$app->request->headers->get($this->module->getHeader());
+            if (!empty($header)) {
+                $token = substr($header, strlen('Bearer '));
+            }
+
+            if (empty($token)) {
+                throw new HttpException(403, 'Expected JWT');
+            }
+
+            try {
+                $ds = JWT::decode($token, $this->module->getJwtSecret(), array('HS256'));
+            } catch (\Exception $ex) {
+                throw new HttpException(403, 'Invalid JWT signature');
+            }
+        }
+
         return Yii::$app->response->sendFile($this->module->getAssetPath() . '/templates/en-US/new.docx');
     }
 
@@ -105,68 +138,68 @@ class BackendController extends Controller
             6 => 'ForceSave'
         );
 
+
+        if (($body_stream = file_get_contents('php://input')) === FALSE) {
+            throw new HttpException(400, 'Empty body');
+        }
+
+        $data = json_decode($body_stream, TRUE); //json_decode - PHP 5 >= 5.2.0
+        if ($data === NULL) {
+            throw new HttpException(400, 'Could not parse json');
+        }
+
+        if ($this->module->isJwtEnabled()) {
+            $token = null;
+            if (!empty($data["token"])) {
+                $token = $data["token"];
+            } else {
+                $header = Yii::$app->request->headers->get($this->module->getHeader());
+                if (!empty($header)) {
+                    $token = substr($header, strlen('Bearer '));
+                }
+            }
+
+            if (empty($token)) {
+                throw new HttpException(403, 'Expected JWT');
+            }
+
+            try {
+                $ds = JWT::decode($token, $this->module->getJwtSecret(), array('HS256'));
+                $data = isset($ds->payload) ? (array)$ds->payload : (array)$ds;
+            } catch (\Exception $ex) {
+                throw new HttpException(403, 'Invalid JWT signature');
+            }
+        }
+
+        //Yii::warning('Tracking request for file ' . $this->file->guid . ' - data: ' . print_r($data, 1), 'onlyoffice');
+
+        $user = null;
+        if (!empty($data['users'])) {
+            $users = $data['users'];
+            $user = User::findOne(['guid' => $users[0]]);
+        }
+
         $result = [];
         $msg = null;
-        try {
-            if (($body_stream = file_get_contents('php://input')) === FALSE) {
-                throw new \Exception('Empty body');
-            }
-
-            $data = json_decode($body_stream, TRUE); //json_decode - PHP 5 >= 5.2.0
-            if ($data === NULL) {
-                throw new \Exception('Could not parse json');
-            }
-
-            if ($this->module->isJwtEnabled()) {
-                $token = null;
-                if (!empty($data["token"])) {
-                    $token = $data["token"];
-                } else {
-                    $header = Yii::$app->request->headers->get($this->module->getHeader());
-                    if (!empty($header)) {
-                        $token = substr($header, strlen('Bearer '));
-                    }
-                }
-
-                if (empty($token)) {
-                    throw new \Exception('Expected JWT');
-                }
-
+        $status = $_trackerStatus[$data["status"]];
+        switch ($status) {
+            case "MustSave":
+            case "Corrupted":
+            case "ForceSave":
                 try {
-                    $ds = JWT::decode($token, $this->module->getJwtSecret(), array('HS256'));
-                    $data = isset($ds->payload) ? (array)$ds->payload : (array)$ds;
-                } catch (\Exception $ex) {
-                    throw new \Exception('Invalid JWT signature');
-                }
-            }
-
-            //Yii::warning('Tracking request for file ' . $this->file->guid . ' - data: ' . print_r($data, 1), 'onlyoffice');
-
-            $user = null;
-            if (!empty($data['users'])) {
-                $users = $data['users'];
-                $user = User::findOne(['guid' => $users[0]]);
-            }
-
-            $status = $_trackerStatus[$data["status"]];
-            switch ($status) {
-                case "MustSave":
-                case "Corrupted":
-                case "ForceSave":
-
                     $url = $data["url"];
                     $originExt = strtolower(FileHelper::getExtension($this->file));
                     $currentExt = strtolower($data['filetype']);
 
                     if($originExt !== $currentExt) {
-                        $result = $this->module->convertService(
+                        $convResult = $this->module->convertService(
                             $data["url"], 
                             $currentExt, 
                             $originExt, 
                             $this->module->generateDocumentKey($this->file) . time(), 
                             false
                         );
-                        $url = $result['fileUrl'];
+                        $url = $convResult['fileUrl'];
                     }
 
                     $newData = $this->module->request($url)->getContent();
@@ -198,11 +231,10 @@ class BackendController extends Controller
                     }
 
                     break;
-            }
-
-        } catch (\Exception $e) {
-            Yii::error($e->getMessage(), 'onlyoffice');
-            $msg = $e->getMessage();
+                } catch (\Exception $e) {
+                    Yii::error($e->getMessage(), 'onlyoffice');
+                    $msg = $e->getMessage();
+                }
         }
 
         if ($msg == null) {

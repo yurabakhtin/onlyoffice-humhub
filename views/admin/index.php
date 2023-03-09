@@ -7,7 +7,8 @@
 
 use yii\bootstrap\ActiveForm;
 use yii\helpers\Html;
-use yii\web\View; 
+use yii\helpers\Url;
+use yii\web\View;
 ?>
 
 <div class="panel panel-default">
@@ -18,13 +19,13 @@ use yii\web\View;
 
         <?php if (empty($model->serverUrl) && empty($trial)): ?>
             <div class="alert alert-warning" role="alert"><?= Yii::t('OnlyofficeModule.base', '<strong>ONLYOFFICE Docs</strong> not configured yet.'); ?></div>
-        <?php elseif (!empty($error)): ?>
-            <div class="alert alert-danger error" role="alert"><?= Yii::t('OnlyofficeModule.base', 'Error when trying to connect ({error})', ['error' => $error]); ?></div>
-        <?php elseif (!empty($version) && !$trial): ?>
-            <div class="alert alert-success" role="alert"><?= Yii::t('OnlyofficeModule.base', '<strong>ONLYOFFICE Docs</strong> successfully connected! - Installed version: {version}', ['version' => $version]); ?></div>
-        <?php elseif (!empty($version) && $trial): ?>
+        <?php elseif (!empty($model->settingError)): ?>
+            <div class="alert alert-danger error" role="alert"><?= Yii::t('OnlyofficeModule.base', 'Error when trying to connect ({error})', ['error' => $model->settingError]); ?></div>
+        <?php elseif (!empty($model->instaledVersion) && !$trial): ?>
+            <div class="alert alert-success" role="alert"><?= Yii::t('OnlyofficeModule.base', '<strong>ONLYOFFICE Docs</strong> successfully connected! - Installed version: {version}', ['version' => $model->instaledVersion]); ?></div>
+        <?php elseif (!empty($model->instaledVersion) && $trial): ?>
             <div class="alert alert-success" role="alert">
-                <?= Yii::t('OnlyofficeModule.base', '<strong>ONLYOFFICE Docs</strong> successfully connected! - Installed version: {version}', ['version' => $version]); ?> 
+                <?= Yii::t('OnlyofficeModule.base', '<strong>ONLYOFFICE Docs</strong> successfully connected! - Installed version: {version}', ['version' => $model->instaledVersion]); ?> 
                 <p style = "color: #84be5e"><?= Yii::t('OnlyofficeModule.base', 'Trial period: {trial} days', ['trial' => $trial]); ?></p>
             </div>
         <?php endif; ?>
@@ -64,8 +65,9 @@ use yii\web\View;
             <?= $form->field($model, 'compactToolbar')->checkbox(); ?>
         </div>
 
-        <div class="form-group">
+        <div id="forceEditTypes" class="form-group">
             <?= Html::activeLabel($model,'editLabel', ['class' => 'control-label']); ?>
+            <br/>
             <?php 
                 foreach($forceEditExt as $key => $ext) {
                     echo $form->field($model, 'forceEditTypes[' . $ext . ']', ['options' => ['class' => 'checkbox-inline']])->checkbox(['label' => $ext]);
@@ -74,45 +76,101 @@ use yii\web\View;
         </div>
 
         <div class="form-group">
-            <?= Html::submitButton('Submit', ['class' => 'btn btn-primary', 'data-ui-loader' => '']) ?>
+            <?= Html::Button('Submit', ['id' => 'saveBtn', 'class' => 'btn btn-primary', 'data-ui-loader' => '']) ?>
         </div>
         <?php ActiveForm::end(); ?>
     </div>
 </div>
-<?php 
-    if (isset($serverApiUrl)) {
-        View::registerJs('
-
-        var js = document.createElement("script");
-        js.setAttribute("type", "text/javascript");
-        js.setAttribute("id", "scripDocServiceAddress");
-        document.getElementsByTagName("head")[0].appendChild(js);
-
-        var scriptAddress = $("#scripDocServiceAddress");
-
-        scriptAddress.on("load", testApiResult).on("error", testApiResult);
-        scriptAddress.attr("src", "' . $serverApiUrl . '");
-
-
-        var testApiResult = function(){
-            if (typeof DocsAPI === "undefined") {
-                if ($(".error").length) {
-                    $(".error").append("<p style=\'color: #ff8989\'>' . Yii::t("OnlyofficeModule.base", "<strong>ONLYOFFICE Docs</strong> DocsAPI undefined.") . '</p>");
-                } else {
-                    $(".invalid-server-url").html("' . Yii::t("OnlyofficeModule.base", "<strong>ONLYOFFICE Docs</strong> DocsAPI undefined.") . '");
-                    $(".invalid-server-url").show();
-                }
-            }
-            delete DocsAPI;
-        }');
-    }
-
-    if($trial === false) {
+<?php
     View::registerJs('
-        $("#configureform-demoserver").closest("label").css({"cursor":"default", "opacity":"0.5"});
-        $("#configureform-demoserver").attr("checked", false);
-        $("#configureform-demoserver").attr("disabled", true);
-        $("#configureform-demoserver").closest("div").children()[2].innerText = "' . Yii::t("OnlyofficeModule.base", "The 30-day test period is over, you can no longer connect to demo ONLYOFFICE Docs server.") . '";
+        humhub.module("onlyoffice", function (module, require, $) {
+            var serverApiUrl = "' . $serverApiUrl . '";
+            var trial = "' . json_encode($trial) . '";
+
+            var testApiResult = function(){
+                if (typeof DocsAPI === "undefined") {
+                    if ($(".error").length) {
+                        $(".error").append("<p style=\'color: #ff8989\'>' . Yii::t("OnlyofficeModule.base", "<strong>ONLYOFFICE Docs</strong> DocsAPI undefined.") . '</p>");
+                    } else {
+                        $(".invalid-server-url").html("' . Yii::t("OnlyofficeModule.base", "<strong>ONLYOFFICE Docs</strong> DocsAPI undefined.") . '");
+                        $(".invalid-server-url").show();
+                    }
+                }
+                delete DocsAPI;
+            }
+
+            if (trial == "false") {
+                $("#configureform-demoserver").closest("label").css({"cursor":"default", "opacity":"0.5"});
+                $("#configureform-demoserver").attr("checked", false);
+                $("#configureform-demoserver").attr("disabled", true);
+                $("#configureform-demoserver").closest("div").children()[2].innerText = "' . Yii::t("OnlyofficeModule.base", "The 30-day test period is over, you can no longer connect to demo ONLYOFFICE Docs server.") . '";
+            }
+
+            if (serverApiUrl.length > 0) {
+                var js = document.createElement("script");
+                js.setAttribute("type", "text/javascript");
+                js.setAttribute("id", "scripDocServiceAddress");
+                document.getElementsByTagName("head")[0].appendChild(js);
+
+                var scriptAddress = $("#scripDocServiceAddress");
+
+                scriptAddress.on("load", testApiResult).on("error", testApiResult);
+                scriptAddress.attr("src", serverApiUrl);
+            }
+
+            $("#saveBtn").click(function(evt) {
+                var saveBtnClone = $("#saveBtn").clone(true, false);
+
+                var serverUrl = $("#configureform-serverurl").val();
+                var verifyPeerOff = $("#configureform-verifypeeroff").prop("checked") ? 1 : 0;
+                var forceSave = $("#configureform-forcesave").prop("checked") ? 1 : 0;
+                var demoServer = $("#configureform-demoserver").prop("checked") ? 1 : 0;
+
+                var jwtSecret = $("#configureform-jwtsecret").val();
+                var jwtHeader = $("#configureform-jwtheader").val();
+                var internalServerUrl = $("#configureform-internalserverurl").val();
+                var storageUrl = $("#configureform-storageurl").val();
+
+                var chat = $("#configureform-chat").prop("checked") ? 1 : 0;
+                var compactHeader = $("#configureform-compactheader").prop("checked") ? 1 : 0;
+                var feedback = $("#configureform-feedback").prop("checked") ? 1 : 0;
+                var help = $("#configureform-help").prop("checked") ? 1 : 0;
+                var compactToolbar = $("#configureform-compacttoolbar").prop("checked") ? 1 : 0;
+
+                var forceEditTypes = {};
+                var forceEditTypesNodes = $("#forceEditTypes").find("input[type=checkbox]");
+                $.each(forceEditTypesNodes, function(i, node){
+                    forceEditTypes[$(node).attr("id").replace("configureform-forceedittypes-", "")] = $(node).prop("checked") ? 1 : 0;
+                });
+
+                $.ajax({
+                    url: "' . Url::to(["/onlyoffice/admin/save"]) . '",
+                    cache: false,
+                    type: "POST",
+                    data: { 
+                        "ConfigureForm": {
+                            serverUrl: serverUrl,
+                            verifyPeerOff: verifyPeerOff,
+                            forceSave: forceSave,
+                            demoServer: demoServer,
+                            jwtSecret: jwtSecret,
+                            jwtHeader: jwtHeader,
+                            internalServerUrl: internalServerUrl,
+                            storageUrl: storageUrl,
+                            chat: chat,
+                            compactHeader: compactHeader,
+                            feedback: feedback,
+                            help: help,
+                            compactToolbar: compactToolbar,
+                            forceEditTypes: forceEditTypes
+                        }
+                    },
+                    dataType: "json"
+                }).catch(function (e) {
+                    $("#saveBtn").replaceWith(saveBtnClone);
+                    module.log.error(e, true);
+                })
+            });
+        });
     ');
-    }
 ?>
