@@ -7,15 +7,15 @@
  */
 
 /**
- *  Copyright (c) Ascensio System SIA 2022. All rights reserved.
+ *  Copyright (c) Ascensio System SIA 2023. All rights reserved.
  *  http://www.onlyoffice.com
  */
 
 namespace humhub\modules\onlyoffice;
 
+use Yii;
 use humhub\modules\file\handler\FileHandlerCollection;
 use humhub\modules\onlyoffice\permissions\CanUseOnlyOffice;
-use Yii;
 
 /**
  * @author luke

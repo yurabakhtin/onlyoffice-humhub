@@ -1,7 +1,7 @@
 <?php
 
 /**
- *  Copyright (c) Ascensio System SIA 2022. All rights reserved.
+ *  Copyright (c) Ascensio System SIA 2023. All rights reserved.
  *  http://www.onlyoffice.com
  */
 
@@ -11,7 +11,8 @@
         <?=
         \humhub\modules\onlyoffice\widgets\EditorWidget::widget([
             'file' => $file,
-            'mode' => $mode
+            'mode' => $mode,
+            'anchor' => $anchor
         ]);
         ?>
     </div>

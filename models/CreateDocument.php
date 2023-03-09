@@ -7,7 +7,7 @@
  */
 
 /**
- *  Copyright (c) Ascensio System SIA 2022. All rights reserved.
+ *  Copyright (c) Ascensio System SIA 2023. All rights reserved.
  *  http://www.onlyoffice.com
  */
 
@@ -15,9 +15,9 @@ namespace humhub\modules\onlyoffice\models;
 
 use Yii;
 use yii\base\Model;
-use humhub\modules\onlyoffice\Module;
 use humhub\modules\file\models\File;
 use humhub\modules\cfiles\models\Folder;
+use humhub\modules\cfiles\permissions\WriteAccess;
 
 /**
  * Description of CreateDocument
@@ -81,12 +81,10 @@ class CreateDocument extends Model
             throw new Exception("File extension cannot be empty");
         }
 
-        $folder = Folder::findOne($this->fid);
-        if (!is_null($folder)) {
-            $canEdit = $folder->canEdit();
-            if (!$canEdit) {
-                return false;
-            }
+        $cfiles = Yii::$app->getModule('cfiles');
+        $folder = isset($cfiles) ? Folder::findOne($this->fid) : null;
+        if ($folder && !$folder->content->container->permissionManager->can(WriteAccess::class)) {
+            return false;
         }
 
         if ($this->validate()) {

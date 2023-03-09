@@ -13,7 +13,10 @@ humhub.module('onlyoffice', function (module, require, $) {
     var loader = require('ui.loader');
     var ooJSLoadRetries = 0;
 
+    var config = null;
     var api = null;
+    var infoMsg = null;
+    var docEditor = null;
 
     var Editor = function (node, options) {
         Widget.call(this, node, options);
@@ -83,8 +86,8 @@ humhub.module('onlyoffice', function (module, require, $) {
         }
 
         api = this.options.api;
-
-        var config = this.options.config;
+        config = this.options.config;
+        infoMsg = this.options.infoMsg;
 
         var docsVersion = DocsAPI.DocEditor.version().split(".");
         if (docsVersion[0] < 6
@@ -102,17 +105,34 @@ humhub.module('onlyoffice', function (module, require, $) {
         config.height = "100%";
         config.events = {
             'onRequestClose': onRequestClose,
+            'onMakeActionLink': onMakeActionLink
             //'onReady': onReady,
             //'onDocumentStateChange': onDocumentStateChange,
             //'onRequestEditRights': onRequestEditRights,
             //'onError': onError,
         };
 
-        if (api.saveasUrl && location.search.indexOf('?r=cfiles') === 0) {
+        if (api.saveasUrl && $('#cfilesUploadFiles').length > 0) {
             config.events.onRequestSaveAs = onRequestSaveAs;
         }
 
+        if (api.usersForMentionsUrl) {
+            config.events.onRequestUsers = onRequestUsers;
+            config.events.onRequestSendNotify = onRequestSendNotify;  
+        }
+        if (api.renameUrl) {
+            config.events.onRequestRename = onRequestRename;
+        }
+
+        if (infoMsg) {
+            config.events.onAppReady = function () {
+                module.log.info(infoMsg, true);
+            }
+        }
+
         this.docEditor = new DocsAPI.DocEditor('iframeContainer', config);
+
+        docEditor = this.docEditor;
     }
 
     var Convert = function (node, options) {
@@ -175,12 +195,69 @@ humhub.module('onlyoffice', function (module, require, $) {
             url: evt.data.url
         };
 
-        client.post(api.saveasUrl, {data: JSON.stringify(saveData), dataType: 'json'}).then((response) => {
+        client.post(api.saveasUrl, {data: saveData, dataType: 'json'}).then((response) => {
             event.trigger('humhub:file:created.cfiles', [response.file]);
         }).catch(function(e) {
             module.log.error(e, true);
         });
     }
+
+    function onRequestRename(evt) {
+        var renameData = {
+            newFileName: evt.data,
+            key: config.document.key,
+            ext: config.document.fileType
+        };
+
+        client.post(api.renameUrl, {data: renameData, dataType: 'json'}).then((response) => {
+            event.trigger('humhub:file:modified', [response.file]);
+        }).catch(function(e) {
+            module.log.error(e, true);
+        });
+    }
+
+    function onRequestUsers() {
+        client.post(api.usersForMentionsUrl).then((response) => {
+            docEditor.setUsers({
+                "users": response.usersForMentions
+            });
+        }).catch(function(e) {
+            module.log.error(e, true);
+        });
+        
+    }
+
+    function onRequestSendNotify(evt) {
+
+        var notifyData = {
+            ACTION_DATA: JSON.stringify(evt.data.actionLink),
+            comment: evt.data.message,
+            emails: evt.data.emails,
+            doc_key: config.document.key
+        };
+
+        client.post(api.sendNotifyUrl, {data: notifyData, dataType: 'json'}).then((response) => {
+        }).catch(function(e) {
+            module.log.error(e, true);
+        });
+
+    }
+
+    function onMakeActionLink(evt){
+        var ACTION_DATA = evt.data;
+        var anchorData = {
+            doc_key: config.document.key
+        };
+
+        client.post(api.makeAnchorUrl, {data: anchorData, dataType: 'json'}).then((response) => {
+            var link = location.origin + response.url + "&anchor=" + encodeURIComponent(JSON.stringify(ACTION_DATA));
+            docEditor.setActionLink(link);
+        }).catch(function(e) {
+            module.log.error(e, true);
+        });
+
+        
+    };
 
     var onRequestCloseObj = null;
     function onRequestClose() {

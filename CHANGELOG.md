@@ -1,5 +1,21 @@
 # Change Log
 
+## 3.0.0
+## Added
+- editor customization
+- validation of server settings on the settings page
+- renaming from editor
+- keep intermediate versions when editing (forcesave)
+- connect to the demo server
+- trial period of 30 days for the demo server
+- transfer user region in conversion
+- editable extensions on the settings page
+- mentioning users in comments
+- bookmarks
+- `es`, `zh` translations
+- Chinese (Traditional, Taiwan) empty file templates
+- the ability to change the JWT header
+
 ## 2.4.0
 ## Added
 - certificate verification setting

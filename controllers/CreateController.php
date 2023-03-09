@@ -7,17 +7,16 @@
  */
 
 /**
- *  Copyright (c) Ascensio System SIA 2022. All rights reserved.
+ *  Copyright (c) Ascensio System SIA 2023. All rights reserved.
  *  http://www.onlyoffice.com
  */
 
 namespace humhub\modules\onlyoffice\controllers;
 
+use Yii;
+use yii\helpers\Url;
 use humhub\components\access\ControllerAccess;
 use humhub\modules\onlyoffice\permissions\CanUseOnlyOffice;
-use Yii;
-use yii\web\HttpException;
-use yii\helpers\Url;
 use humhub\modules\file\libs\FileHelper;
 use humhub\modules\onlyoffice\Module;
 

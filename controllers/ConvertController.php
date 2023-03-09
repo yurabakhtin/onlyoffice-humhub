@@ -1,7 +1,7 @@
 <?php
 
 /**
- *  Copyright (c) Ascensio System SIA 2022. All rights reserved.
+ *  Copyright (c) Ascensio System SIA 2023. All rights reserved.
  *  http://www.onlyoffice.com
  */
 
@@ -40,17 +40,17 @@ class ConvertController extends BaseFileController
     {
         Yii::$app->response->format = 'json';
 
-        $json = $this->module->convertService($this->file, $ts);
+        $result = $this->module->fileToConversion($this->file, $ts);
 
-        if (!empty($json["endConvert"]) && $json["endConvert"]) {
-            $this->saveFileReplace($json["fileUrl"], $newName);
+        if (isset($result['endConvert']) && $result['endConvert']) {
+            $this->saveFileReplace($result['fileUrl'], $newName);
         }
 
-        return $json;
+        return $result;
     }
 
     private function saveFileReplace($url, $newName) {
-        $content = $this->module->request($url)->getBody();
+        $content = $this->module->request($url)->getContent();
 
         $this->file->store->setContent($content);
         $this->file->updateAttributes([

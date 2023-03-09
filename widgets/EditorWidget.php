@@ -7,21 +7,24 @@
  */
 
 /**
- *  Copyright (c) Ascensio System SIA 2022. All rights reserved.
+ *  Copyright (c) Ascensio System SIA 2023. All rights reserved.
  *  http://www.onlyoffice.com
  */
 
 namespace humhub\modules\onlyoffice\widgets;
 
 use Yii;
+use yii\helpers\Url;
 use yii\web\HttpException;
 use humhub\modules\file\models\File;
 use humhub\modules\cfiles\models\File as cFile;
 use humhub\modules\cfiles\models\Folder as cFolder;
-use yii\helpers\Url;
 use humhub\libs\Html;
 use humhub\modules\file\libs\FileHelper;
 use humhub\widgets\JsWidget;
+use humhub\modules\content\permissions\ManageContent;
+use humhub\modules\content\models\ContentContainer;
+use humhub\modules\user\models\User;
 use \Firebase\JWT\JWT;
 
 /**
@@ -51,6 +54,8 @@ class EditorWidget extends JsWidget
      * @inheritdoc
      */
     public $init = true;
+
+    public $anchor;
 
     /**
      * @inheritdoc
@@ -83,13 +88,28 @@ class EditorWidget extends JsWidget
     {
         $module = Yii::$app->getModule('onlyoffice');
 
-        $api = [];
-        if ($this->file->object_model === cFile::class) {
-            $cfile = cFile::findOne($this->file->object_id);
-            $cfolder = cFolder::findOne($cfile->parent_folder_id);
-            if (!$cfolder->isAllPostedFiles()) {
-                $api['saveasUrl'] = Url::to(['/onlyoffice/api/saveas'], true);
-            }
+        $api = [
+            'sendNotifyUrl' => Url::to(['/onlyoffice/api/send-notify'], true),
+            'makeAnchorUrl' => Url::to(['/onlyoffice/api/make-anchor'], true),
+            'saveasUrl' => Url::to(['/onlyoffice/api/saveas'], true)
+        ];
+
+        if(!Yii::$app->user->isGuest) {
+            $api['usersForMentionsUrl'] = Url::to(['/onlyoffice/api/users-for-mentions'], true);
+        }
+
+        $owner = User::findOne($this->file->created_by);
+        $containerRecord = ContentContainer::findOne(['id' => $owner->contentcontainer_id]);
+        $container = $containerRecord->getPolymorphicRelation();
+
+        $canRename = $container->can(ManageContent::class);
+        if ($canRename) {
+            $api['renameUrl'] = Url::to(['/onlyoffice/api/rename'], true);
+        }
+
+        $infoMsg = null;
+        if ($module->isDemoServerEnabled()) {
+            $infoMsg = Yii::t('OnlyofficeModule.base', 'This is a public test server, please do not use it for private sensitive data. The server will be available during a 30-day period.');
         }
 
         return [
@@ -97,7 +117,8 @@ class EditorWidget extends JsWidget
             'edit-mode' => $this->mode,
             'file-info-url' => Url::to(['/onlyoffice/open/get-info', 'guid' => $this->file->guid]),
             'module-configured' => (empty($module->getServerUrl()) ? '0' : '1'),
-            'api' => $api
+            'api' => $api,
+            'info-msg' => $infoMsg
         ];
     }
 
@@ -159,6 +180,7 @@ class EditorWidget extends JsWidget
                 ]
             ],
             'editorConfig' => [
+                'actionLink' => $this->anchor,
                 'mode' => $this->mode,
                 'lang' => ($user) && !empty($user->language) ? $user->language : Yii::$app->language,
                 'callbackUrl' => $callbackUrl,
@@ -167,7 +189,12 @@ class EditorWidget extends JsWidget
                     'name' => ($user) ? Html::encode($user->displayname) : 'Anonymous User',
                 ],
                 'customization' => [
-                    //'forcesave' => true,
+                    'forcesave' => $module->getForceSave(),
+                    'chat' => $module->getChat(),
+                    'compactHeader' => $module->getCompactHeader(),
+                    'feedback' => $module->getFeedback(),
+                    'help' => $module->getHelp(),
+                    'compactToolbar' => $module->getCompactToolbar(),
                 ]
             ]
         ];

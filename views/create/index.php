@@ -1,11 +1,10 @@
 <?php
 
 /**
- *  Copyright (c) Ascensio System SIA 2022. All rights reserved.
+ *  Copyright (c) Ascensio System SIA 2023. All rights reserved.
  *  http://www.onlyoffice.com
  */
 
-use humhub\modules\onlyoffice\Module;
 use yii\helpers\Url;
 
 $modal = \humhub\widgets\ModalDialog::begin([

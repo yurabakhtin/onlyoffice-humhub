@@ -7,16 +7,16 @@
  */
 
 /**
- *  Copyright (c) Ascensio System SIA 2022. All rights reserved.
+ *  Copyright (c) Ascensio System SIA 2023. All rights reserved.
  *  http://www.onlyoffice.com
  */
 
 namespace humhub\modules\onlyoffice\filehandler;
 
 use Yii;
+use yii\helpers\Url;
 use humhub\modules\onlyoffice\Module;
 use humhub\modules\file\handler\BaseFileHandler;
-use yii\helpers\Url;
 
 /**
  * Description of ViewHandler
