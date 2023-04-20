@@ -1,5 +1,8 @@
 # Change Log
 
+## Changed
+- hide close button for share-modal
+
 ## 3.0.0
 ## Added
 - editor customization
