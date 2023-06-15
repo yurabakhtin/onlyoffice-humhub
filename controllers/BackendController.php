@@ -13,14 +13,13 @@
 
 namespace humhub\modules\onlyoffice\controllers;
 
+use humhub\components\Controller;
+use humhub\modules\file\libs\FileHelper;
+use humhub\modules\file\models\File;
+use humhub\modules\onlyoffice\Module;
+use humhub\modules\user\models\User;
 use Yii;
 use yii\web\HttpException;
-use humhub\modules\file\models\File;
-use humhub\modules\user\models\User;
-use humhub\components\Controller;
-use \humhub\components\Module;
-use humhub\modules\file\libs\FileHelper;
-use \Firebase\JWT\JWT;
 
 class BackendController extends Controller
 {
@@ -91,7 +90,7 @@ class BackendController extends Controller
             }
 
             try {
-                $ds = JWT::decode($token, $this->module->getJwtSecret(), array('HS256'));
+                $ds = $this->module->jwtDecode($token);
             } catch (\Exception $ex) {
                 throw new HttpException(403, 'Invalid JWT signature');
             }
@@ -116,7 +115,7 @@ class BackendController extends Controller
             }
 
             try {
-                $ds = JWT::decode($token, $this->module->getJwtSecret(), array('HS256'));
+                $ds = $this->module->jwtDecode($token);
             } catch (\Exception $ex) {
                 throw new HttpException(403, 'Invalid JWT signature');
             }
@@ -164,7 +163,7 @@ class BackendController extends Controller
             }
 
             try {
-                $ds = JWT::decode($token, $this->module->getJwtSecret(), array('HS256'));
+                $ds = $this->module->jwtDecode($token);
                 $data = isset($ds->payload) ? (array)$ds->payload : (array)$ds;
             } catch (\Exception $ex) {
                 throw new HttpException(403, 'Invalid JWT signature');
