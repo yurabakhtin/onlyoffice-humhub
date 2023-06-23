@@ -13,9 +13,13 @@
 
 namespace humhub\modules\onlyoffice;
 
-use Yii;
+use humhub\components\ActiveRecord;
+use humhub\modules\content\models\Content;
 use humhub\modules\file\handler\FileHandlerCollection;
+use humhub\modules\file\models\File;
 use humhub\modules\onlyoffice\permissions\CanUseOnlyOffice;
+use Yii;
+use yii\db\Expression;
 
 /**
  * @author luke
@@ -54,6 +58,25 @@ class Events
             }
             if ($canView) {
                 $collection->register(new filehandler\ViewFileHandler());
+            }
+        }
+    }
+
+    public static function onContentAfterSoftDelete($event)
+    {
+        if (!($event->sender instanceof Content)) {
+            return;
+        }
+
+        $record = $event->sender->getPolymorphicRelation();
+        if (!($record instanceof ActiveRecord)) {
+            return;
+        }
+
+        foreach ($record->fileManager->find()->each() as $file) {
+            /* @var File $file */
+            if (isset($file->onlyoffice_key)) {
+                $file->updateAttributes(['onlyoffice_key' => new Expression('NULL')]);
             }
         }
     }
