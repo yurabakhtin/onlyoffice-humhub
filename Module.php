@@ -13,14 +13,15 @@
 
 namespace humhub\modules\onlyoffice;
 
+use Firebase\JWT\JWT;
+use humhub\libs\CURLHelper;
+use humhub\modules\file\libs\FileHelper;
+use stdClass;
 use Yii;
 use yii\helpers\Url;
 use yii\helpers\Json;
 use yii\httpclient\Client;
 use yii\httpclient\Response;
-use humhub\modules\file\libs\FileHelper;
-use humhub\libs\CURLHelper;
-use \Firebase\JWT\JWT;
 
 /**
  * File Module
@@ -96,6 +97,21 @@ class Module extends \humhub\components\Module
             return $this->demoparam['secret'];
         }
         return $this->settings->get('jwtSecret');
+    }
+
+    public function getJwtAlgorithm(): string
+    {
+        return 'HS256';
+    }
+
+    public function jwtEncode(array $data): string
+    {
+        return JWT::encode($data, $this->getJwtSecret(), $this->getJwtAlgorithm());
+    }
+
+    public function jwtDecode(string $hash): stdClass
+    {
+        return JWT::decode($hash, $this->getJwtSecret());
     }
 
     public function getServerUrl()
@@ -270,8 +286,8 @@ class Module extends \humhub\components\Module
             $headers = [];
             $headers['Accept'] = 'application/json';
             if ($this->isJwtEnabled()) {
-                $data['token'] = JWT::encode($data, $this->getJwtSecret());
-                $headers[$this->getHeader()] = 'Bearer ' . JWT::encode(['payload' => $data], $this->getJwtSecret());
+                $data['token'] = $this->jwtEncode($data);
+                $headers[$this->getHeader()] = 'Bearer ' . $this->jwtEncode(['payload' => $data]);
             }
 
             $options = array(
@@ -342,8 +358,8 @@ class Module extends \humhub\components\Module
             $headers = [];
             $headers['Accept'] = 'application/json';
             if ($this->isJwtEnabled()) {
-                $data['token'] = JWT::encode($data, $this->getJwtSecret());
-                $headers[$this->getHeader()] = 'Bearer ' . JWT::encode(['payload' => $data], $this->getJwtSecret());
+                $data['token'] = $this->jwtEncode($data);
+                $headers[$this->getHeader()] = 'Bearer ' . $this->jwtEncode(['payload' => $data]);
             }
 
             $options = [
@@ -396,7 +412,7 @@ class Module extends \humhub\components\Module
             $data['isEmpty'] = true;
         }
 
-        return JWT::encode($data, Yii::$app->settings->get('secret'));
+        return JWT::encode($data, Yii::$app->settings->get('secret'), $this->getJwtAlgorithm());
     }
 
     /**
@@ -405,7 +421,7 @@ class Module extends \humhub\components\Module
     public function readHash($hash)
     {
         try {
-            $data = JWT::decode($hash, Yii::$app->settings->get('secret'), array('HS256'));
+            $data = JWT::decode($hash, Yii::$app->settings->get('secret'));
         } catch (\Exception $ex) {
             $error = 'Invalid hash ' . $ex->getMessage();
             Yii::error($error);
