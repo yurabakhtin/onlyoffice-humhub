@@ -6,13 +6,15 @@
  */
 
 use humhub\modules\file\handler\FileHandlerCollection;
+use humhub\modules\file\models\File;
+use humhub\modules\onlyoffice\Events;
 
 return [
     'id' => 'onlyoffice',
     'class' => 'humhub\modules\onlyoffice\Module',
     'namespace' => 'humhub\modules\onlyoffice',
     'events' => [
-        [FileHandlerCollection::className(), FileHandlerCollection::EVENT_INIT, ['humhub\modules\onlyoffice\Events', 'onFileHandlerCollection']],
+        [FileHandlerCollection::class, FileHandlerCollection::EVENT_INIT, [Events::class, 'onFileHandlerCollection']],
+        [File::class, File::EVENT_AFTER_NEW_STORED_FILE, [Events::class, 'onAfterNewStoredFile']],
     ]
 ];
-?>
