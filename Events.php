@@ -13,9 +13,11 @@
 
 namespace humhub\modules\onlyoffice;
 
-use Yii;
 use humhub\modules\file\handler\FileHandlerCollection;
+use humhub\modules\file\models\File;
 use humhub\modules\onlyoffice\permissions\CanUseOnlyOffice;
+use Yii;
+use yii\db\Expression;
 
 /**
  * @author luke
@@ -55,6 +57,15 @@ class Events
             if ($canView) {
                 $collection->register(new filehandler\ViewFileHandler());
             }
+        }
+    }
+
+    public static function onAfterNewStoredFile($event)
+    {
+        $file = $event->sender;
+
+        if ($file instanceof File && isset($file->onlyoffice_key)) {
+            $file->updateAttributes(['onlyoffice_key' => new Expression('NULL')]);
         }
     }
 
