@@ -31,33 +31,6 @@ class CreateDocument extends Model
     public $fileName;
     public $fid;
     public $openFlag = true;
-    private $localPath = [
-        "az" => "az-Latn-AZ",
-        "bg" => "bg-BG",
-        "cs" => "cs-CZ",
-        "de" => "de-DE",
-        "el" => "el-GR",
-        "en_GB" => "en-GB",
-        "en-US" => "en-US",
-        "es" => "es-ES",
-        "fr" => "fr-FR",
-        "it" => "it-IT",
-        "ja" => "ja-JP",
-        "ko" => "ko-KR",
-        "lv" => "lv-LV",
-        "nl" => "nl-NL",
-        "pl" => "pl-PL",
-        "pt_BR" => "pt-BR",
-        "pt" => "pt-PT",
-        "ru" => "ru-RU",
-        "sk" => "sk-SK",
-        "sv" => "sv-SE",
-        "tr" => "tr-TR",
-        "uk" => "uk-UA",
-        "vi" => "vi-VN",
-        "zh-CN" => "zh-CN",
-        "zh-TW" => "zh-TW"
-    ];
 
     public function rules()
     {
@@ -113,11 +86,11 @@ class CreateDocument extends Model
         $user = Yii::$app->user->getIdentity();
 
         $lang = ($user) && !empty($user->language) ? $user->language : Yii::$app->language;
-        if (!array_key_exists($lang, $this->localPath)) {
+        if (!array_key_exists($lang, $module->languageCodes)) {
             $lang = 'en-US';
         }
 
-        return $module->getAssetPath() . '/templates/' . $this->localPath[$lang];
+        return $module->getAssetPath() . '/templates/' . $module->languageCodes[$lang];
     }
 
 }
