@@ -56,7 +56,7 @@ class CreateDocument extends Model
         "uk" => "uk-UA",
         "vi" => "vi-VN",
         "zh-CN" => "zh-CN",
-        "zh-TW" => "zh-CN"
+        "zh-TW" => "zh-TW"
     ];
 
     public function rules()

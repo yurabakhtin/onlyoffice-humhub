@@ -523,7 +523,7 @@ class Module extends \humhub\components\Module
         "uk" => "uk-UA",
         "vi" => "vi-VN",
         "zh-CN" => "zh-CN",
-        "zh-TW" => "zh-CN"
+        "zh-TW" => "zh-TW"
     ];
     private function convertResponceError($errorCode) {
         $errorMessage = "";
