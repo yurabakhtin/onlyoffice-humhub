@@ -14,6 +14,7 @@
 namespace humhub\modules\onlyoffice;
 
 use Firebase\JWT\JWT;
+use Firebase\JWT\Key;
 use humhub\libs\CURLHelper;
 use humhub\modules\file\libs\FileHelper;
 use stdClass;
@@ -111,7 +112,7 @@ class Module extends \humhub\components\Module
 
     public function jwtDecode(string $hash): stdClass
     {
-        return JWT::decode($hash, $this->getJwtSecret());
+        return JWT::decode($hash, new Key($this->getJwtSecret(), $this->getJwtAlgorithm()));
     }
 
     public function getServerUrl()
@@ -421,7 +422,7 @@ class Module extends \humhub\components\Module
     public function readHash($hash)
     {
         try {
-            $data = JWT::decode($hash, Yii::$app->settings->get('secret'));
+            $data = JWT::decode($hash, new Key(Yii::$app->settings->get('secret'), $this->getJwtAlgorithm()));
         } catch (\Exception $ex) {
             $error = 'Invalid hash ' . $ex->getMessage();
             Yii::error($error);
