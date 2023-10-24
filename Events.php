@@ -14,7 +14,9 @@
 namespace humhub\modules\onlyoffice;
 
 use Yii;
+use yii\db\Expression;
 use humhub\modules\file\handler\FileHandlerCollection;
+use humhub\modules\file\models\File;
 use humhub\modules\onlyoffice\permissions\CanUseOnlyOffice;
 
 /**
@@ -58,4 +60,12 @@ class Events
         }
     }
 
+    public static function onAfterNewStoredFile($event)
+    {
+        $file = $event->sender;
+
+        if ($file instanceof File && isset($file->onlyoffice_key)) {
+            $file->updateAttributes(['onlyoffice_key' => new Expression('NULL')]);
+        }
+    }
 }
