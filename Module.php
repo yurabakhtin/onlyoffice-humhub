@@ -107,12 +107,28 @@ class Module extends \humhub\components\Module
 
     public function jwtEncode(array $data): string
     {
-        return JWT::encode($data, $this->getJwtSecret(), $this->getJwtAlgorithm());
+        $cryptData = null;
+
+        if (class_exists(Key::class)) {
+            $cryptData = JWT::encode($data, $this->getJwtSecret(), $this->getJwtAlgorithm());
+        } else {
+            $cryptData = JWT::encode($data, $this->getJwtSecret());
+        }
+
+        return $cryptData;
     }
 
     public function jwtDecode(string $hash): stdClass
     {
-        return JWT::decode($hash, new Key($this->getJwtSecret(), $this->getJwtAlgorithm()));
+        $data = new stdClass();
+
+        if (class_exists(Key::class)) {
+            $data = JWT::decode($hash, new Key($this->getJwtSecret(), $this->getJwtAlgorithm()));
+        } else {
+            $data = JWT::decode($hash, $this->getJwtSecret(), array($this->getJwtAlgorithm()));
+        }
+
+        return $data;
     }
 
     public function getServerUrl()
@@ -413,7 +429,14 @@ class Module extends \humhub\components\Module
             $data['isEmpty'] = true;
         }
 
-        return JWT::encode($data, Yii::$app->settings->get('secret'), $this->getJwtAlgorithm());
+        $cryptData = null;
+        if (class_exists(Key::class)) {
+            $cryptData = JWT::encode($data, Yii::$app->settings->get('secret'), $this->getJwtAlgorithm());
+        } else {
+            $cryptData = JWT::encode($data, Yii::$app->settings->get('secret'));
+        }
+
+        return $cryptData;
     }
 
     /**
@@ -421,8 +444,13 @@ class Module extends \humhub\components\Module
      */
     public function readHash($hash)
     {
+        $data = null;
         try {
-            $data = JWT::decode($hash, new Key(Yii::$app->settings->get('secret'), $this->getJwtAlgorithm()));
+            if (class_exists(Key::class)) {
+                $data = JWT::decode($hash, new Key(Yii::$app->settings->get('secret'), $this->getJwtAlgorithm()));
+            } else {
+                $data = JWT::decode($hash, Yii::$app->settings->get('secret'), array($this->getJwtAlgorithm()));
+            }
         } catch (\Exception $ex) {
             $error = 'Invalid hash ' . $ex->getMessage();
             Yii::error($error);
