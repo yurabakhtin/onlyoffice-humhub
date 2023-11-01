@@ -205,6 +205,10 @@ class BackendController extends Controller
 
                     if (!empty($newData)) {
 
+                        if ($status == 'ForceSave') {
+                            $this->file->updateAttributes(['onlyoffice_key_lock' => true]);
+                        }
+
                         if (version_compare(Yii::$app->version, '1.10', '>=')) {
                             // For HumHub from version 1.10 with versioning support
                             $this->file->setStoredFileContent($newData);
@@ -233,6 +237,12 @@ class BackendController extends Controller
                 } catch (\Exception $e) {
                     Yii::error($e->getMessage(), 'onlyoffice');
                     $msg = $e->getMessage();
+                }
+                finally
+                {
+                    if ($status == 'ForceSave') {
+                        $this->file->updateAttributes(['onlyoffice_key_lock' => false]);
+                    }
                 }
         }
 

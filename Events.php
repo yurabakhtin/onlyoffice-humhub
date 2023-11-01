@@ -65,7 +65,9 @@ class Events
         $file = $event->sender;
 
         if ($file instanceof File && isset($file->onlyoffice_key)) {
-            $file->updateAttributes(['onlyoffice_key' => new Expression('NULL')]);
+            if (!$file->onlyoffice_key_lock) {
+                $file->updateAttributes(['onlyoffice_key' => new Expression('NULL')]);
+            }
         }
     }
 }
