@@ -13,14 +13,16 @@
 
 namespace humhub\modules\onlyoffice;
 
+use Firebase\JWT\JWT;
+use Firebase\JWT\Key;
+use humhub\libs\CURLHelper;
+use humhub\modules\file\libs\FileHelper;
+use stdClass;
 use Yii;
 use yii\helpers\Url;
 use yii\helpers\Json;
 use yii\httpclient\Client;
 use yii\httpclient\Response;
-use humhub\modules\file\libs\FileHelper;
-use humhub\libs\CURLHelper;
-use \Firebase\JWT\JWT;
 
 /**
  * File Module
@@ -96,6 +98,37 @@ class Module extends \humhub\components\Module
             return $this->demoparam['secret'];
         }
         return $this->settings->get('jwtSecret');
+    }
+
+    public function getJwtAlgorithm(): string
+    {
+        return 'HS256';
+    }
+
+    public function jwtEncode(array $data): string
+    {
+        $cryptData = null;
+
+        if (class_exists(Key::class)) {
+            $cryptData = JWT::encode($data, $this->getJwtSecret(), $this->getJwtAlgorithm());
+        } else {
+            $cryptData = JWT::encode($data, $this->getJwtSecret());
+        }
+
+        return $cryptData;
+    }
+
+    public function jwtDecode(string $hash): stdClass
+    {
+        $data = new stdClass();
+
+        if (class_exists(Key::class)) {
+            $data = JWT::decode($hash, new Key($this->getJwtSecret(), $this->getJwtAlgorithm()));
+        } else {
+            $data = JWT::decode($hash, $this->getJwtSecret(), array($this->getJwtAlgorithm()));
+        }
+
+        return $data;
     }
 
     public function getServerUrl()
@@ -270,8 +303,8 @@ class Module extends \humhub\components\Module
             $headers = [];
             $headers['Accept'] = 'application/json';
             if ($this->isJwtEnabled()) {
-                $data['token'] = JWT::encode($data, $this->getJwtSecret());
-                $headers[$this->getHeader()] = 'Bearer ' . JWT::encode(['payload' => $data], $this->getJwtSecret());
+                $data['token'] = $this->jwtEncode($data);
+                $headers[$this->getHeader()] = 'Bearer ' . $this->jwtEncode(['payload' => $data]);
             }
 
             $options = array(
@@ -342,8 +375,8 @@ class Module extends \humhub\components\Module
             $headers = [];
             $headers['Accept'] = 'application/json';
             if ($this->isJwtEnabled()) {
-                $data['token'] = JWT::encode($data, $this->getJwtSecret());
-                $headers[$this->getHeader()] = 'Bearer ' . JWT::encode(['payload' => $data], $this->getJwtSecret());
+                $data['token'] = $this->jwtEncode($data);
+                $headers[$this->getHeader()] = 'Bearer ' . $this->jwtEncode(['payload' => $data]);
             }
 
             $options = [
@@ -396,7 +429,14 @@ class Module extends \humhub\components\Module
             $data['isEmpty'] = true;
         }
 
-        return JWT::encode($data, Yii::$app->settings->get('secret'));
+        $cryptData = null;
+        if (class_exists(Key::class)) {
+            $cryptData = JWT::encode($data, Yii::$app->settings->get('secret'), $this->getJwtAlgorithm());
+        } else {
+            $cryptData = JWT::encode($data, Yii::$app->settings->get('secret'));
+        }
+
+        return $cryptData;
     }
 
     /**
@@ -404,8 +444,13 @@ class Module extends \humhub\components\Module
      */
     public function readHash($hash)
     {
+        $data = null;
         try {
-            $data = JWT::decode($hash, Yii::$app->settings->get('secret'), array('HS256'));
+            if (class_exists(Key::class)) {
+                $data = JWT::decode($hash, new Key(Yii::$app->settings->get('secret'), $this->getJwtAlgorithm()));
+            } else {
+                $data = JWT::decode($hash, Yii::$app->settings->get('secret'), array($this->getJwtAlgorithm()));
+            }
         } catch (\Exception $ex) {
             $error = 'Invalid hash ' . $ex->getMessage();
             Yii::error($error);
@@ -507,7 +552,7 @@ class Module extends \humhub\components\Module
         "uk" => "uk-UA",
         "vi" => "vi-VN",
         "zh-CN" => "zh-CN",
-        "zh-TW" => "zh-CN"
+        "zh-TW" => "zh-TW"
     ];
     private function convertResponceError($errorCode) {
         $errorMessage = "";

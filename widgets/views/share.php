@@ -13,9 +13,12 @@ if (class_exists('humhub\assets\ClipboardJsAsset')) {
 }
 ?>
 
-<?php $modal = ModalDialog::begin(['header' => Yii::t('OnlyofficeModule.base', '<strong>Share</strong> document')]) ?>
+<?php $modal = ModalDialog::begin() ?>
 <?= Html::beginTag('div', $options) ?>
 
+<div class="modal-header">
+    <h4 class="modal-title" id="#onlyoffice-share-modal-title"><?= Yii::t('OnlyofficeModule.base', '<strong>Share</strong> document'); ?></h4>
+</div>
 <div class="modal-body">
     <?= Yii::t('OnlyofficeModule.base', 'You can simply share this document using a direct link. The user does not need an valid user account on the platform.'); ?>
     <br/>

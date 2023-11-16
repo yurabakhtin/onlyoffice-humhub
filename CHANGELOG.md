@@ -1,5 +1,11 @@
 # Change Log
 
+## 3.1.0
+## Changed
+- HumHub 1.15 compatibility
+- hide close button for share-modal
+- refresh file key after uploading new file version
+
 ## 3.0.0
 ## Added
 - editor customization

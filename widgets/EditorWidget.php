@@ -13,19 +13,17 @@
 
 namespace humhub\modules\onlyoffice\widgets;
 
+use humhub\libs\Html;
+use humhub\modules\content\permissions\ManageContent;
+use humhub\modules\content\models\ContentContainer;
+use humhub\modules\file\libs\FileHelper;
+use humhub\modules\file\models\File;
+use humhub\modules\onlyoffice\Module;
+use humhub\modules\user\models\User;
+use humhub\widgets\JsWidget;
 use Yii;
 use yii\helpers\Url;
 use yii\web\HttpException;
-use humhub\modules\file\models\File;
-use humhub\modules\cfiles\models\File as cFile;
-use humhub\modules\cfiles\models\Folder as cFolder;
-use humhub\libs\Html;
-use humhub\modules\file\libs\FileHelper;
-use humhub\widgets\JsWidget;
-use humhub\modules\content\permissions\ManageContent;
-use humhub\modules\content\models\ContentContainer;
-use humhub\modules\user\models\User;
-use \Firebase\JWT\JWT;
 
 /**
  * Description of EditorWidget
@@ -147,6 +145,7 @@ class EditorWidget extends JsWidget
 
     protected function getConfig()
     {
+        /* @var Module $module */
         $module = Yii::$app->getModule('onlyoffice');
         $user = Yii::$app->user->getIdentity();
         $userGuid = null;
@@ -205,8 +204,7 @@ class EditorWidget extends JsWidget
         }
 
         if ($module->isJwtEnabled()) {
-            $token = JWT::encode($config, $module->getJwtSecret());
-            $config['token'] = $token;
+            $config['token'] = $module->jwtEncode($config);
         }
 
         return $config;
