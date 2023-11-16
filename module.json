@@ -18,5 +18,6 @@
             "role": "Support"
         }
     ],
-    "screenshots": ["resources/screen1.png", "resources/screen2.png", "resources/screen3.png", "resources/screen4.png", "resources/screen5.png"]
+    "screenshots": ["resources/screen1.png", "resources/screen2.png", "resources/screen3.png", "resources/screen4.png", "resources/screen5.png"],
+    "licence": "AGPL-3.0-or-later"
 }
