@@ -1,5 +1,6 @@
 # Change Log
 
+## 3.1.0
 ## Changed
 - HumHub 1.15 compatibility
 - hide close button for share-modal
