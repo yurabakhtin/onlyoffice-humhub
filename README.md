@@ -30,7 +30,7 @@ Community Edition vs Enterprise Edition comparison can be found [here](#onlyoffi
 
 ## Installing HumHub ONLYOFFICE integration plugin
 
-Either install it from [HumHub Marketplace](https://www.humhub.com/en/marketplace/onlyoffice/) or simply clone the repository inside one of the folder specified by `moduleAutoloadPaths` parameter. Please see [HumHub Documentation](https://docs.humhub.org/docs/develop/environment#module-loader-path) for more information.
+Either install it from [HumHub Marketplace](https://marketplace.humhub.com/module/onlyoffice) or simply clone the repository inside one of the folder specified by `moduleAutoloadPaths` parameter. Please see [HumHub Documentation](https://docs.humhub.org/docs/develop/environment#module-loader-path) for more information.
 
 ## Configuring HumHub CONLYOFFICE integration plugin
 
