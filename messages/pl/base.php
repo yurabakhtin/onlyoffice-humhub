@@ -51,7 +51,6 @@ return [
     'Server address for internal requests from ONLYOFFICE Docs' => 'Adres serwera dla zapytań wewnętrznych z ONLYOFFICE Docs',
     'Can use ONLYOFFICE' => 'Może korzystać z ONLYOFFICE',
     'Allows the user to use ONLYOFFICE.' => 'Zezwala użytkownikowi na korzystanie z ONLYOFFICE.',
-    'Form template' => 'Szablon formularza',
     'Fill in form in ONLYOFFICE' => 'Wypełnić formularz w ONLYOFFICE',
     'Please update ONLYOFFICE Docs to version 7.0 to work on fillable forms online' => 'Zaktualizuj ONLYOFFICE Docs do wersji 7.0, aby działały w formularzach do wypełniania online',
     'Disable certificate verification (insecure)' => 'Wyłącz weryfikację certyfikatu (niebezpieczne)',

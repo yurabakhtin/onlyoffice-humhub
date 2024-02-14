@@ -51,7 +51,6 @@ return [
     'Server address for internal requests from ONLYOFFICE Docs' => '用于ONLYOFFICE Docs内部请求的服务器的地址',
     'Can use ONLYOFFICE' => '可以使用ONLYOFFICE',
     'Allows the user to use ONLYOFFICE.' => '允许用户使用ONLYOFFICE。',
-    'Form template' => '表单模板',
     'Fill in form in ONLYOFFICE' => '在ONLYOFFICE上填写表单',
     'Please update ONLYOFFICE Docs to version 7.0 to work on fillable forms online' => '请将ONLYOFFICE Docs更新到7.0版本，以便在线编辑可填写的表单',
     'Disable certificate verification (insecure)' => '关闭证书校验(不安全)',
