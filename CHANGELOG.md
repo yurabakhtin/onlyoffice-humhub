@@ -15,6 +15,7 @@
 - `es`, `zh` translations
 - Chinese (Traditional, Taiwan) empty file templates
 - the ability to change the JWT header
+- Update Active Form for Bootstrap 5
 
 ## 2.4.0
 ## Added

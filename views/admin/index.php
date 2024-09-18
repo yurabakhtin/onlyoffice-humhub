@@ -5,7 +5,7 @@
  *  http://www.onlyoffice.com
  */
 
-use yii\bootstrap\ActiveForm;
+use humhub\modules\ui\form\widgets\ActiveForm;
 use yii\helpers\Html;
 use yii\helpers\Url;
 use yii\web\View;

@@ -5,14 +5,16 @@
  *  http://www.onlyoffice.com
  */
 
-use humhub\widgets\ActiveForm;
 use humhub\libs\Html;
+use humhub\modules\onlyoffice\assets\Assets;
+use humhub\modules\ui\form\widgets\ActiveForm;
+use humhub\widgets\ModalDialog;
 
-\humhub\modules\onlyoffice\assets\Assets::register($this);
+Assets::register($this);
 
-$modal = \humhub\widgets\ModalDialog::begin([
-            'header' => Yii::t('OnlyofficeModule.base', '<strong>Create</strong> document')
-        ])
+$modal = ModalDialog::begin([
+    'header' => Yii::t('OnlyofficeModule.base', '<strong>Create</strong> document'),
+])
 ?>
 
 <?php $form = ActiveForm::begin(); ?>
@@ -30,4 +32,4 @@ $modal = \humhub\widgets\ModalDialog::begin([
 
 <?php ActiveForm::end(); ?>
 
-<?php \humhub\widgets\ModalDialog::end(); ?>
+<?php ModalDialog::end(); ?>
