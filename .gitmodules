@@ -2,3 +2,6 @@
 	path = resources/templates
 	url = https://github.com/ONLYOFFICE/document-templates
 	branch = main/new
+[submodule "resources/formats"]
+	path = resources/formats
+	url = https://github.com/ONLYOFFICE/document-formats.git
