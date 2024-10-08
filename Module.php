@@ -31,6 +31,7 @@ use yii\httpclient\Response;
  */
 class Module extends \humhub\components\Module
 {
+    private $formatFields;
 
     public $resourcesPath = 'resources';
 
@@ -46,39 +47,6 @@ class Module extends \humhub\components\Module
     const DOCUMENT_TYPE_TEXT = 'word';
     const DOCUMENT_TYPE_PRESENTATION = 'slide';
     const DOCUMENT_TYPE_SPREADSHEET = 'cell';
-
-    /**
-     * @var string[] allowed spreadsheet extensions 
-     */
-    public $spreadsheetExtensions = ['xls', 'xlsx', 'ods', 'csv'];
-
-    /**
-     * @var string[] allowed presentation extensions 
-     */
-    public $presentationExtensions = ['ppsx', 'pps', 'ppt', 'pptx', 'odp'];
-
-    /**
-     * @var string[] allowed text extensions 
-     */
-    public $textExtensions = ['docx', 'docxf', 'oform', 'doc', 'odt', 'rtf', 'txt', 'html', 'htm', 'mht', 'pdf', 'djvu', 'fb2', 'epub', 'xps'];
-
-    /**
-     * @var string[] allowed for editing extensions
-     */
-    public $editableExtensions = ['xlsx', 'ppsx', 'pptx', 'docx', 'docxf', 'oform' ];
-    public $convertableExtensions = ['doc','odt','xls','ods','ppt','odp','txt','csv'];
-    public $forceEditableExtensions = ['csv', 'odp', 'ods', 'odt', 'rtf', 'txt'];
-
-    public $convertsTo = [
-        'doc' => 'docx',
-        'odt' => 'docx',
-        'txt' => 'docx',
-        'xls' => 'xlsx',
-        'ods' => 'xlsx',
-        'csv' => 'xlsx',
-        'ppt' => 'pptx',
-        'odp' => 'pptx',
-    ];
     
     public $demoparam = [
         'trial' => 30,
@@ -86,6 +54,51 @@ class Module extends \humhub\components\Module
         'secret' => 'sn2puSUF7muF5Jas',
         'serverUrl' => 'https://onlinedocs.onlyoffice.com'
     ];
+
+    public function formats() {
+        if (isset($this->formatFields)) {
+            return $this->formatFields;
+        }
+
+        $formatsContent = file_get_contents($this->getAssetPath() . '/formats/onlyoffice-docs-formats.json');
+        $formats = json_decode($formatsContent);
+
+        $this->formatFields = new stdClass();
+        $this->formatFields->spreadsheetExtensions = [];
+        $this->formatFields->presentationExtensions = [];
+        $this->formatFields->textExtensions = [];
+        $this->formatFields->editableExtensions = [];
+        $this->formatFields->convertableExtensions = [];
+        $this->formatFields->forceEditableExtensions = [];
+        $this->formatFields->convertsTo = [];
+
+        foreach ($formats as $format) {
+            if ($format->type === self::DOCUMENT_TYPE_SPREADSHEET) {
+                array_push($this->formatFields->spreadsheetExtensions, $format->name);
+            }
+            if ($format->type === self::DOCUMENT_TYPE_PRESENTATION) {
+                array_push($this->formatFields->presentationExtensions, $format->name);
+            }
+            if ($format->type === self::DOCUMENT_TYPE_TEXT || $format->type === 'pdf') {
+                array_push($this->formatFields->textExtensions, $format->name);
+            }
+
+            if (in_array('edit', $format->actions)) {
+                array_push($this->formatFields->editableExtensions, $format->name);
+            }
+
+            if (in_array('auto-convert', $format->actions)) {
+                array_push($this->formatFields->convertableExtensions, $format->name);
+                $this->formatFields->convertsTo[$format->name] = $format->convert[0];
+            }
+
+            if (in_array('lossy-edit', $format->actions)) {
+                array_push($this->formatFields->forceEditableExtensions, $format->name);
+            }
+        }
+
+        return $this->formatFields;
+    }
 
     public function isJwtEnabled() {
         if($this->isDemoServerEnabled())
@@ -241,11 +254,11 @@ class Module extends \humhub\components\Module
     {
         $fileExtension = strtolower(FileHelper::getExtension($file));
 
-        if (in_array($fileExtension, $this->spreadsheetExtensions)) {
+        if (in_array($fileExtension, $this->formats()->spreadsheetExtensions)) {
             return self::DOCUMENT_TYPE_SPREADSHEET;
-        } elseif (in_array($fileExtension, $this->presentationExtensions)) {
+        } elseif (in_array($fileExtension, $this->formats()->presentationExtensions)) {
             return self::DOCUMENT_TYPE_PRESENTATION;
-        } elseif (in_array($fileExtension, $this->textExtensions)) {
+        } elseif (in_array($fileExtension, $this->formats()->textExtensions)) {
             return self::DOCUMENT_TYPE_TEXT;
         }
 
@@ -255,13 +268,13 @@ class Module extends \humhub\components\Module
     public function canEdit($file)
     {
         $fileExtension = strtolower(FileHelper::getExtension($file));
-        return in_array($fileExtension, array_merge($this->getforceEditTypes(), $this->editableExtensions));
+        return in_array($fileExtension, array_merge($this->getforceEditTypes(), $this->formats()->editableExtensions));
     }
 
     public function canConvert($file)
     {
         $fileExtension = strtolower(FileHelper::getExtension($file));
-        return in_array($fileExtension, $this->convertableExtensions);
+        return in_array($fileExtension, $this->formats()->convertableExtensions);
     }
 
     public function canView($file)
@@ -344,7 +357,7 @@ class Module extends \humhub\components\Module
         }
 
         if(is_null($toExt))
-            $toExt = $this->convertsTo[$fromExt];
+            $toExt = $this->formats()->convertsTo[$fromExt];
 
         return $this->convertService($downloadUrl, $fromExt, $toExt, $key . $ts, $async);
     }
