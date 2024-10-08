@@ -20,6 +20,8 @@ if ($documentType === Module::DOCUMENT_TYPE_SPREADSHEET) {
     $headerBackgroundColor = '#5A7DC9';
 } elseif ($documentType === Module::DOCUMENT_TYPE_PRESENTATION) {
     $headerBackgroundColor = '#DD682B';
+} elseif ($documentType === Module::DOCUMENT_TYPE_PDF) {
+    $headerBackgroundColor = '#D45757';
 }
 ?>
 

@@ -47,6 +47,7 @@ class Module extends \humhub\components\Module
     const DOCUMENT_TYPE_TEXT = 'word';
     const DOCUMENT_TYPE_PRESENTATION = 'slide';
     const DOCUMENT_TYPE_SPREADSHEET = 'cell';
+    const DOCUMENT_TYPE_PDF = 'pdf';
 
     public $demoparam = [
         'trial' => 30,
@@ -67,6 +68,7 @@ class Module extends \humhub\components\Module
         $this->formats->spreadsheetExtensions = [];
         $this->formats->presentationExtensions = [];
         $this->formats->textExtensions = [];
+        $this->formats->pdfExtensions = [];
         $this->formats->editableExtensions = [];
         $this->formats->convertableExtensions = [];
         $this->formats->forceEditableExtensions = [];
@@ -80,8 +82,11 @@ class Module extends \humhub\components\Module
             if ($formatJson->type === self::DOCUMENT_TYPE_PRESENTATION) {
                 array_push($this->formats->presentationExtensions, $formatJson->name);
             }
-            if ($formatJson->type === self::DOCUMENT_TYPE_TEXT || $formatJson->type === 'pdf') {
+            if ($formatJson->type === self::DOCUMENT_TYPE_TEXT) {
                 array_push($this->formats->textExtensions, $formatJson->name);
+            }
+            if ($formatJson->type === self::DOCUMENT_TYPE_PDF) {
+                array_push($this->formats->pdfExtensions, $formatJson->name);
             }
 
             if (in_array('edit', $formatJson->actions)) {
@@ -264,6 +269,8 @@ class Module extends \humhub\components\Module
             return self::DOCUMENT_TYPE_PRESENTATION;
         } elseif (in_array($fileExtension, $this->formats()->textExtensions)) {
             return self::DOCUMENT_TYPE_TEXT;
+        } elseif (in_array($fileExtension, $this->formats()->pdfExtensions)) {
+            return self::DOCUMENT_TYPE_PDF;
         }
 
         return null;
