@@ -71,6 +71,7 @@ class Module extends \humhub\components\Module
         $this->formatFields->convertableExtensions = [];
         $this->formatFields->forceEditableExtensions = [];
         $this->formatFields->convertsTo = [];
+        $this->formatFields->mimes = [];
 
         foreach ($formats as $format) {
             if ($format->type === self::DOCUMENT_TYPE_SPREADSHEET) {
@@ -95,6 +96,8 @@ class Module extends \humhub\components\Module
             if (in_array('lossy-edit', $format->actions)) {
                 array_push($this->formatFields->forceEditableExtensions, $format->name);
             }
+
+            $this->formatFields->mimes[$format->name] = count($format->mime) > 0 ? $format->mime[0] : 'application/octet-stream';
         }
 
         return $this->formatFields;
@@ -507,38 +510,6 @@ class Module extends \humhub\components\Module
 
         return $response->send();
     }
-
-    /**
-     * @var string[] mimes dictionary
-     */
-    public $mimes = [
-        'csv' => 'text/csv',
-        'doc' => 'application/msword',
-        'docx' => 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
-        'docxf' => 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
-        'oform' => 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
-        'dotx' => 'application/vnd.openxmlformats-officedocument.wordprocessingml.template',
-        'epub' => 'application/epub+zip',
-        'fb2' => 'text/fb2+xml',
-        'html' => 'text/html',
-        'odp' => 'application/vnd.oasis.opendocument.presentation',
-        'ods' => 'application/vnd.oasis.opendocument.spreadsheet',
-        'odt' => 'application/vnd.oasis.opendocument.text',
-        'otp' => 'application/vnd.oasis.opendocument.presentation-template',
-        'ots' => 'application/vnd.oasis.opendocument.spreadsheet-template',
-        'ott' => 'application/vnd.oasis.opendocument.text-template',
-        'pdf' => 'application/pdf',
-        'potx' => 'application/vnd.openxmlformats-officedocument.presentationml.template',
-        'ppsx' => 'application/vnd.openxmlformats-officedocument.presentationml.slideshow',
-        'ppt' => 'application/vnd.ms-powerpoint',
-        'pptm' => 'application/vnd.ms-powerpoint.presentation.macroEnabled.12',
-        'pptx' => 'application/vnd.openxmlformats-officedocument.presentationml.presentation',
-        'rtf' => 'text/rtf',
-        'txt' => 'text/plain',
-        'xls' => 'application/vnd.ms-excel',
-        'xlsx' => 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
-        'xltx' => 'application/vnd.openxmlformats-officedocument.spreadsheetml.template'
-    ];
 
     public $languageCodes = [
         "az" => "az-Latn-AZ",

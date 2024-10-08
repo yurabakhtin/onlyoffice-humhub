@@ -66,7 +66,7 @@ class CreateDocument extends Model
             $source = $this->templatePath() . '/new.' . $this->extension;
             $newFile = $this->fileName . '.' . $this->extension;
 
-            $mime = $module->mimes[$this->extension];
+            $mime = $module->formats()->mimes[$this->extension];
 
             $file = new File();
             $file->file_name = $newFile;
