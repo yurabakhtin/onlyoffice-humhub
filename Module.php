@@ -31,7 +31,7 @@ use yii\httpclient\Response;
  */
 class Module extends \humhub\components\Module
 {
-    private $formatFields;
+    private $formats;
 
     public $resourcesPath = 'resources';
 
@@ -47,7 +47,7 @@ class Module extends \humhub\components\Module
     const DOCUMENT_TYPE_TEXT = 'word';
     const DOCUMENT_TYPE_PRESENTATION = 'slide';
     const DOCUMENT_TYPE_SPREADSHEET = 'cell';
-    
+
     public $demoparam = [
         'trial' => 30,
         'header' => 'AuthorizationJWT',
@@ -60,47 +60,47 @@ class Module extends \humhub\components\Module
             return $this->formatFields;
         }
 
-        $formatsContent = file_get_contents($this->getAssetPath() . '/formats/onlyoffice-docs-formats.json');
-        $formats = json_decode($formatsContent);
+        $formatsJsonContent = file_get_contents($this->getAssetPath() . '/formats/onlyoffice-docs-formats.json');
+        $formatsJson = json_decode($formatsJsonContent);
 
-        $this->formatFields = new stdClass();
-        $this->formatFields->spreadsheetExtensions = [];
-        $this->formatFields->presentationExtensions = [];
-        $this->formatFields->textExtensions = [];
-        $this->formatFields->editableExtensions = [];
-        $this->formatFields->convertableExtensions = [];
-        $this->formatFields->forceEditableExtensions = [];
-        $this->formatFields->convertsTo = [];
-        $this->formatFields->mimes = [];
+        $this->formats = new stdClass();
+        $this->formats->spreadsheetExtensions = [];
+        $this->formats->presentationExtensions = [];
+        $this->formats->textExtensions = [];
+        $this->formats->editableExtensions = [];
+        $this->formats->convertableExtensions = [];
+        $this->formats->forceEditableExtensions = [];
+        $this->formats->convertsTo = [];
+        $this->formats->mimes = [];
 
-        foreach ($formats as $format) {
-            if ($format->type === self::DOCUMENT_TYPE_SPREADSHEET) {
-                array_push($this->formatFields->spreadsheetExtensions, $format->name);
+        foreach ($formatsJson as $formatJson) {
+            if ($formatJson->type === self::DOCUMENT_TYPE_SPREADSHEET) {
+                array_push($this->formats->spreadsheetExtensions, $formatJson->name);
             }
-            if ($format->type === self::DOCUMENT_TYPE_PRESENTATION) {
-                array_push($this->formatFields->presentationExtensions, $format->name);
+            if ($formatJson->type === self::DOCUMENT_TYPE_PRESENTATION) {
+                array_push($this->formats->presentationExtensions, $formatJson->name);
             }
-            if ($format->type === self::DOCUMENT_TYPE_TEXT || $format->type === 'pdf') {
-                array_push($this->formatFields->textExtensions, $format->name);
-            }
-
-            if (in_array('edit', $format->actions)) {
-                array_push($this->formatFields->editableExtensions, $format->name);
+            if ($formatJson->type === self::DOCUMENT_TYPE_TEXT || $formatJson->type === 'pdf') {
+                array_push($this->formats->textExtensions, $formatJson->name);
             }
 
-            if (in_array('auto-convert', $format->actions)) {
-                array_push($this->formatFields->convertableExtensions, $format->name);
-                $this->formatFields->convertsTo[$format->name] = $format->convert[0];
+            if (in_array('edit', $formatJson->actions)) {
+                array_push($this->formats->editableExtensions, $formatJson->name);
             }
 
-            if (in_array('lossy-edit', $format->actions)) {
-                array_push($this->formatFields->forceEditableExtensions, $format->name);
+            if (in_array('auto-convert', $formatJson->actions)) {
+                array_push($this->formats->convertableExtensions, $formatJson->name);
+                $this->formats->convertsTo[$formatJson->name] = $formatJson->convert[0];
             }
 
-            $this->formatFields->mimes[$format->name] = count($format->mime) > 0 ? $format->mime[0] : 'application/octet-stream';
+            if (in_array('lossy-edit', $formatJson->actions)) {
+                array_push($this->formats->forceEditableExtensions, $formatJson->name);
+            }
+
+            $this->formats->mimes[$formatJson->name] = count($formatJson->mime) > 0 ? $formatJson->mime[0] : 'application/octet-stream';
         }
 
-        return $this->formatFields;
+        return $this->formats;
     }
 
     public function isJwtEnabled() {
@@ -253,6 +253,7 @@ class Module extends \humhub\components\Module
         }
         return $this->demoparam['trial'] - round( (time() - $trial) / (60*60*24) );
     }
+
     public function getDocumentType($file)
     {
         $fileExtension = strtolower(FileHelper::getExtension($file));
@@ -475,6 +476,7 @@ class Module extends \humhub\components\Module
 
         return [$data, null];
     }
+
     /**
      * Send request by URL with CURL method
      *
@@ -538,6 +540,7 @@ class Module extends \humhub\components\Module
         "zh-CN" => "zh-CN",
         "zh-TW" => "zh-TW"
     ];
+
     private function convertResponceError($errorCode) {
         $errorMessage = "";
 
