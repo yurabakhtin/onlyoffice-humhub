@@ -24,19 +24,22 @@ class Mention extends BaseNotification
 
     public function html()
     {
-        return Yii::t('UserModule.notification', '{displayName} mentioned you in {contentTitle}.', 
-        [
-            'displayName' => Html::tag('strong', Html::encode($this->originator->displayName)),
-            'contentTitle' => $this->source->file->file_name,
-        ]) . ' ' . $this->source->message;
+        return Yii::t(
+            'UserModule.notification',
+            '{displayName} mentioned you in {contentTitle}.',
+            [
+                'displayName' => Html::tag('strong', Html::encode($this->originator->displayName)),
+                'contentTitle' => $this->source->file->file_name,
+            ],
+        ) . ' ' . $this->source->message;
     }
 
     public function getMailSubject()
     {
         return Yii::t('UserModule.notification', "{displayName} just mentioned you in {contentTitle} \"{preview}\"", [
-                    'displayName' => $this->originator->displayName,
-                    'contentTitle' => $this->source->file->file_name,
-                    'preview' => $this->source->message
+            'displayName' => $this->originator->displayName,
+            'contentTitle' => $this->source->file->file_name,
+            'preview' => $this->source->message,
         ]);
     }
 
@@ -54,11 +57,11 @@ class Mention extends BaseNotification
         $this->file = $this->source->file;
 
         $url = Url::to(['/onlyoffice/open',
-                'guid' => $this->file->guid,
-                'mode' => 'view',
-                'seen' => !$this->record->seen,
-                'notify' => $this->record->id,
-                'anchor' => $this->source->anchor]);
+            'guid' => $this->file->guid,
+            'mode' => 'view',
+            'seen' => !$this->record->seen,
+            'notify' => $this->record->id,
+            'anchor' => $this->source->anchor]);
 
         $result = [
             'url' => $url,

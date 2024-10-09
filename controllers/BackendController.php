@@ -18,9 +18,9 @@ use yii\web\HttpException;
 use humhub\modules\file\models\File;
 use humhub\modules\user\models\User;
 use humhub\components\Controller;
-use \humhub\components\Module;
+use humhub\components\Module;
 use humhub\modules\file\libs\FileHelper;
-use \Firebase\JWT\JWT;
+use Firebase\JWT\JWT;
 
 class BackendController extends Controller
 {
@@ -50,7 +50,7 @@ class BackendController extends Controller
 
         $hash = Yii::$app->request->get('doc');
 
-        list ($hashData, $error) = $this->module->readHash($hash);
+        list($hashData, $error) = $this->module->readHash($hash);
         if (!empty($error)) {
             throw new HttpException(404, 'Backend action with empty or invalid hash');
         }
@@ -91,7 +91,7 @@ class BackendController extends Controller
             }
 
             try {
-                $ds = JWT::decode($token, $this->module->getJwtSecret(), array('HS256'));
+                $ds = JWT::decode($token, $this->module->getJwtSecret(), ['HS256']);
             } catch (\Exception $ex) {
                 throw new HttpException(403, 'Invalid JWT signature');
             }
@@ -116,7 +116,7 @@ class BackendController extends Controller
             }
 
             try {
-                $ds = JWT::decode($token, $this->module->getJwtSecret(), array('HS256'));
+                $ds = JWT::decode($token, $this->module->getJwtSecret(), ['HS256']);
             } catch (\Exception $ex) {
                 throw new HttpException(403, 'Invalid JWT signature');
             }
@@ -129,22 +129,22 @@ class BackendController extends Controller
     {
         Yii::$app->response->format = 'json';
 
-        $_trackerStatus = array(
+        $_trackerStatus = [
             0 => 'NotFound',
             1 => 'Editing',
             2 => 'MustSave',
             3 => 'Corrupted',
             4 => 'Closed',
-            6 => 'ForceSave'
-        );
+            6 => 'ForceSave',
+        ];
 
 
-        if (($body_stream = file_get_contents('php://input')) === FALSE) {
+        if (($body_stream = file_get_contents('php://input')) === false) {
             throw new HttpException(400, 'Empty body');
         }
 
-        $data = json_decode($body_stream, TRUE); //json_decode - PHP 5 >= 5.2.0
-        if ($data === NULL) {
+        $data = json_decode($body_stream, true); //json_decode - PHP 5 >= 5.2.0
+        if ($data === null) {
             throw new HttpException(400, 'Could not parse json');
         }
 
@@ -164,7 +164,7 @@ class BackendController extends Controller
             }
 
             try {
-                $ds = JWT::decode($token, $this->module->getJwtSecret(), array('HS256'));
+                $ds = JWT::decode($token, $this->module->getJwtSecret(), ['HS256']);
                 $data = isset($ds->payload) ? (array)$ds->payload : (array)$ds;
             } catch (\Exception $ex) {
                 throw new HttpException(403, 'Invalid JWT signature');
@@ -191,13 +191,13 @@ class BackendController extends Controller
                     $originExt = strtolower(FileHelper::getExtension($this->file));
                     $currentExt = strtolower($data['filetype']);
 
-                    if($originExt !== $currentExt) {
+                    if ($originExt !== $currentExt) {
                         $convResult = $this->module->convertService(
-                            $data["url"], 
-                            $currentExt, 
-                            $originExt, 
-                            $this->module->generateDocumentKey($this->file) . time(), 
-                            false
+                            $data["url"],
+                            $currentExt,
+                            $originExt,
+                            $this->module->generateDocumentKey($this->file) . time(),
+                            false,
                         );
                         $url = $convResult['fileUrl'];
                     }
@@ -223,7 +223,9 @@ class BackendController extends Controller
                             $newAttr['onlyoffice_key'] = new \yii\db\Expression('NULL');
                         }
 
-                        if (!empty($user)) $newAttr['updated_by'] = $user->getId();
+                        if (!empty($user)) {
+                            $newAttr['updated_by'] = $user->getId();
+                        }
                         $this->file->updateAttributes($newAttr);
 
                     } else {

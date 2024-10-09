@@ -20,7 +20,7 @@ use yii\httpclient\Client;
 use yii\httpclient\Response;
 use humhub\modules\file\libs\FileHelper;
 use humhub\libs\CURLHelper;
-use \Firebase\JWT\JWT;
+use Firebase\JWT\JWT;
 
 /**
  * File Module
@@ -29,34 +29,33 @@ use \Firebase\JWT\JWT;
  */
 class Module extends \humhub\components\Module
 {
-
     public $resourcesPath = 'resources';
 
     /**
      * Open modes
      */
-    const OPEN_MODE_VIEW = 'view';
-    const OPEN_MODE_EDIT = 'edit';
+    public const OPEN_MODE_VIEW = 'view';
+    public const OPEN_MODE_EDIT = 'edit';
 
     /**
      * Only document types
      */
-    const DOCUMENT_TYPE_TEXT = 'word';
-    const DOCUMENT_TYPE_PRESENTATION = 'slide';
-    const DOCUMENT_TYPE_SPREADSHEET = 'cell';
+    public const DOCUMENT_TYPE_TEXT = 'word';
+    public const DOCUMENT_TYPE_PRESENTATION = 'slide';
+    public const DOCUMENT_TYPE_SPREADSHEET = 'cell';
 
     /**
-     * @var string[] allowed spreadsheet extensions 
+     * @var string[] allowed spreadsheet extensions
      */
     public $spreadsheetExtensions = ['xls', 'xlsx', 'ods', 'csv'];
 
     /**
-     * @var string[] allowed presentation extensions 
+     * @var string[] allowed presentation extensions
      */
     public $presentationExtensions = ['ppsx', 'pps', 'ppt', 'pptx', 'odp'];
 
     /**
-     * @var string[] allowed text extensions 
+     * @var string[] allowed text extensions
      */
     public $textExtensions = ['docx', 'docxf', 'oform', 'doc', 'odt', 'rtf', 'txt', 'html', 'htm', 'mht', 'pdf', 'djvu', 'fb2', 'epub', 'xps'];
 
@@ -77,22 +76,25 @@ class Module extends \humhub\components\Module
         'ppt' => 'pptx',
         'odp' => 'pptx',
     ];
-    
+
     public $demoparam = [
         'trial' => 30,
         'header' => 'AuthorizationJWT',
         'secret' => 'sn2puSUF7muF5Jas',
-        'serverUrl' => 'https://onlinedocs.onlyoffice.com'
+        'serverUrl' => 'https://onlinedocs.onlyoffice.com',
     ];
 
-    public function isJwtEnabled() {
-        if($this->isDemoServerEnabled())
+    public function isJwtEnabled()
+    {
+        if ($this->isDemoServerEnabled()) {
             return true;
+        }
         return !empty($this->getJwtSecret());
     }
 
-    public function getJwtSecret() {
-        if($this->isDemoServerEnabled()) { 
+    public function getJwtSecret()
+    {
+        if ($this->isDemoServerEnabled()) {
             return $this->demoparam['secret'];
         }
         return $this->settings->get('jwtSecret');
@@ -100,7 +102,7 @@ class Module extends \humhub\components\Module
 
     public function getServerUrl()
     {
-        if($this->isDemoServerEnabled()) {
+        if ($this->isDemoServerEnabled()) {
             return $this->demoparam['serverUrl'];
         }
 
@@ -133,11 +135,13 @@ class Module extends \humhub\components\Module
         return $this->settings->get('demoServer');
     }
 
-    public function isDemoServerEnabled() {
-        if(boolval($this->getDemoServer())) {
+    public function isDemoServerEnabled()
+    {
+        if (boolval($this->getDemoServer())) {
             $trial = $this->getTrial();
-            if($trial !== false)
+            if ($trial !== false) {
                 return true;
+            }
         }
         return false;
     }
@@ -174,7 +178,7 @@ class Module extends \humhub\components\Module
 
     public function getforceEditTypes()
     {
-        return explode("," , $this->settings->get('forceEditTypes'));
+        return explode(",", $this->settings->get('forceEditTypes'));
     }
 
     public function getServerApiUrl(): string
@@ -196,13 +200,13 @@ class Module extends \humhub\components\Module
     {
         $settings =  Yii::$app->getModule('onlyoffice')->settings;
         $trial = $settings->get('trial');
-        
-        if(empty($trial)) {
+
+        if (empty($trial)) {
             $settings->set('trial', time());
-        } elseif($this->demoparam['trial'] - round( (time() - $trial) / (60*60*24) ) < 0) {
+        } elseif ($this->demoparam['trial'] - round((time() - $trial) / (60 * 60 * 24)) < 0) {
             return false;
         }
-        return $this->demoparam['trial'] - round( (time() - $trial) / (60*60*24) );
+        return $this->demoparam['trial'] - round((time() - $trial) / (60 * 60 * 24));
     }
     public function getDocumentType($file)
     {
@@ -242,7 +246,7 @@ class Module extends \humhub\components\Module
     public function getConfigUrl()
     {
         return Url::to([
-                    '/onlyoffice/admin'
+            '/onlyoffice/admin',
         ]);
     }
 
@@ -274,10 +278,10 @@ class Module extends \humhub\components\Module
                 $headers[$this->getHeader()] = 'Bearer ' . JWT::encode(['payload' => $data], $this->getJwtSecret());
             }
 
-            $options = array(
+            $options = [
                 'headers' => $headers,
-                'body' => $data
-            );
+                'body' => $data,
+            ];
 
             $response = $this->request($url, 'POST', $options)->getData();
             if (isset($response['error'])) {
@@ -310,8 +314,9 @@ class Module extends \humhub\components\Module
             $downloadUrl = $this->getStorageUrl() . Url::to(['/onlyoffice/backend/download', 'doc' => $docHash], false);
         }
 
-        if(is_null($toExt))
+        if (is_null($toExt)) {
             $toExt = $this->convertsTo[$fromExt];
+        }
 
         return $this->convertService($downloadUrl, $fromExt, $toExt, $key . $ts, $async);
     }
@@ -335,7 +340,7 @@ class Module extends \humhub\components\Module
             'outputtype' => $toExt,
             'key' => $key,
             'url' => $documentUrl,
-            'region' => $region
+            'region' => $region,
         ];
 
         try {
@@ -348,7 +353,7 @@ class Module extends \humhub\components\Module
 
             $options = [
                 'headers' => $headers,
-                'body' => $data
+                'body' => $data,
             ];
 
             $response = $this->request($url, 'POST', $options)->getData();
@@ -405,7 +410,7 @@ class Module extends \humhub\components\Module
     public function readHash($hash)
     {
         try {
-            $data = JWT::decode($hash, Yii::$app->settings->get('secret'), array('HS256'));
+            $data = JWT::decode($hash, Yii::$app->settings->get('secret'), ['HS256']);
         } catch (\Exception $ex) {
             $error = 'Invalid hash ' . $ex->getMessage();
             Yii::error($error);
@@ -479,7 +484,7 @@ class Module extends \humhub\components\Module
         'txt' => 'text/plain',
         'xls' => 'application/vnd.ms-excel',
         'xlsx' => 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
-        'xltx' => 'application/vnd.openxmlformats-officedocument.spreadsheetml.template'
+        'xltx' => 'application/vnd.openxmlformats-officedocument.spreadsheetml.template',
     ];
 
     public $languageCodes = [
@@ -507,9 +512,10 @@ class Module extends \humhub\components\Module
         "uk" => "uk-UA",
         "vi" => "vi-VN",
         "zh-CN" => "zh-CN",
-        "zh-TW" => "zh-CN"
+        "zh-TW" => "zh-CN",
     ];
-    private function convertResponceError($errorCode) {
+    private function convertResponceError($errorCode)
+    {
         $errorMessage = "";
 
         switch ($errorCode) {
@@ -550,7 +556,8 @@ class Module extends \humhub\components\Module
         throw new \Exception($errorMessage);
     }
 
-    private function commandResponceError($errorCode) {
+    private function commandResponceError($errorCode)
+    {
         $errorMessage = "";
 
         switch ($errorCode) {

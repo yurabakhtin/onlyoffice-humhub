@@ -4,7 +4,6 @@ use yii\db\Migration;
 
 class m200401_164457_shareLinks extends Migration
 {
-
     public function up()
     {
         try {

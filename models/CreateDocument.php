@@ -26,7 +26,6 @@ use humhub\modules\cfiles\permissions\WriteAccess;
  */
 class CreateDocument extends Model
 {
-
     public $extension;
     public $fileName;
     public $fid;
@@ -56,7 +55,7 @@ class CreateDocument extends Model
         "uk" => "uk-UA",
         "vi" => "vi-VN",
         "zh-CN" => "zh-CN",
-        "zh-TW" => "zh-CN"
+        "zh-TW" => "zh-CN",
     ];
 
     public function rules()
@@ -71,7 +70,7 @@ class CreateDocument extends Model
     public function attributeLabels()
     {
         return [
-            'openFlag' => Yii::t('OnlyofficeModule.base', 'Open the new document in the next step')
+            'openFlag' => Yii::t('OnlyofficeModule.base', 'Open the new document in the next step'),
         ];
     }
 
@@ -108,7 +107,8 @@ class CreateDocument extends Model
         return false;
     }
 
-    private function templatePath() {
+    private function templatePath()
+    {
         $module = Yii::$app->getModule('onlyoffice');
         $user = Yii::$app->user->getIdentity();
 

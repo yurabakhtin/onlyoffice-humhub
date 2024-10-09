@@ -32,19 +32,19 @@ class OpenController extends BaseFileController
 
     /**
      * Opens the document in modal
-     * 
+     *
      * @return string
      * @throws HttpException
      */
     public function actionIndex()
     {
         // $url = Yii::$app->request->url;
-        if(isset($_GET['anchor'])) {
+        if (isset($_GET['anchor'])) {
             $this->actionDataUrl = $_GET['anchor'];
             $this->anchor = json_decode(urldecode($this->actionDataUrl), true);
         }
 
-        if(!empty($_GET['seen'])) {
+        if (!empty($_GET['seen'])) {
             Notification::findOne($_GET['notify'])->getBaseModel()->markAsSeen();
         }
 
@@ -53,15 +53,15 @@ class OpenController extends BaseFileController
         }
 
         return $this->renderAjax('index', [
-                    'file' => $this->file,
-                    'mode' => $this->mode,
-                    'anchor' => $this->anchor
+            'file' => $this->file,
+            'mode' => $this->mode,
+            'anchor' => $this->anchor,
         ]);
     }
 
     /**
      * Returns file informations
-     * 
+     *
      * @return type
      * @throws HttpException
      */
