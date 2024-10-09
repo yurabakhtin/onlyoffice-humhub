@@ -21,7 +21,6 @@ use humhub\modules\onlyoffice\components\BaseFileController;
 
 class ShareController extends BaseFileController
 {
-
     public function init()
     {
         parent::init();
@@ -33,7 +32,7 @@ class ShareController extends BaseFileController
 
     /**
      * Share Modal
-     * 
+     *
      * @return type
      * @throws HttpException
      */
@@ -47,7 +46,7 @@ class ShareController extends BaseFileController
         Yii::$app->response->format = 'json';
         Share::deleteAll(['file_id' => $this->file->id, 'mode' => Yii::$app->request->post('shareMode')]);
         return [
-            'success' => true
+            'success' => true,
         ];
     }
 
@@ -56,7 +55,7 @@ class ShareController extends BaseFileController
         Yii::$app->response->format = 'json';
         $url = Share::getShareLink($this->file, true, Yii::$app->request->post('shareMode'));
         return [
-            'url' => $url
+            'url' => $url,
         ];
     }
 

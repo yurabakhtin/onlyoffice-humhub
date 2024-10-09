@@ -25,7 +25,6 @@ use humhub\modules\file\handler\BaseFileHandler;
  */
 class ViewFileHandler extends BaseFileHandler
 {
-
     /**
      * @inheritdoc
      */
@@ -36,7 +35,7 @@ class ViewFileHandler extends BaseFileHandler
             'data-action-url' => Url::to(['/onlyoffice/open', 'guid' => $this->file->guid, 'mode' => Module::OPEN_MODE_VIEW]),
             'data-action-click' => 'ui.modal.load',
             'data-modal-id' => 'onlyoffice-modal',
-            'data-modal-close' => ''
+            'data-modal-close' => '',
         ];
     }
 

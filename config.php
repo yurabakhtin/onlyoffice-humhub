@@ -13,6 +13,5 @@ return [
     'namespace' => 'humhub\modules\onlyoffice',
     'events' => [
         [FileHandlerCollection::className(), FileHandlerCollection::EVENT_INIT, ['humhub\modules\onlyoffice\Events', 'onFileHandlerCollection']],
-    ]
+    ],
 ];
-?>

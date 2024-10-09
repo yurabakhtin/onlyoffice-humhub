@@ -13,7 +13,6 @@ use humhub\modules\file\handler\BaseFileHandler;
 
 class ConvertFileHandler extends BaseFileHandler
 {
-
     /**
      * @inheritdoc
      */
@@ -24,7 +23,7 @@ class ConvertFileHandler extends BaseFileHandler
             'data-action-url' => Url::to(['/onlyoffice/convert', 'guid' => $this->file->guid]),
             'data-action-click' => 'ui.modal.load',
             'data-modal-id' => 'onlyoffice-modal',
-            'data-modal-close' => ''
+            'data-modal-close' => '',
         ];
     }
 

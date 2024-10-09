@@ -14,7 +14,7 @@ class m220427_072441_mentions extends Migration
                 'id' => $this->primaryKey(),
                 'file_id' => $this->integer()->notNull(),
                 'message' => $this->string(255),
-                'anchor' => $this->string(255)->notNull()
+                'anchor' => $this->string(255)->notNull(),
             ]);
 
             $this->addForeignKey('fk_file', 'onlyoffice_mention', 'file_id', 'file', 'id', 'CASCADE');

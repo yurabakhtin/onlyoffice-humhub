@@ -29,14 +29,13 @@ use humhub\modules\content\components\ContentActiveRecord;
  */
 class BaseFileController extends Controller
 {
-
     /**
      * @var File
      */
     public $file;
 
     /**
-     * @var string the open mode (view, edit) 
+     * @var string the open mode (view, edit)
      */
     public $mode;
 
@@ -87,7 +86,7 @@ class BaseFileController extends Controller
 
     /**
      * Returns the URL for the file content - to redirect to
-     * 
+     *
      * @return string
      */
     protected function determineContentFileUrl()
@@ -103,7 +102,7 @@ class BaseFileController extends Controller
             /** @var ContentActiveRecord $underlyingObject */
             return $underlyingObject->content->getUrl();
         }
-        
+
         return Url::home();
     }
 

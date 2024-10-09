@@ -26,7 +26,6 @@ use humhub\widgets\JsWidget;
  */
 class ShareWidget extends JsWidget
 {
-
     /**
      * @var File the file
      */
@@ -68,11 +67,11 @@ class ShareWidget extends JsWidget
         $editLink = Share::getShareLink($this->file, false, Module::OPEN_MODE_EDIT);
 
         return $this->render('share', [
-                    'options' => $this->getOptions(),
-                    'mode' => $this->mode,
-                    'file' => $this->file,
-                    'viewLink' => $viewLink,
-                    'editLink' => $editLink,
+            'options' => $this->getOptions(),
+            'mode' => $this->mode,
+            'file' => $this->file,
+            'viewLink' => $viewLink,
+            'editLink' => $editLink,
         ]);
     }
 

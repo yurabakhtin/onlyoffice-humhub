@@ -24,7 +24,6 @@ use humhub\modules\file\handler\BaseFileHandler;
  */
 class CreateFileHandler extends BaseFileHandler
 {
-
     /**
      * @inheritdoc
      */
@@ -35,7 +34,7 @@ class CreateFileHandler extends BaseFileHandler
             'data-action-url' => Url::to(['/onlyoffice/create']),
             'data-action-click' => 'ui.modal.load',
             'data-modal-id' => 'onlyoffice-modal',
-            'data-modal-close' => ''
+            'data-modal-close' => '',
         ];
     }
 

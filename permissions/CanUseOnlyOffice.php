@@ -21,7 +21,6 @@ use humhub\libs\BasePermission;
  */
 class CanUseOnlyOffice extends BasePermission
 {
-
     /**
      * @inheritdoc
      */

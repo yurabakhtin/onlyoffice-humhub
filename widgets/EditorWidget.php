@@ -25,7 +25,7 @@ use humhub\widgets\JsWidget;
 use humhub\modules\content\permissions\ManageContent;
 use humhub\modules\content\models\ContentContainer;
 use humhub\modules\user\models\User;
-use \Firebase\JWT\JWT;
+use Firebase\JWT\JWT;
 
 /**
  * Description of EditorWidget
@@ -34,7 +34,6 @@ use \Firebase\JWT\JWT;
  */
 class EditorWidget extends JsWidget
 {
-
     /**
      * @var File the file
      */
@@ -65,7 +64,7 @@ class EditorWidget extends JsWidget
     /**
      * Mobile regex from https://github.com/ONLYOFFICE/CommunityServer/blob/v9.1.1/web/studio/ASC.Web.Studio/web.appsettings.config#L35
      */
-    const USER_AGENT_MOBILE = "/android|avantgo|playbook|blackberry|blazer|compal|elaine|fennec|hiptop|iemobile|ip(hone|od|ad)|iris|kindle|lge |maemo|midp|mmp|opera m(ob|in)i|palm( os)?|phone|p(ixi|re)\\/|plucker|pocket|psp|symbian|treo|up\\.(browser|link)|vodafone|wap|windows (ce|phone)|xda|xiino/i";
+    public const USER_AGENT_MOBILE = "/android|avantgo|playbook|blackberry|blazer|compal|elaine|fennec|hiptop|iemobile|ip(hone|od|ad)|iris|kindle|lge |maemo|midp|mmp|opera m(ob|in)i|palm( os)?|phone|p(ixi|re)\\/|plucker|pocket|psp|symbian|treo|up\\.(browser|link)|vodafone|wap|windows (ce|phone)|xda|xiino/i";
 
     /**
      * @inheritdoc
@@ -91,10 +90,10 @@ class EditorWidget extends JsWidget
         $api = [
             'sendNotifyUrl' => Url::to(['/onlyoffice/api/send-notify'], true),
             'makeAnchorUrl' => Url::to(['/onlyoffice/api/make-anchor'], true),
-            'saveasUrl' => Url::to(['/onlyoffice/api/saveas'], true)
+            'saveasUrl' => Url::to(['/onlyoffice/api/saveas'], true),
         ];
 
-        if(!Yii::$app->user->isGuest) {
+        if (!Yii::$app->user->isGuest) {
             $api['usersForMentionsUrl'] = Url::to(['/onlyoffice/api/users-for-mentions'], true);
         }
 
@@ -118,7 +117,7 @@ class EditorWidget extends JsWidget
             'file-info-url' => Url::to(['/onlyoffice/open/get-info', 'guid' => $this->file->guid]),
             'module-configured' => (empty($module->getServerUrl()) ? '0' : '1'),
             'api' => $api,
-            'info-msg' => $infoMsg
+            'info-msg' => $infoMsg,
         ];
     }
 
@@ -128,7 +127,7 @@ class EditorWidget extends JsWidget
     public function getAttributes()
     {
         return [
-            'style' => 'height:100%;border-radius: 8px 8px 0px 0px;background-color:#F4F4F4'
+            'style' => 'height:100%;border-radius: 8px 8px 0px 0px;background-color:#F4F4F4',
         ];
     }
 
@@ -138,10 +137,10 @@ class EditorWidget extends JsWidget
     public function run()
     {
         return $this->render('editor', [
-                    'documentType' => $this->documentType,
-                    'file' => $this->file,
-                    'mode' => $this->mode,
-                    'options' => $this->getOptions(),
+            'documentType' => $this->documentType,
+            'file' => $this->file,
+            'mode' => $this->mode,
+            'options' => $this->getOptions(),
         ]);
     }
 
@@ -177,7 +176,7 @@ class EditorWidget extends JsWidget
                 ],
                 'permissions' => [
                     'edit' => $this->mode == 'edit',
-                ]
+                ],
             ],
             'editorConfig' => [
                 'actionLink' => $this->anchor,
@@ -195,8 +194,8 @@ class EditorWidget extends JsWidget
                     'feedback' => $module->getFeedback(),
                     'help' => $module->getHelp(),
                     'compactToolbar' => $module->getCompactToolbar(),
-                ]
-            ]
+                ],
+            ],
         ];
 
         $userAgent = Yii::$app->request->getUserAgent();

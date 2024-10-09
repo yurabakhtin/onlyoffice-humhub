@@ -14,8 +14,8 @@ use humhub\modules\file\models\File;
 /**
  * This is the model class for table "onlyoffice_share".
  *
- * @property integer $id
- * @property integer $file_id
+ * @property int $id
+ * @property int $file_id
  * @property string $secret
  * @property $mode $mode
  *
@@ -23,7 +23,6 @@ use humhub\modules\file\models\File;
  */
 class Share extends \yii\db\ActiveRecord
 {
-
     /**
      * @inheritdoc
      */
@@ -55,7 +54,7 @@ class Share extends \yii\db\ActiveRecord
 
     public static function generateShareLink($file, $mode)
     {
-        $share = new self;
+        $share = new self();
         $share->file_id = $file->id;
         $share->mode = $mode;
         $share->secret = bin2hex(Yii::$app->security->generateRandomKey(25));

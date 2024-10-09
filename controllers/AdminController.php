@@ -34,19 +34,19 @@ class AdminController extends Controller
         $model->loadSettings();
 
         $trial = $serverApiUrl = null;
-        if($this->module->isDemoServerEnabled()) {
+        if ($this->module->isDemoServerEnabled()) {
             $trial = $this->module->getTrial();
-        } 
-        if(!empty($model->serverUrl) || $this->module->isDemoServerEnabled()) {
+        }
+        if (!empty($model->serverUrl) || $this->module->isDemoServerEnabled()) {
             $serverApiUrl = $this->module->getServerApiUrl();
         }
 
         return $this->render('index', [
-                                        'model' => $model,
-                                        'serverApiUrl' => $serverApiUrl,
-                                        'trial' => $trial,
-                                        'forceEditExt' => $this->module->forceEditableExtensions
-                                      ]);
+            'model' => $model,
+            'serverApiUrl' => $serverApiUrl,
+            'trial' => $trial,
+            'forceEditExt' => $this->module->forceEditableExtensions,
+        ]);
     }
 
     public function actionSave()
@@ -162,7 +162,7 @@ class AdminController extends Controller
         }
 
         try {
-        $this->module->request($result['fileUrl']);
+            $this->module->request($result['fileUrl']);
         } catch (\Exception $ex) {
             Yii::error('CheckConvertFile: ' . $ex->getMessage());
             return ['error' => $ex->getMessage()];

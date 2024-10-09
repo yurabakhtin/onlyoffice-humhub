@@ -15,7 +15,6 @@ use humhub\widgets\JsWidget;
 
 class ConvertWidget extends JsWidget
 {
-
     /**
      * @var File the file
      */
@@ -64,9 +63,9 @@ class ConvertWidget extends JsWidget
     public function run()
     {
         return $this->render('convert', [
-                    'options' => $this->getOptions(),
-                    'file' => $this->file,
-                    'newName' => $this->newName,
+            'options' => $this->getOptions(),
+            'file' => $this->file,
+            'newName' => $this->newName,
         ]);
     }
 

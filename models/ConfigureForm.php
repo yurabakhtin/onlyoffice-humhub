@@ -14,7 +14,6 @@ use Yii;
  */
 class ConfigureForm extends \yii\base\Model
 {
-
     public $serverUrl;
     public $verifyPeerOff;
     public $jwtSecret;
@@ -82,7 +81,7 @@ class ConfigureForm extends \yii\base\Model
             'editLabel' => Yii::t('OnlyofficeModule.base', 'Open the file for editing (due to format restrictions, the data might be lost when saving to the formats from the list below)'),
         ];
     }
-    
+
     /**
      * @inheritdoc
      */
@@ -101,18 +100,18 @@ class ConfigureForm extends \yii\base\Model
     public function loadSettings()
     {
         $this->serverUrl = Yii::$app->getModule('onlyoffice')->settings->get('serverUrl');
-        $this->verifyPeerOff = (boolean)Yii::$app->getModule('onlyoffice')->settings->get('verifyPeerOff');
+        $this->verifyPeerOff = (bool)Yii::$app->getModule('onlyoffice')->settings->get('verifyPeerOff');
         $this->jwtSecret = Yii::$app->getModule('onlyoffice')->settings->get('jwtSecret');
         $this->jwtHeader = Yii::$app->getModule('onlyoffice')->settings->get('jwtHeader');
         $this->internalServerUrl = Yii::$app->getModule('onlyoffice')->settings->get('internalServerUrl');
         $this->storageUrl = Yii::$app->getModule('onlyoffice')->settings->get('storageUrl');
-        $this->demoServer = (boolean)Yii::$app->getModule('onlyoffice')->settings->get('demoServer');
-        $this->chat = (boolean)Yii::$app->getModule('onlyoffice')->settings->get('chat');
-        $this->compactHeader = (boolean)Yii::$app->getModule('onlyoffice')->settings->get('compactHeader');
-        $this->feedback = (boolean)Yii::$app->getModule('onlyoffice')->settings->get('feedback');
-        $this->help = (boolean)Yii::$app->getModule('onlyoffice')->settings->get('help');
-        $this->compactToolbar = (boolean)Yii::$app->getModule('onlyoffice')->settings->get('compactToolbar');
-        $this->forceSave = (boolean)Yii::$app->getModule('onlyoffice')->settings->get('forceSave');
+        $this->demoServer = (bool)Yii::$app->getModule('onlyoffice')->settings->get('demoServer');
+        $this->chat = (bool)Yii::$app->getModule('onlyoffice')->settings->get('chat');
+        $this->compactHeader = (bool)Yii::$app->getModule('onlyoffice')->settings->get('compactHeader');
+        $this->feedback = (bool)Yii::$app->getModule('onlyoffice')->settings->get('feedback');
+        $this->help = (bool)Yii::$app->getModule('onlyoffice')->settings->get('help');
+        $this->compactToolbar = (bool)Yii::$app->getModule('onlyoffice')->settings->get('compactToolbar');
+        $this->forceSave = (bool)Yii::$app->getModule('onlyoffice')->settings->get('forceSave');
         $this->forceEditTypes = $this->deserializeForceEditTypes();
 
         $this->settingError = Yii::$app->getModule('onlyoffice')->settings->get('settingError');
@@ -147,7 +146,8 @@ class ConfigureForm extends \yii\base\Model
         Yii::$app->getModule('onlyoffice')->settings->set('instaledVersion', $this->instaledVersion);
     }
 
-    public function deserializeForceEditTypes() {
+    public function deserializeForceEditTypes()
+    {
         $result = [];
         foreach (explode(",", Yii::$app->getModule('onlyoffice')->settings->get("forceEditTypes") ?? "") as $ext) {
             $result[$ext] = 1;
@@ -155,10 +155,13 @@ class ConfigureForm extends \yii\base\Model
         return $result;
     }
 
-    public function serializeForceEditTypes() {
-        return implode(",", array_keys(array_filter($this->forceEditTypes, function ($ext) {
+    public function serializeForceEditTypes()
+    {
+        return implode(",", array_keys(array_filter(
+            $this->forceEditTypes,
+            function ($ext) {
                 return $ext == true;
-            }
+            },
         )));
     }
 }

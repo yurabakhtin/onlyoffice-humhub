@@ -18,13 +18,12 @@ use yii\web\AssetBundle;
 
 class Assets extends AssetBundle
 {
-
     public $publishOptions = [
-        'forceCopy' => true
+        'forceCopy' => true,
     ];
     public $css = [];
     public $jsOptions = [
-        'position' => \yii\web\View::POS_BEGIN
+        'position' => \yii\web\View::POS_BEGIN,
     ];
 
     public function init()
@@ -32,7 +31,7 @@ class Assets extends AssetBundle
 
         $this->js = [
             Yii::$app->getModule('onlyoffice')->getServerApiUrl(),
-            'humhub.onlyoffice.js'
+            'humhub.onlyoffice.js',
         ];
 
 
