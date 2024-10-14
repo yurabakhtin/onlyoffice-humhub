@@ -1,5 +1,8 @@
 # Change Log
 
+## Changed
+- demo server address changed
+
 ## 3.1.0
 ## Changed
 - HumHub 1.15 compatibility
