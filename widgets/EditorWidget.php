@@ -44,6 +44,11 @@ class EditorWidget extends JsWidget
     public $mode;
 
     /**
+     * @var string restrict mode
+     */
+    public $restrict;
+
+    /**
      * @inheritdoc
      */
     public $jsWidget = 'onlyoffice.Editor';
@@ -175,7 +180,8 @@ class EditorWidget extends JsWidget
                     'created' => Html::encode(Yii::$app->formatter->asDatetime($this->file->created_at, 'short')),
                 ],
                 'permissions' => [
-                    'edit' => $this->mode == 'edit',
+                    'edit' => $this->mode == Module::OPEN_MODE_EDIT && empty($this->restrict),
+                    'fillForms' => $this->restrict == Module::OPEN_RESTRICT_FILL
                 ]
             ],
             'editorConfig' => [

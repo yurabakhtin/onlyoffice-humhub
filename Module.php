@@ -17,6 +17,7 @@ use Firebase\JWT\JWT;
 use Firebase\JWT\Key;
 use humhub\libs\CURLHelper;
 use humhub\modules\file\libs\FileHelper;
+use humhub\modules\file\models\File;
 use stdClass;
 use Yii;
 use yii\helpers\Url;
@@ -40,6 +41,11 @@ class Module extends \humhub\components\Module
      */
     const OPEN_MODE_VIEW = 'view';
     const OPEN_MODE_EDIT = 'edit';
+
+    /**
+     * Restricted open modes
+    */
+    const OPEN_RESTRICT_FILL = 'fill';
 
     /**
      * Only document types
@@ -482,6 +488,21 @@ class Module extends \humhub\components\Module
         }
 
         return [$data, null];
+    }
+
+    /**
+     * Checking pdf onlyoffice form
+     *
+     * @param File $file object
+     * @return bool
+     */
+    public function isOnlyofficeForm($file) {
+        if ($file === null) return false;
+
+        $path = $file->getStoredFilePath() . 'file';
+        $content = file_get_contents($path, false, null, 0, 100);
+
+        return str_contains($content, '/ONLYOFFICEFORM');
     }
 
     /**

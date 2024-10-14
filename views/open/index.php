@@ -13,6 +13,7 @@ use yii\web\View;
         \humhub\modules\onlyoffice\widgets\EditorWidget::widget([
             'file' => $file,
             'mode' => $mode,
+            'restrict' => $restrict,
             'anchor' => $anchor
         ]);
         ?>
