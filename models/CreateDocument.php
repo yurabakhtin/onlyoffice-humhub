@@ -87,7 +87,7 @@ class CreateDocument extends Model
 
         $lang = ($user) && !empty($user->language) ? $user->language : Yii::$app->language;
         if (!array_key_exists($lang, $module->languageCodes)) {
-            $lang = 'en-US';
+            $lang = 'default';
         }
 
         return $module->getAssetPath() . '/templates/' . $module->languageCodes[$lang];

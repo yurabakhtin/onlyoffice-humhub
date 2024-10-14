@@ -542,6 +542,7 @@ class Module extends \humhub\components\Module
     }
 
     public $languageCodes = [
+        "default" => "default",
         "az" => "az-Latn-AZ",
         "bg" => "bg-BG",
         "cs" => "cs-CZ",
