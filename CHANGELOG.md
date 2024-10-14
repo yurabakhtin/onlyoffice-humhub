@@ -1,5 +1,10 @@
 # Change Log
 
+## Changed
+- updated empty templates
+- creating and editing pdf form
+- updatable list of supported formats
+
 ## 3.1.0
 ## Changed
 - HumHub 1.15 compatibility
