@@ -84,7 +84,7 @@ class Module extends \humhub\components\Module
         'trial' => 30,
         'header' => 'AuthorizationJWT',
         'secret' => 'sn2puSUF7muF5Jas',
-        'serverUrl' => 'https://onlinedocs.onlyoffice.com'
+        'serverUrl' => 'https://onlinedocs.docs.onlyoffice.com'
     ];
 
     public function isJwtEnabled() {
