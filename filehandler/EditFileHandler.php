@@ -39,10 +39,6 @@ class EditFileHandler extends BaseFileHandler
             'data-modal-close' => ''
         ];
 
-        if (pathinfo($this->file->file_name, PATHINFO_EXTENSION) === 'oform') {
-            $attributes['label'] = Yii::t('OnlyofficeModule.base', 'Fill in form in ONLYOFFICE');
-        }
-
         return $attributes;
     }
 
