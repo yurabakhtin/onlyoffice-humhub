@@ -498,11 +498,49 @@ class Module extends \humhub\components\Module
      */
     public function isOnlyofficeForm($file) {
         if ($file === null) return false;
+        if ($this->getDocumentType($file) !== self::DOCUMENT_TYPE_PDF) return false;
+
+        $limitDetect = 300;
+        $onlyofficeFormMetaTag = 'ONLYOFFICEFORM';
 
         $path = $file->getStoredFilePath() . 'file';
-        $content = file_get_contents($path, false, null, 0, 100);
+        $content = file_get_contents($path, false, null, 0, $limitDetect);
 
-        return str_contains($content, '/ONLYOFFICEFORM');
+        $indexFirst = strpos($content, "%\xCD\xCA\xD2\xA9\x0D");
+        if ($indexFirst === false) {
+            return false;
+        }
+
+        $pFirst = substr($content, $indexFirst + 6);
+        if (!str_starts_with($pFirst, "1 0 obj\n<<\n")) {
+            return false;
+        }
+
+        $pFirst = substr($pFirst, 11);
+
+        $indexStream = strpos($pFirst, "stream\x0D\x0A");
+        $indexMeta = strpos($pFirst, $onlyofficeFormMetaTag);
+
+        if ($indexStream === false || $indexMeta === false || $indexStream < $indexMeta) {
+            return false;
+        }
+
+        $pMeta = substr($pFirst, $indexMeta);
+        $pMeta = substr($pMeta, strlen($onlyofficeFormMetaTag) + 3);
+
+        $indexMetaLast = strpos($pMeta, " ");
+        if ($indexMetaLast === false) {
+            return false;
+        }
+
+        $pMeta = substr($pMeta, $indexMetaLast + 1);
+
+        $indexMetaLast = strpos($pMeta, " ");
+        if ($indexMetaLast === false) {
+            return false;
+        }
+
+        return true;
     }
 
     /**
