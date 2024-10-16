@@ -7,6 +7,7 @@
 ## Changed
 - creating and editing pdf form
 - updatable list of supported formats
+- demo server address changed
 
 ## 3.1.0
 ## Changed
