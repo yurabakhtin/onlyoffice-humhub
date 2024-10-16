@@ -1,7 +1,10 @@
 # Change Log
 
+## Added
+- default empty templates
+- ar-SA, eu-ES, fi-FI, he-IL, nb-NO, sl-SL and sr-Cyrl-RS empty file templates
+
 ## Changed
-- updated empty templates
 - creating and editing pdf form
 - updatable list of supported formats
 
