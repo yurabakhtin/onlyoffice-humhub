@@ -51,6 +51,8 @@ class ApiController extends Controller
         $url = Yii::$app->request->post('url');
         $filename = Yii::$app->request->post('name');
 
+        $url = $this->module->replaceDocumentServerUrlToInternal($url);
+
         $response = $this->module->request($url);
 
         $newContent = $response->getContent();
