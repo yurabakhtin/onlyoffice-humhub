@@ -51,6 +51,10 @@ class ApiController extends Controller
         $url = Yii::$app->request->post('url');
         $filename = Yii::$app->request->post('name');
 
+        if (parse_url($url, PHP_URL_HOST) !== parse_url($this->module->getServerUrl(), PHP_URL_HOST)) {
+            throw new Exception("Incorrect domain in file url");
+        }
+
         $url = $this->module->replaceDocumentServerUrlToInternal($url);
 
         $response = $this->module->request($url);
