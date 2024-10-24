@@ -41,6 +41,11 @@ class BaseFileController extends Controller
     public $mode;
 
     /**
+     * @var string the restricted mode
+     */
+    public $restrict;
+
+    /**
      * @var string the secret used to open this document, if provided
      */
     public $shareSecret;
@@ -72,10 +77,14 @@ class BaseFileController extends Controller
                 throw new HttpException(403, Yii::t('OnlyofficeModule.base', 'File read access denied!'));
             }
 
+            if (Yii::$app->request->get('restrict') == Module::OPEN_RESTRICT_FILL) {
+                $this->restrict = Module::OPEN_RESTRICT_FILL;
+            }
+
             $this->mode = Module::OPEN_MODE_VIEW;
 
             if (Yii::$app->request->get('mode') == Module::OPEN_MODE_EDIT) {
-                if (!$this->file->canDelete()) {
+                if (!$this->file->canDelete() && empty($this->restrict)) {
                     throw new HttpException(403, Yii::t('OnlyofficeModule.base', 'File write access denied!'));
                 }
                 $this->mode = Module::OPEN_MODE_EDIT;

@@ -55,6 +55,7 @@ class OpenController extends BaseFileController
         return $this->renderAjax('index', [
                     'file' => $this->file,
                     'mode' => $this->mode,
+                    'restrict' => $this->restrict,
                     'anchor' => $this->anchor
         ]);
     }

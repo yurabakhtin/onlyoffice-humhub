@@ -68,7 +68,7 @@ $modal = \humhub\widgets\ModalDialog::begin([
         <li><a class="try-editor document" data-action-click="ui.modal.load" data-action-url="<?= Url::to(['document', 'extension' => 'docx']); ?>">Document</a></li>
         <li><a class="try-editor spreadsheet" data-action-click="ui.modal.load" data-action-url="<?= Url::to(['document', 'extension' => 'xlsx']); ?>">Spreadsheet</a></li>
         <li><a class="try-editor presentation" data-action-click="ui.modal.load" data-action-url="<?= Url::to(['document', 'extension' => 'pptx']); ?>">Presentation</a></li>
-        <li><a class="try-editor form-template" data-action-click="ui.modal.load" data-action-url="<?= Url::to(['document', 'extension' => 'docxf']); ?>">PDF form</a></li>
+        <li><a class="try-editor form-template" data-action-click="ui.modal.load" data-action-url="<?= Url::to(['document', 'extension' => 'pdf']); ?>">PDF form</a></li>
     </ul>
 </div>
 <?php \humhub\widgets\ModalDialog::end(); ?>

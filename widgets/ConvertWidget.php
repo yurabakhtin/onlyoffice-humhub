@@ -42,7 +42,7 @@ class ConvertWidget extends JsWidget
         parent::init();
 
         $module = Yii::$app->getModule('onlyoffice');
-        $this->newName = substr($this->file->fileName, 0, strpos($this->file->fileName, '.') + 1) . $module->convertsTo[strtolower(FileHelper::getExtension($this->file))];
+        $this->newName = substr($this->file->fileName, 0, strpos($this->file->fileName, '.') + 1) . $module->formats()->convertsTo[strtolower(FileHelper::getExtension($this->file))];
     }
 
     /**

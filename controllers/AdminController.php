@@ -45,7 +45,7 @@ class AdminController extends Controller
                                         'model' => $model,
                                         'serverApiUrl' => $serverApiUrl,
                                         'trial' => $trial,
-                                        'forceEditExt' => $this->module->forceEditableExtensions
+                                        'forceEditExt' => $this->module->formats()->forceEditableExtensions
                                       ]);
     }
 

@@ -23,7 +23,7 @@ use humhub\modules\file\handler\BaseFileHandler;
  *
  * @author Luke
  */
-class EditFileHandler extends BaseFileHandler
+class FillingFileHandler extends BaseFileHandler
 {
 
     /**
@@ -32,8 +32,8 @@ class EditFileHandler extends BaseFileHandler
     public function getLinkAttributes()
     {
         $attributes = [
-            'label' => Yii::t('OnlyofficeModule.base', 'Edit document'),
-            'data-action-url' => Url::to(['/onlyoffice/open', 'guid' => $this->file->guid, 'mode' => Module::OPEN_MODE_EDIT]),
+            'label' => Yii::t('OnlyofficeModule.base', 'Fill in form in ONLYOFFICE'),
+            'data-action-url' => Url::to(['/onlyoffice/open', 'guid' => $this->file->guid, 'mode' => Module::OPEN_MODE_EDIT, 'restrict' => Module::OPEN_RESTRICT_FILL]),
             'data-action-click' => 'ui.modal.load',
             'data-modal-id' => 'onlyoffice-modal',
             'data-modal-close' => ''
