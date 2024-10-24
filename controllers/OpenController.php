@@ -92,7 +92,7 @@ class OpenController extends BaseFileController
             $openUrl = Url::to(['/onlyoffice/open', 'guid' => $this->file->guid, 'mode' => $this->mode]);
         }
 
-        $jsCode = 'var modalOO = humhub.require("ui.modal"); modalOO.get("#onlyoffice-modal").load("' . $openUrl . '");';
+        $jsCode = 'var modalOO = humhub.require("ui.modal"); modalOO.get("onlyoffice-modal").load("' . $openUrl . '");';
         Yii::$app->session->setFlash('executeJavascript', $jsCode);
 
         return $this->redirect($url);

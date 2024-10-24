@@ -579,6 +579,30 @@ class Module extends \humhub\components\Module
         return $response->send();
     }
 
+    /**
+     * Replace document server url to internal address
+     *
+     * @param string $url document server url
+     * @return string
+     */
+    public function replaceDocumentServerUrlToInternal($url) {
+        $documentServerUrl = $this->getInternalServerUrl();
+        if (!empty($documentServerUrl)) {
+            $from = $this->getServerUrl();
+
+            if (!preg_match("/^https?:\/\//i", $from)) {
+                $parsedUrl = parse_url($url);
+                $from = $parsedUrl["scheme"] . "://" . $parsedUrl["host"] . (array_key_exists("port", $parsedUrl) ? (":" . $parsedUrl["port"]) : "") . $from;
+            }
+
+            if ($from !== $documentServerUrl) {
+                $url = str_replace($from, $documentServerUrl, $url);
+            }
+        }
+
+        return $url;
+    }
+
     public $languageCodes = [
         "default" => "default",
         "ar" => "ar-SA",
