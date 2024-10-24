@@ -605,7 +605,7 @@ class Module extends \humhub\components\Module
         "pt" => "pt-PT",
         "ru" => "ru-RU",
         "sk" => "sk-SK",
-        "sl" => "sl-SL",
+        "sl" => "sl-SI",
         "sr" => "sr-Cyrl-RS",
         "sv" => "sv-SE",
         "tr" => "tr-TR",
