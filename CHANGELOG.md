@@ -3,6 +3,7 @@
 ## Added
 - default empty templates
 - ar-SA, eu-ES, fi-FI, he-IL, nb-NO, sl-SL and sr-Cyrl-RS empty file templates
+- jwt expire configuration
 
 ## Changed
 - creating and editing pdf form
