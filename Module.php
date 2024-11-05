@@ -36,6 +36,8 @@ class Module extends \humhub\components\Module
 
     public $resourcesPath = 'resources';
 
+    public int $jwtExpiration = 300;
+
     /**
      * Open modes
      */
@@ -135,6 +137,8 @@ class Module extends \humhub\components\Module
     public function jwtEncode(array $data): string
     {
         $cryptData = null;
+
+        $data['exp'] = time() + $this->jwtExpiration;
 
         if (class_exists(Key::class)) {
             $cryptData = JWT::encode($data, $this->getJwtSecret(), $this->getJwtAlgorithm());
