@@ -2,8 +2,9 @@ name: Artifact
 
 on:
   workflow_dispatch:
+  push:
+    branches: [master]
   pull_request:
-    types: [opened, reopened]
     branches: [master]
   
 jobs:
