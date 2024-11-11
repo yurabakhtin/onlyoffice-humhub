@@ -13,7 +13,6 @@ use humhub\modules\file\handler\BaseFileHandler;
 
 class ConvertFileHandler extends BaseFileHandler
 {
-
     /**
      * @inheritdoc
      */
@@ -27,5 +26,4 @@ class ConvertFileHandler extends BaseFileHandler
             'data-modal-close' => ''
         ];
     }
-
 }

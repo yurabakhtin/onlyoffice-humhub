@@ -18,7 +18,6 @@ use yii\web\AssetBundle;
 
 class Assets extends AssetBundle
 {
-
     public $publishOptions = [
         'forceCopy' => true
     ];
@@ -39,5 +38,4 @@ class Assets extends AssetBundle
         $this->sourcePath = dirname(__FILE__) . '/../resources';
         parent::init();
     }
-
 }

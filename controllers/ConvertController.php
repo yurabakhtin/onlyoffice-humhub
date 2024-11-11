@@ -10,11 +10,10 @@ namespace humhub\modules\onlyoffice\controllers;
 use Yii;
 use yii\web\HttpException;
 use humhub\modules\onlyoffice\components\BaseFileController;
-use \humhub\components\Module;
+use humhub\components\Module;
 
 class ConvertController extends BaseFileController
 {
-
     /**
      * @var Module
      */
@@ -49,7 +48,8 @@ class ConvertController extends BaseFileController
         return $result;
     }
 
-    private function saveFileReplace($url, $newName) {
+    private function saveFileReplace($url, $newName)
+    {
         $content = $this->module->request($url)->getContent();
 
         $this->file->store->setContent($content);

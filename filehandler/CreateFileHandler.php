@@ -24,19 +24,20 @@ use humhub\modules\file\handler\BaseFileHandler;
  */
 class CreateFileHandler extends BaseFileHandler
 {
-
     /**
      * @inheritdoc
      */
     public function getLinkAttributes()
     {
         return [
-            'label' => Yii::t('OnlyofficeModule.base', 'Create document <small>(Text, Spreadsheet, Presentation, PDF form)</small>'),
+            'label' => Yii::t(
+                'OnlyofficeModule.base',
+                'Create document <small>(Text, Spreadsheet, Presentation, PDF form)</small>'
+            ),
             'data-action-url' => Url::to(['/onlyoffice/create']),
             'data-action-click' => 'ui.modal.load',
             'data-modal-id' => 'onlyoffice-modal',
             'data-modal-close' => ''
         ];
     }
-
 }

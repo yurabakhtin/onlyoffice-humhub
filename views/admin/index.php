@@ -9,24 +9,57 @@ use yii\bootstrap\ActiveForm;
 use yii\helpers\Html;
 use yii\helpers\Url;
 use yii\web\View;
+
 ?>
 
 <div class="panel panel-default">
 
-    <div class="panel-heading"><?= Yii::t('OnlyofficeModule.base', '<strong>ONLYOFFICE - Docs</strong> module configuration'); ?></div>
+    <div class="panel-heading">
+        <?= Yii::t(
+            'OnlyofficeModule.base',
+            '<strong>ONLYOFFICE - Docs</strong> module configuration'
+        ); ?>
+    </div>
 
     <div class="panel-body">
 
-        <?php if (empty($model->serverUrl) && empty($trial)): ?>
-            <div class="alert alert-warning" role="alert"><?= Yii::t('OnlyofficeModule.base', '<strong>ONLYOFFICE Docs</strong> not configured yet.'); ?></div>
-        <?php elseif (!empty($model->settingError)): ?>
-            <div class="alert alert-danger error" role="alert"><?= Yii::t('OnlyofficeModule.base', 'Error when trying to connect ({error})', ['error' => $model->settingError]); ?></div>
-        <?php elseif (!empty($model->instaledVersion) && !$trial): ?>
-            <div class="alert alert-success" role="alert"><?= Yii::t('OnlyofficeModule.base', '<strong>ONLYOFFICE Docs</strong> successfully connected! - Installed version: {version}', ['version' => $model->instaledVersion]); ?></div>
-        <?php elseif (!empty($model->instaledVersion) && $trial): ?>
+        <?php if (empty($model->serverUrl) && empty($trial)) : ?>
+            <div class="alert alert-warning" role="alert">
+                <?= Yii::t(
+                    'OnlyofficeModule.base',
+                    '<strong>ONLYOFFICE Docs</strong> not configured yet.'
+                ); ?>
+            </div>
+        <?php elseif (!empty($model->settingError)) : ?>
+            <div class="alert alert-danger error" role="alert">
+                <?= Yii::t(
+                    'OnlyofficeModule.base',
+                    'Error when trying to connect ({error})',
+                    ['error' => $model->settingError]
+                ); ?>
+            </div>
+        <?php elseif (!empty($model->instaledVersion) && !$trial) : ?>
             <div class="alert alert-success" role="alert">
-                <?= Yii::t('OnlyofficeModule.base', '<strong>ONLYOFFICE Docs</strong> successfully connected! - Installed version: {version}', ['version' => $model->instaledVersion]); ?> 
-                <p style = "color: #84be5e"><?= Yii::t('OnlyofficeModule.base', 'Trial period: {trial} days', ['trial' => $trial]); ?></p>
+                <?= Yii::t(
+                    'OnlyofficeModule.base',
+                    '<strong>ONLYOFFICE Docs</strong> successfully connected! - Installed version: {version}',
+                    ['version' => $model->instaledVersion]
+                ); ?>
+            </div>
+        <?php elseif (!empty($model->instaledVersion) && $trial) : ?>
+            <div class="alert alert-success" role="alert">
+                <?= Yii::t(
+                    'OnlyofficeModule.base',
+                    '<strong>ONLYOFFICE Docs</strong> successfully connected! - Installed version: {version}',
+                    ['version' => $model->instaledVersion]
+                ); ?> 
+                <p style = "color: #84be5e">
+                    <?= Yii::t(
+                        'OnlyofficeModule.base',
+                        'Trial period: {trial} days',
+                        ['trial' => $trial]
+                    ); ?>
+                </p>
             </div>
         <?php endif; ?>
 
@@ -57,7 +90,7 @@ use yii\web\View;
         </div>
 
         <div class="form-group">
-            <?= Html::activeLabel($model,'customLabel', ['class' => 'control-label']); ?>
+            <?= Html::activeLabel($model, 'customLabel', ['class' => 'control-label']); ?>
             <?= $form->field($model, 'chat')->checkbox(); ?>
             <?= $form->field($model, 'compactHeader')->checkbox(); ?>
             <?= $form->field($model, 'feedback')->checkbox(); ?>
@@ -66,13 +99,15 @@ use yii\web\View;
         </div>
 
         <div id="forceEditTypes" class="form-group">
-            <?= Html::activeLabel($model,'editLabel', ['class' => 'control-label']); ?>
+            <?= Html::activeLabel($model, 'editLabel', ['class' => 'control-label']); ?>
             <br/>
-            <?php 
-                foreach($forceEditExt as $key => $ext) {
-                    echo $form->field($model, 'forceEditTypes[' . $ext . ']', ['options' => ['class' => 'checkbox-inline']])->checkbox(['label' => $ext]);
-                }
-            ?>
+            <?php foreach ($forceEditExt as $key => $ext) {
+                echo $form->field(
+                    $model,
+                    'forceEditTypes[' . $ext . ']',
+                    ['options' => ['class' => 'checkbox-inline']]
+                )->checkbox(['label' => $ext]);
+            } ?>
         </div>
 
         <div class="form-group">
@@ -90,9 +125,17 @@ use yii\web\View;
             var testApiResult = function(){
                 if (typeof DocsAPI === "undefined") {
                     if ($(".error").length) {
-                        $(".error").append("<p style=\'color: #ff8989\'>' . Yii::t("OnlyofficeModule.base", "<strong>ONLYOFFICE Docs</strong> DocsAPI undefined.") . '</p>");
+                        $(".error").append("<p style=\'color: #ff8989\'>' .
+                        Yii::t(
+                            "OnlyofficeModule.base",
+                            "<strong>ONLYOFFICE Docs</strong> DocsAPI undefined."
+                        ) . '</p>");
                     } else {
-                        $(".invalid-server-url").html("' . Yii::t("OnlyofficeModule.base", "<strong>ONLYOFFICE Docs</strong> DocsAPI undefined.") . '");
+                        $(".invalid-server-url").html("' .
+                        Yii::t(
+                            "OnlyofficeModule.base",
+                            "<strong>ONLYOFFICE Docs</strong> DocsAPI undefined."
+                        ) . '");
                         $(".invalid-server-url").show();
                     }
                 }
@@ -103,7 +146,11 @@ use yii\web\View;
                 $("#configureform-demoserver").closest("label").css({"cursor":"default", "opacity":"0.5"});
                 $("#configureform-demoserver").attr("checked", false);
                 $("#configureform-demoserver").attr("disabled", true);
-                $("#configureform-demoserver").closest("div").children()[2].innerText = "' . Yii::t("OnlyofficeModule.base", "The 30-day test period is over, you can no longer connect to demo ONLYOFFICE Docs server.") . '";
+                $("#configureform-demoserver").closest("div").children()[2].innerText = "' .
+                Yii::t(
+                    "OnlyofficeModule.base",
+                    "The 30-day test period is over, you can no longer connect to demo ONLYOFFICE Docs server."
+                ) . '";
             }
 
             if (serverApiUrl.length > 0) {
@@ -140,7 +187,8 @@ use yii\web\View;
                 var forceEditTypes = {};
                 var forceEditTypesNodes = $("#forceEditTypes").find("input[type=checkbox]");
                 $.each(forceEditTypesNodes, function(i, node){
-                    forceEditTypes[$(node).attr("id").replace("configureform-forceedittypes-", "")] = $(node).prop("checked") ? 1 : 0;
+                    var type = $(node).attr("id").replace("configureform-forceedittypes-", "");
+                    forceEditTypes[type] = $(node).prop("checked") ? 1 : 0;
                 });
 
                 $.ajax({
@@ -172,5 +220,4 @@ use yii\web\View;
                 })
             });
         });
-    ');
-?>
+    '); ?>

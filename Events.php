@@ -24,7 +24,6 @@ use humhub\modules\onlyoffice\permissions\CanUseOnlyOffice;
  */
 class Events
 {
-
     public static function onFileHandlerCollection($event)
     {
         if (!Yii::$app->user->can(CanUseOnlyOffice::class)) {
@@ -43,7 +42,9 @@ class Events
         $module = Yii::$app->getModule('onlyoffice');
         $file = $event->sender->file;
 
-        if ($module->getDocumentType($file) === null) return;
+        if ($module->getDocumentType($file) === null) {
+            return;
+        }
 
         $isOnlyofficeForm = $module->isOnlyofficeForm($file);
 

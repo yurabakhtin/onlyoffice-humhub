@@ -26,7 +26,6 @@ use humhub\modules\cfiles\permissions\WriteAccess;
  */
 class CreateDocument extends Model
 {
-
     public $extension;
     public $fileName;
     public $fid;
@@ -81,7 +80,8 @@ class CreateDocument extends Model
         return false;
     }
 
-    private function templatePath() {
+    private function templatePath()
+    {
         $module = Yii::$app->getModule('onlyoffice');
         $user = Yii::$app->user->getIdentity();
 
@@ -92,5 +92,4 @@ class CreateDocument extends Model
 
         return $module->getAssetPath() . '/templates/' . $module->languageCodes[$lang];
     }
-
 }

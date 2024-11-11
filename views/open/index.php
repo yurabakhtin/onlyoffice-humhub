@@ -6,7 +6,9 @@
  */
 
 use yii\web\View;
+
 ?>
+
 <div class="modal-dialog animated fadeIn" style="width:96%">
     <div class="modal-content onlyofficeModal" style="background-color:transparent;">
         <?=
@@ -33,5 +35,4 @@ use yii\web\View;
         function setSize() {
             $(".onlyofficeModal").css("height", window.innerHeight - 110 + "px");
         }
-    ');
-?>
+    '); ?>

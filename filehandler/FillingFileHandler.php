@@ -25,7 +25,6 @@ use humhub\modules\file\handler\BaseFileHandler;
  */
 class FillingFileHandler extends BaseFileHandler
 {
-
     /**
      * @inheritdoc
      */
@@ -33,7 +32,12 @@ class FillingFileHandler extends BaseFileHandler
     {
         $attributes = [
             'label' => Yii::t('OnlyofficeModule.base', 'Fill in form in ONLYOFFICE'),
-            'data-action-url' => Url::to(['/onlyoffice/open', 'guid' => $this->file->guid, 'mode' => Module::OPEN_MODE_EDIT, 'restrict' => Module::OPEN_RESTRICT_FILL]),
+            'data-action-url' => Url::to([
+                '/onlyoffice/open',
+                'guid' => $this->file->guid,
+                'mode' => Module::OPEN_MODE_EDIT,
+                'restrict' => Module::OPEN_RESTRICT_FILL
+            ]),
             'data-action-click' => 'ui.modal.load',
             'data-modal-id' => 'onlyoffice-modal',
             'data-modal-close' => ''
@@ -41,5 +45,4 @@ class FillingFileHandler extends BaseFileHandler
 
         return $attributes;
     }
-
 }

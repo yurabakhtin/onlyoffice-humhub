@@ -21,7 +21,6 @@ use humhub\libs\BasePermission;
  */
 class CanUseOnlyOffice extends BasePermission
 {
-
     /**
      * @inheritdoc
      */
@@ -47,5 +46,4 @@ class CanUseOnlyOffice extends BasePermission
      * @inheritdoc
      */
     protected $defaultState = self::STATE_ALLOW;
-
 }

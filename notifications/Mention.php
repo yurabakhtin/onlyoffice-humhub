@@ -24,11 +24,14 @@ class Mention extends BaseNotification
 
     public function html()
     {
-        return Yii::t('UserModule.notification', '{displayName} mentioned you in {contentTitle}.', 
-        [
-            'displayName' => Html::tag('strong', Html::encode($this->originator->displayName)),
-            'contentTitle' => $this->source->file->file_name,
-        ]) . ' ' . $this->source->message;
+        return Yii::t(
+            'UserModule.notification',
+            '{displayName} mentioned you in {contentTitle}.',
+            [
+                'displayName' => Html::tag('strong', Html::encode($this->originator->displayName)),
+                'contentTitle' => $this->source->file->file_name,
+            ]
+        ) . ' ' .  $this->source->message;
     }
 
     public function getMailSubject()

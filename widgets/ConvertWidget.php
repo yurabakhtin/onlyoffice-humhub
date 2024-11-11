@@ -15,12 +15,14 @@ use humhub\widgets\JsWidget;
 
 class ConvertWidget extends JsWidget
 {
-
     /**
      * @var File the file
      */
     public $file;
 
+    /**
+     * @inheritdoc
+     */
     public $newName;
 
     /**
@@ -42,7 +44,11 @@ class ConvertWidget extends JsWidget
         parent::init();
 
         $module = Yii::$app->getModule('onlyoffice');
-        $this->newName = substr($this->file->fileName, 0, strpos($this->file->fileName, '.') + 1) . $module->formats()->convertsTo[strtolower(FileHelper::getExtension($this->file))];
+        $this->newName = substr(
+            $this->file->fileName,
+            0,
+            strpos($this->file->fileName, '.') + 1
+        ) . $module->formats()->convertsTo[strtolower(FileHelper::getExtension($this->file))];
     }
 
     /**
@@ -51,7 +57,12 @@ class ConvertWidget extends JsWidget
     public function getData()
     {
         return [
-            'convert-post' => Url::to(['/onlyoffice/convert/convert', 'guid' => $this->file->guid, 'ts' => time(), 'newName' => $this->newName]),
+            'convert-post' => Url::to([
+                '/onlyoffice/convert/convert',
+                'guid' => $this->file->guid,
+                'ts' => time(),
+                'newName' => $this->newName
+            ]),
             'file-info-url' => Url::to(['/onlyoffice/open/get-info', 'guid' => $this->file->guid]),
             'done-message' => Yii::t('OnlyofficeModule.base', 'Done!'),
             'error-message' => Yii::t('OnlyofficeModule.base', 'Error:'),
@@ -69,5 +80,4 @@ class ConvertWidget extends JsWidget
                     'newName' => $this->newName,
         ]);
     }
-
 }

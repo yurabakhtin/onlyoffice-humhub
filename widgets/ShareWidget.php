@@ -26,7 +26,6 @@ use humhub\widgets\JsWidget;
  */
 class ShareWidget extends JsWidget
 {
-
     /**
      * @var File the file
      */
@@ -75,5 +74,4 @@ class ShareWidget extends JsWidget
                     'editLink' => $editLink,
         ]);
     }
-
 }

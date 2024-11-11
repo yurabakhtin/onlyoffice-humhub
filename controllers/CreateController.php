@@ -22,7 +22,6 @@ use humhub\modules\onlyoffice\Module;
 
 class CreateController extends \humhub\components\Controller
 {
-
     /**
      * @inheritdoc
      */
@@ -45,20 +44,19 @@ class CreateController extends \humhub\components\Controller
         $model->extension = Yii::$app->request->get('extension');
 
         if ($model->load(Yii::$app->request->post())) {
-
             $file = $model->save();
 
             if ($file !== false) {
                 return $this->asJson([
-                            'success' => true,
-                            'file' => FileHelper::getFileInfos($file),
-                            'openFlag' => (boolean) $model->openFlag,
-                            'openUrl' => Url::to(['/onlyoffice/open', 'guid' => $file->guid, 'mode' => Module::OPEN_MODE_EDIT])
+                    'success' => true,
+                    'file' => FileHelper::getFileInfos($file),
+                    'openFlag' => (bool) $model->openFlag,
+                    'openUrl' => Url::to(['/onlyoffice/open', 'guid' => $file->guid, 'mode' => Module::OPEN_MODE_EDIT])
                 ]);
             } else {
                 return $this->asJson([
-                            'success' => false,
-                            'output' => $this->renderAjax('document', ['model' => $model])
+                    'success' => false,
+                    'output' => $this->renderAjax('document', ['model' => $model])
                 ]);
             }
         }
@@ -76,5 +74,4 @@ class CreateController extends \humhub\components\Controller
 
         return null;
     }
-
 }

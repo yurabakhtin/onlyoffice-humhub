@@ -32,7 +32,6 @@ use yii\web\HttpException;
  */
 class EditorWidget extends JsWidget
 {
-
     /**
      * @var File the file
      */
@@ -66,9 +65,12 @@ class EditorWidget extends JsWidget
     protected $documentType = null;
 
     /**
-     * Mobile regex from https://github.com/ONLYOFFICE/CommunityServer/blob/v9.1.1/web/studio/ASC.Web.Studio/web.appsettings.config#L35
+     * Mobile regex from
+     * https://github.com/ONLYOFFICE/CommunityServer/blob/v9.1.1/web/studio/ASC.Web.Studio/web.appsettings.config#L35
      */
-    const USER_AGENT_MOBILE = "/android|avantgo|playbook|blackberry|blazer|compal|elaine|fennec|hiptop|iemobile|ip(hone|od|ad)|iris|kindle|lge |maemo|midp|mmp|opera m(ob|in)i|palm( os)?|phone|p(ixi|re)\\/|plucker|pocket|psp|symbian|treo|up\\.(browser|link)|vodafone|wap|windows (ce|phone)|xda|xiino/i";
+    protected const USER_AGENT_MOBILE = "/android|avantgo|playbook|blackberry|blazer|compal|elaine|fennec|hiptop|" .
+        "iemobile|ip(hone|od|ad)|iris|kindle|lge |maemo|midp|mmp|opera m(ob|in)i|palm( os)?|phone|p(ixi|re)\\/|" .
+        "plucker|pocket|psp|symbian|treo|up\\.(browser|link)|vodafone|wap|windows (ce|phone)|xda|xiino/i";
 
     /**
      * @inheritdoc
@@ -97,7 +99,7 @@ class EditorWidget extends JsWidget
             'saveasUrl' => Url::to(['/onlyoffice/api/saveas'], true)
         ];
 
-        if(!Yii::$app->user->isGuest) {
+        if (!Yii::$app->user->isGuest) {
             $api['usersForMentionsUrl'] = Url::to(['/onlyoffice/api/users-for-mentions'], true);
         }
 
@@ -112,7 +114,11 @@ class EditorWidget extends JsWidget
 
         $infoMsg = null;
         if ($module->isDemoServerEnabled()) {
-            $infoMsg = Yii::t('OnlyofficeModule.base', 'This is a public test server, please do not use it for private sensitive data. The server will be available during a 30-day period.');
+            $infoMsg = Yii::t(
+                'OnlyofficeModule.base',
+                'This is a public test server, please do not use it for private sensitive data.' .
+                    'The server will be available during a 30-day period.'
+            );
         }
 
         return [

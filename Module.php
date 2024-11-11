@@ -41,21 +41,21 @@ class Module extends \humhub\components\Module
     /**
      * Open modes
      */
-    const OPEN_MODE_VIEW = 'view';
-    const OPEN_MODE_EDIT = 'edit';
+    public const OPEN_MODE_VIEW = 'view';
+    public const OPEN_MODE_EDIT = 'edit';
 
     /**
      * Restricted open modes
     */
-    const OPEN_RESTRICT_FILL = 'fill';
+    public const OPEN_RESTRICT_FILL = 'fill';
 
     /**
      * Only document types
      */
-    const DOCUMENT_TYPE_TEXT = 'word';
-    const DOCUMENT_TYPE_PRESENTATION = 'slide';
-    const DOCUMENT_TYPE_SPREADSHEET = 'cell';
-    const DOCUMENT_TYPE_PDF = 'pdf';
+    public const DOCUMENT_TYPE_TEXT = 'word';
+    public const DOCUMENT_TYPE_PRESENTATION = 'slide';
+    public const DOCUMENT_TYPE_SPREADSHEET = 'cell';
+    public const DOCUMENT_TYPE_PDF = 'pdf';
 
     public $demoparam = [
         'trial' => 30,
@@ -64,7 +64,8 @@ class Module extends \humhub\components\Module
         'serverUrl' => 'https://onlinedocs.docs.onlyoffice.com'
     ];
 
-    public function formats() {
+    public function formats()
+    {
         if (isset($this->formatFields)) {
             return $this->formatFields;
         }
@@ -110,22 +111,29 @@ class Module extends \humhub\components\Module
                 array_push($this->formats->forceEditableExtensions, $formatJson->name);
             }
 
-            $this->formats->mimes[$formatJson->name] = count($formatJson->mime) > 0 ? $formatJson->mime[0] : 'application/octet-stream';
+            $this->formats->mimes[$formatJson->name] = count($formatJson->mime) > 0
+                ? $formatJson->mime[0]
+                : 'application/octet-stream';
         }
 
         return $this->formats;
     }
 
-    public function isJwtEnabled() {
-        if($this->isDemoServerEnabled())
+    public function isJwtEnabled()
+    {
+        if ($this->isDemoServerEnabled()) {
             return true;
+        }
+
         return !empty($this->getJwtSecret());
     }
 
-    public function getJwtSecret() {
-        if($this->isDemoServerEnabled()) { 
+    public function getJwtSecret()
+    {
+        if ($this->isDemoServerEnabled()) {
             return $this->demoparam['secret'];
         }
+
         return $this->settings->get('jwtSecret');
     }
 
@@ -164,7 +172,7 @@ class Module extends \humhub\components\Module
 
     public function getServerUrl()
     {
-        if($this->isDemoServerEnabled()) {
+        if ($this->isDemoServerEnabled()) {
             return $this->demoparam['serverUrl'];
         }
 
@@ -197,12 +205,16 @@ class Module extends \humhub\components\Module
         return $this->settings->get('demoServer');
     }
 
-    public function isDemoServerEnabled() {
-        if(boolval($this->getDemoServer())) {
+    public function isDemoServerEnabled()
+    {
+        if (boolval($this->getDemoServer())) {
             $trial = $this->getTrial();
-            if($trial !== false)
+
+            if ($trial !== false) {
                 return true;
+            }
         }
+
         return false;
     }
 
@@ -238,7 +250,7 @@ class Module extends \humhub\components\Module
 
     public function getforceEditTypes()
     {
-        return explode("," , $this->settings->get('forceEditTypes'));
+        return explode(",", $this->settings->get('forceEditTypes'));
     }
 
     public function getServerApiUrl(): string
@@ -260,13 +272,14 @@ class Module extends \humhub\components\Module
     {
         $settings =  Yii::$app->getModule('onlyoffice')->settings;
         $trial = $settings->get('trial');
-        
-        if(empty($trial)) {
+
+        if (empty($trial)) {
             $settings->set('trial', time());
-        } elseif($this->demoparam['trial'] - round( (time() - $trial) / (60*60*24) ) < 0) {
+        } elseif ($this->demoparam['trial'] - round((time() - $trial) / (60 * 60 * 24)) < 0) {
             return false;
         }
-        return $this->demoparam['trial'] - round( (time() - $trial) / (60*60*24) );
+
+        return $this->demoparam['trial'] - round((time() - $trial) / (60 * 60 * 24));
     }
 
     public function getDocumentType($file)
@@ -303,13 +316,10 @@ class Module extends \humhub\components\Module
         return !empty($this->getDocumentType($file));
     }
 
-    /**
-     * @inheritdoc
-     */
     public function getConfigUrl()
     {
         return Url::to([
-                    '/onlyoffice/admin'
+            '/onlyoffice/admin'
         ]);
     }
 
@@ -326,6 +336,7 @@ class Module extends \humhub\components\Module
 
         $key = substr(strtolower(md5(Yii::$app->security->generateRandomString(20))), 0, 20);
         $file->updateAttributes(['onlyoffice_key' => $key]);
+
         return $key;
     }
 
@@ -377,8 +388,9 @@ class Module extends \humhub\components\Module
             $downloadUrl = $this->getStorageUrl() . Url::to(['/onlyoffice/backend/download', 'doc' => $docHash], false);
         }
 
-        if(is_null($toExt))
+        if (is_null($toExt)) {
             $toExt = $this->formats()->convertsTo[$fromExt];
+        }
 
         return $this->convertService($downloadUrl, $fromExt, $toExt, $key . $ts, $async);
     }
@@ -500,9 +512,14 @@ class Module extends \humhub\components\Module
      * @param File $file object
      * @return bool
      */
-    public function isOnlyofficeForm($file) {
-        if ($file === null) return false;
-        if ($this->getDocumentType($file) !== self::DOCUMENT_TYPE_PDF) return false;
+    public function isOnlyofficeForm($file)
+    {
+        if ($file === null) {
+            return false;
+        }
+        if ($this->getDocumentType($file) !== self::DOCUMENT_TYPE_PDF) {
+            return false;
+        }
 
         $limitDetect = 300;
         $onlyofficeFormMetaTag = 'ONLYOFFICEFORM';
@@ -589,14 +606,16 @@ class Module extends \humhub\components\Module
      * @param string $url document server url
      * @return string
      */
-    public function replaceDocumentServerUrlToInternal($url) {
+    public function replaceDocumentServerUrlToInternal($url)
+    {
         $documentServerUrl = $this->getInternalServerUrl();
         if (!empty($documentServerUrl)) {
             $from = $this->getServerUrl();
 
             if (!preg_match("/^https?:\/\//i", $from)) {
                 $parsedUrl = parse_url($url);
-                $from = $parsedUrl["scheme"] . "://" . $parsedUrl["host"] . (array_key_exists("port", $parsedUrl) ? (":" . $parsedUrl["port"]) : "") . $from;
+                $from = $parsedUrl["scheme"] . "://" . $parsedUrl["host"] .
+                    (array_key_exists("port", $parsedUrl) ? (":" . $parsedUrl["port"]) : "") . $from;
             }
 
             if ($from !== $documentServerUrl) {
@@ -643,7 +662,8 @@ class Module extends \humhub\components\Module
         "zh-TW" => "zh-TW"
     ];
 
-    private function convertResponceError($errorCode) {
+    private function convertResponceError($errorCode)
+    {
         $errorMessage = "";
 
         switch ($errorCode) {
@@ -684,7 +704,8 @@ class Module extends \humhub\components\Module
         throw new \Exception($errorMessage);
     }
 
-    private function commandResponceError($errorCode) {
+    private function commandResponceError($errorCode)
+    {
         $errorMessage = "";
 
         switch ($errorCode) {
