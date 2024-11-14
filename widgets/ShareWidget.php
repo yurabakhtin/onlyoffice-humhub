@@ -7,7 +7,7 @@
  */
 
 /**
- *  Copyright (c) Ascensio System SIA 2023. All rights reserved.
+ *  Copyright (c) Ascensio System SIA 2024. All rights reserved.
  *  http://www.onlyoffice.com
  */
 
@@ -26,7 +26,6 @@ use humhub\widgets\JsWidget;
  */
 class ShareWidget extends JsWidget
 {
-
     /**
      * @var File the file
      */
@@ -75,5 +74,4 @@ class ShareWidget extends JsWidget
                     'editLink' => $editLink,
         ]);
     }
-
 }

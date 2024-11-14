@@ -1,7 +1,7 @@
 <?php
 
 /**
- *  Copyright (c) Ascensio System SIA 2023. All rights reserved.
+ *  Copyright (c) Ascensio System SIA 2024. All rights reserved.
  *  http://www.onlyoffice.com
  */
 
@@ -13,7 +13,6 @@ use humhub\modules\file\handler\BaseFileHandler;
 
 class ConvertFileHandler extends BaseFileHandler
 {
-
     /**
      * @inheritdoc
      */
@@ -27,5 +26,4 @@ class ConvertFileHandler extends BaseFileHandler
             'data-modal-close' => ''
         ];
     }
-
 }

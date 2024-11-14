@@ -1,7 +1,7 @@
 <?php
 
 /**
- *  Copyright (c) Ascensio System SIA 2023. All rights reserved.
+ *  Copyright (c) Ascensio System SIA 2024. All rights reserved.
  *  http://www.onlyoffice.com
  */
 
@@ -18,14 +18,26 @@ $modal = \humhub\widgets\ModalDialog::begin([
 <?php $form = ActiveForm::begin(); ?>
 
 <div class="modal-body">
-    <?= $form->field($model, 'fileName', ['template' => '{label}<div class="input-group">{input}<div class="input-group-addon">' . $model->extension . '</div></div>{hint}{error}']); ?>
+    <?= $form->field(
+        $model,
+        'fileName',
+        ['template' => '{label}<div class="input-group">{input}<div class="input-group-addon">' .
+            $model->extension . '</div></div>{hint}{error}'
+        ]
+    ); ?>
     <?= $form->field($model, 'openFlag')->checkbox(); ?>
 
     <?= $form->field($model, 'fid')->hiddenInput()->label(false); ?>
 </div>
 
 <div class="modal-footer">
-    <?= Html::submitButton('Save', ['data-action-click' => 'onlyoffice.createSubmit', 'data-ui-loader' => '', 'class' => 'btn btn-primary']); ?>
+    <?= Html::submitButton(
+        'Save',
+        ['data-action-click' => 'onlyoffice.createSubmit',
+            'data-ui-loader' => '',
+            'class' => 'btn btn-primary'
+        ]
+    ); ?>
 </div>
 
 <?php ActiveForm::end(); ?>

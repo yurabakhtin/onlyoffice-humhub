@@ -7,7 +7,7 @@
  */
 
 /**
- *  Copyright (c) Ascensio System SIA 2023. All rights reserved.
+ *  Copyright (c) Ascensio System SIA 2024. All rights reserved.
  *  http://www.onlyoffice.com
  */
 
@@ -21,7 +21,6 @@ use humhub\modules\onlyoffice\components\BaseFileController;
 
 class ShareController extends BaseFileController
 {
-
     public function init()
     {
         parent::init();
@@ -33,7 +32,7 @@ class ShareController extends BaseFileController
 
     /**
      * Share Modal
-     * 
+     *
      * @return type
      * @throws HttpException
      */
@@ -59,5 +58,4 @@ class ShareController extends BaseFileController
             'url' => $url
         ];
     }
-
 }

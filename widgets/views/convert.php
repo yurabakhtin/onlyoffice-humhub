@@ -1,7 +1,7 @@
 <?php
 
 /**
- *  Copyright (c) Ascensio System SIA 2023. All rights reserved.
+ *  Copyright (c) Ascensio System SIA 2024. All rights reserved.
  *  http://www.onlyoffice.com
  */
 
@@ -16,8 +16,11 @@ use humhub\widgets\ModalDialog;
 
 <div class="modal-body">
     <span>
-        <?= Yii::t('OnlyofficeModule.base', 'Converting <strong>{oldFileName}</strong> to <strong>{newFileName}</strong>..',
-        ['oldFileName' => $file->fileName, 'newFileName' => $newName]); ?>
+        <?= Yii::t(
+            'OnlyofficeModule.base',
+            'Converting <strong>{oldFileName}</strong> to <strong>{newFileName}</strong>..',
+            ['oldFileName' => $file->fileName, 'newFileName' => $newName]
+        ); ?>
     </span>
     <br/>
     <span id="oConvertMessage"></span>
@@ -25,7 +28,9 @@ use humhub\widgets\ModalDialog;
 </div>
 
 <div class="modal-footer">
-    <a href="#" data-modal-close class="btn btn-primary" data-action-click="close" data-ui-loader><?= Yii::t('OnlyofficeModule.base', 'Close'); ?></a>
+    <a href="#" data-modal-close class="btn btn-primary" data-action-click="close" data-ui-loader>
+        <?= Yii::t('OnlyofficeModule.base', 'Close'); ?>
+    </a>
 </div>
 
 <?= Html::endTag('div'); ?>
