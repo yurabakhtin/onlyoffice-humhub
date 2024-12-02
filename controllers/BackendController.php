@@ -7,7 +7,7 @@
  */
 
 /**
- *  Copyright (c) Ascensio System SIA 2023. All rights reserved.
+ *  Copyright (c) Ascensio System SIA 2024. All rights reserved.
  *  http://www.onlyoffice.com
  */
 
@@ -138,12 +138,12 @@ class BackendController extends Controller
         );
 
 
-        if (($body_stream = file_get_contents('php://input')) === FALSE) {
+        if (($body_stream = file_get_contents('php://input')) === false) {
             throw new HttpException(400, 'Empty body');
         }
 
-        $data = json_decode($body_stream, TRUE); //json_decode - PHP 5 >= 5.2.0
-        if ($data === NULL) {
+        $data = json_decode($body_stream, true); //json_decode - PHP 5 >= 5.2.0
+        if ($data === null) {
             throw new HttpException(400, 'Could not parse json');
         }
 
@@ -170,8 +170,6 @@ class BackendController extends Controller
             }
         }
 
-        //Yii::warning('Tracking request for file ' . $this->file->guid . ' - data: ' . print_r($data, 1), 'onlyoffice');
-
         $user = null;
         if (!empty($data['users'])) {
             $users = $data['users'];
@@ -190,12 +188,12 @@ class BackendController extends Controller
                     $originExt = strtolower(FileHelper::getExtension($this->file));
                     $currentExt = strtolower($data['filetype']);
 
-                    if($originExt !== $currentExt) {
+                    if ($originExt !== $currentExt) {
                         $convResult = $this->module->convertService(
-                            $data["url"], 
-                            $currentExt, 
-                            $originExt, 
-                            $this->module->generateDocumentKey($this->file) . time(), 
+                            $data["url"],
+                            $currentExt,
+                            $originExt,
+                            $this->module->generateDocumentKey($this->file) . time(),
                             false
                         );
                         $url = $convResult['fileUrl'];
@@ -204,7 +202,6 @@ class BackendController extends Controller
                     $newData = $this->module->request($url)->getContent();
 
                     if (!empty($newData)) {
-
                         if ($status == 'ForceSave') {
                             $this->file->updateAttributes(['onlyoffice_key_lock' => true]);
                         }
@@ -226,9 +223,10 @@ class BackendController extends Controller
                             $newAttr['onlyoffice_key'] = new \yii\db\Expression('NULL');
                         }
 
-                        if (!empty($user)) $newAttr['updated_by'] = $user->getId();
+                        if (!empty($user)) {
+                            $newAttr['updated_by'] = $user->getId();
+                        }
                         $this->file->updateAttributes($newAttr);
-
                     } else {
                         throw new \Exception('Could not save onlyoffice document: ' . $data["url"]);
                     }
@@ -237,9 +235,7 @@ class BackendController extends Controller
                 } catch (\Exception $e) {
                     Yii::error($e->getMessage(), 'onlyoffice');
                     $msg = $e->getMessage();
-                }
-                finally
-                {
+                } finally {
                     if ($status == 'ForceSave') {
                         $this->file->updateAttributes(['onlyoffice_key_lock' => false]);
                     }
@@ -257,5 +253,4 @@ class BackendController extends Controller
         //Yii::warning("Return: " . print_r($result, 1), 'onlyoffice');
         return $result;
     }
-
 }

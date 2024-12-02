@@ -7,7 +7,7 @@
  */
 
 /**
- *  Copyright (c) Ascensio System SIA 2023. All rights reserved.
+ *  Copyright (c) Ascensio System SIA 2024. All rights reserved.
  *  http://www.onlyoffice.com
  */
 
@@ -32,19 +32,19 @@ class OpenController extends BaseFileController
 
     /**
      * Opens the document in modal
-     * 
+     *
      * @return string
      * @throws HttpException
      */
     public function actionIndex()
     {
         // $url = Yii::$app->request->url;
-        if(isset($_GET['anchor'])) {
+        if (isset($_GET['anchor'])) {
             $this->actionDataUrl = $_GET['anchor'];
             $this->anchor = json_decode(urldecode($this->actionDataUrl), true);
         }
 
-        if(!empty($_GET['seen'])) {
+        if (!empty($_GET['seen'])) {
             Notification::findOne($_GET['notify'])->getBaseModel()->markAsSeen();
         }
 
@@ -55,13 +55,14 @@ class OpenController extends BaseFileController
         return $this->renderAjax('index', [
                     'file' => $this->file,
                     'mode' => $this->mode,
+                    'restrict' => $this->restrict,
                     'anchor' => $this->anchor
         ]);
     }
 
     /**
      * Returns file informations
-     * 
+     *
      * @return type
      * @throws HttpException
      */
@@ -84,17 +85,28 @@ class OpenController extends BaseFileController
         }
 
         if ($this->shareSecret) {
-            $openUrl = Url::to(['/onlyoffice/open', 'share' => $this->shareSecret]);
+            $openUrl = Url::to([
+                '/onlyoffice/open',
+                'share' => $this->shareSecret
+            ]);
         } elseif ($this->anchor) {
-            $openUrl = Url::to(['/onlyoffice/open', 'guid' => $this->file->guid, 'mode' => $this->mode, 'anchor' => $this->actionDataUrl]);
+            $openUrl = Url::to([
+                '/onlyoffice/open',
+                'guid' => $this->file->guid,
+                'mode' => $this->mode,
+                'anchor' => $this->actionDataUrl
+            ]);
         } else {
-            $openUrl = Url::to(['/onlyoffice/open', 'guid' => $this->file->guid, 'mode' => $this->mode]);
+            $openUrl = Url::to([
+                '/onlyoffice/open',
+                'guid' => $this->file->guid,
+                'mode' => $this->mode
+            ]);
         }
 
-        $jsCode = 'var modalOO = humhub.require("ui.modal"); modalOO.get("#onlyoffice-modal").load("' . $openUrl . '");';
+        $jsCode = 'var modalOO = humhub.require("ui.modal"); modalOO.get("onlyoffice-modal").load("' . $openUrl . '");';
         Yii::$app->session->setFlash('executeJavascript', $jsCode);
 
         return $this->redirect($url);
     }
-
 }

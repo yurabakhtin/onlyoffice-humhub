@@ -7,7 +7,7 @@
  */
 
 /**
- *  Copyright (c) Ascensio System SIA 2023. All rights reserved.
+ *  Copyright (c) Ascensio System SIA 2024. All rights reserved.
  *  http://www.onlyoffice.com
  */
 
@@ -21,7 +21,6 @@ use humhub\libs\BasePermission;
  */
 class CanUseOnlyOffice extends BasePermission
 {
-
     /**
      * @inheritdoc
      */
@@ -47,5 +46,4 @@ class CanUseOnlyOffice extends BasePermission
      * @inheritdoc
      */
     protected $defaultState = self::STATE_ALLOW;
-
 }

@@ -7,7 +7,7 @@
  */
 
 /**
- *  Copyright (c) Ascensio System SIA 2023. All rights reserved.
+ *  Copyright (c) Ascensio System SIA 2024. All rights reserved.
  *  http://www.onlyoffice.com
  */
 
@@ -26,7 +26,6 @@ use humhub\modules\cfiles\permissions\WriteAccess;
  */
 class CreateDocument extends Model
 {
-
     public $extension;
     public $fileName;
     public $fid;
@@ -66,7 +65,7 @@ class CreateDocument extends Model
             $source = $this->templatePath() . '/new.' . $this->extension;
             $newFile = $this->fileName . '.' . $this->extension;
 
-            $mime = $module->mimes[$this->extension];
+            $mime = $module->formats()->mimes[$this->extension];
 
             $file = new File();
             $file->file_name = $newFile;
@@ -81,16 +80,16 @@ class CreateDocument extends Model
         return false;
     }
 
-    private function templatePath() {
+    private function templatePath()
+    {
         $module = Yii::$app->getModule('onlyoffice');
         $user = Yii::$app->user->getIdentity();
 
         $lang = ($user) && !empty($user->language) ? $user->language : Yii::$app->language;
         if (!array_key_exists($lang, $module->languageCodes)) {
-            $lang = 'en-US';
+            $lang = 'default';
         }
 
         return $module->getAssetPath() . '/templates/' . $module->languageCodes[$lang];
     }
-
 }

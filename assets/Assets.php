@@ -7,7 +7,7 @@
  */
 
 /**
- *  Copyright (c) Ascensio System SIA 2023. All rights reserved.
+ *  Copyright (c) Ascensio System SIA 2024. All rights reserved.
  *  http://www.onlyoffice.com
  */
 
@@ -18,7 +18,6 @@ use yii\web\AssetBundle;
 
 class Assets extends AssetBundle
 {
-
     public $publishOptions = [
         'forceCopy' => true
     ];
@@ -39,5 +38,4 @@ class Assets extends AssetBundle
         $this->sourcePath = dirname(__FILE__) . '/../resources';
         parent::init();
     }
-
 }

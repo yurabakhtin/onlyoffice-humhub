@@ -15,6 +15,7 @@ namespace humhub\modules\onlyoffice\filehandler;
 
 use Yii;
 use yii\helpers\Url;
+use humhub\modules\onlyoffice\Module;
 use humhub\modules\file\handler\BaseFileHandler;
 
 /**
@@ -22,22 +23,26 @@ use humhub\modules\file\handler\BaseFileHandler;
  *
  * @author Luke
  */
-class CreateFileHandler extends BaseFileHandler
+class FillingFileHandler extends BaseFileHandler
 {
     /**
      * @inheritdoc
      */
     public function getLinkAttributes()
     {
-        return [
-            'label' => Yii::t(
-                'OnlyofficeModule.base',
-                'Create document <small>(Text, Spreadsheet, Presentation, PDF form)</small>'
-            ),
-            'data-action-url' => Url::to(['/onlyoffice/create']),
+        $attributes = [
+            'label' => Yii::t('OnlyofficeModule.base', 'Fill in form in ONLYOFFICE'),
+            'data-action-url' => Url::to([
+                '/onlyoffice/open',
+                'guid' => $this->file->guid,
+                'mode' => Module::OPEN_MODE_EDIT,
+                'restrict' => Module::OPEN_RESTRICT_FILL
+            ]),
             'data-action-click' => 'ui.modal.load',
             'data-modal-id' => 'onlyoffice-modal',
             'data-modal-close' => ''
         ];
+
+        return $attributes;
     }
 }

@@ -1,7 +1,7 @@
 <?php
 
 /**
- *  Copyright (c) Ascensio System SIA 2023. All rights reserved.
+ *  Copyright (c) Ascensio System SIA 2024. All rights reserved.
  *  http://www.onlyoffice.com
  */
 
@@ -65,10 +65,42 @@ $modal = \humhub\widgets\ModalDialog::begin([
     <span class="try-descr">Please select a document type.</span>
     <br />
     <ul class="try-editor-list">
-        <li><a class="try-editor document" data-action-click="ui.modal.load" data-action-url="<?= Url::to(['document', 'extension' => 'docx']); ?>">Document</a></li>
-        <li><a class="try-editor spreadsheet" data-action-click="ui.modal.load" data-action-url="<?= Url::to(['document', 'extension' => 'xlsx']); ?>">Spreadsheet</a></li>
-        <li><a class="try-editor presentation" data-action-click="ui.modal.load" data-action-url="<?= Url::to(['document', 'extension' => 'pptx']); ?>">Presentation</a></li>
-        <li><a class="try-editor form-template" data-action-click="ui.modal.load" data-action-url="<?= Url::to(['document', 'extension' => 'docxf']); ?>">Form template</a></li>
+        <li>
+            <a class="try-editor document" data-action-click="ui.modal.load" data-action-url="
+                <?= Url::to([
+                    'document',
+                    'extension' => 'docx'
+                ]); ?>">
+                Document
+            </a>
+        </li>
+        <li>
+            <a class="try-editor spreadsheet" data-action-click="ui.modal.load" data-action-url="
+                <?= Url::to([
+                    'document',
+                    'extension' => 'xlsx'
+                ]); ?>">
+                Spreadsheet
+            </a>
+        </li>
+        <li>
+            <a class="try-editor presentation" data-action-click="ui.modal.load" data-action-url="
+                <?= Url::to([
+                    'document',
+                    'extension' => 'pptx'
+                ]); ?>">
+                Presentation
+            </a>
+        </li>
+        <li>
+            <a class="try-editor form-template" data-action-click="ui.modal.load" data-action-url="
+                <?= Url::to([
+                    'document',
+                    'extension' => 'pdf'
+                ]); ?>">
+                PDF form
+            </a>
+        </li>
     </ul>
 </div>
 <?php \humhub\widgets\ModalDialog::end(); ?>

@@ -1,7 +1,7 @@
 <?php
 
 /**
- *  Copyright (c) Ascensio System SIA 2023. All rights reserved.
+ *  Copyright (c) Ascensio System SIA 2024. All rights reserved.
  *  http://www.onlyoffice.com
  */
 
@@ -14,14 +14,19 @@ $config = [
     'class' => 'humhub\modules\onlyoffice\Module',
     'namespace' => 'humhub\modules\onlyoffice',
     'events' => [
-        [FileHandlerCollection::className(), FileHandlerCollection::EVENT_INIT, ['humhub\modules\onlyoffice\Events', 'onFileHandlerCollection']],
+        [
+            FileHandlerCollection::className(),
+            FileHandlerCollection::EVENT_INIT,
+            ['humhub\modules\onlyoffice\Events', 'onFileHandlerCollection']
+        ],
     ]
 ];
 
 if (defined('humhub\modules\file\models\File::EVENT_AFTER_NEW_STORED_FILE')) {
-    array_push($config['events'], [File::class, File::EVENT_AFTER_NEW_STORED_FILE, [Events::class, 'onAfterNewStoredFile']]);
+    array_push(
+        $config['events'],
+        [File::class, File::EVENT_AFTER_NEW_STORED_FILE, [Events::class, 'onAfterNewStoredFile']]
+    );
 };
 
 return $config;
-
-?>

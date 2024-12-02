@@ -7,7 +7,7 @@
  */
 
 /**
- *  Copyright (c) Ascensio System SIA 2023. All rights reserved.
+ *  Copyright (c) Ascensio System SIA 2024. All rights reserved.
  *  http://www.onlyoffice.com
  */
 
@@ -17,6 +17,7 @@ use Firebase\JWT\JWT;
 use Firebase\JWT\Key;
 use humhub\libs\CURLHelper;
 use humhub\modules\file\libs\FileHelper;
+use humhub\modules\file\models\File;
 use stdClass;
 use Yii;
 use yii\helpers\Url;
@@ -31,72 +32,108 @@ use yii\httpclient\Response;
  */
 class Module extends \humhub\components\Module
 {
+    private $formats;
 
     public $resourcesPath = 'resources';
+
+    public int $jwtExpiration = 300;
 
     /**
      * Open modes
      */
-    const OPEN_MODE_VIEW = 'view';
-    const OPEN_MODE_EDIT = 'edit';
+    public const OPEN_MODE_VIEW = 'view';
+    public const OPEN_MODE_EDIT = 'edit';
+
+    /**
+     * Restricted open modes
+    */
+    public const OPEN_RESTRICT_FILL = 'fill';
 
     /**
      * Only document types
      */
-    const DOCUMENT_TYPE_TEXT = 'word';
-    const DOCUMENT_TYPE_PRESENTATION = 'slide';
-    const DOCUMENT_TYPE_SPREADSHEET = 'cell';
+    public const DOCUMENT_TYPE_TEXT = 'word';
+    public const DOCUMENT_TYPE_PRESENTATION = 'slide';
+    public const DOCUMENT_TYPE_SPREADSHEET = 'cell';
+    public const DOCUMENT_TYPE_PDF = 'pdf';
 
-    /**
-     * @var string[] allowed spreadsheet extensions 
-     */
-    public $spreadsheetExtensions = ['xls', 'xlsx', 'ods', 'csv'];
-
-    /**
-     * @var string[] allowed presentation extensions 
-     */
-    public $presentationExtensions = ['ppsx', 'pps', 'ppt', 'pptx', 'odp'];
-
-    /**
-     * @var string[] allowed text extensions 
-     */
-    public $textExtensions = ['docx', 'docxf', 'oform', 'doc', 'odt', 'rtf', 'txt', 'html', 'htm', 'mht', 'pdf', 'djvu', 'fb2', 'epub', 'xps'];
-
-    /**
-     * @var string[] allowed for editing extensions
-     */
-    public $editableExtensions = ['xlsx', 'ppsx', 'pptx', 'docx', 'docxf', 'oform' ];
-    public $convertableExtensions = ['doc','odt','xls','ods','ppt','odp','txt','csv'];
-    public $forceEditableExtensions = ['csv', 'odp', 'ods', 'odt', 'rtf', 'txt'];
-
-    public $convertsTo = [
-        'doc' => 'docx',
-        'odt' => 'docx',
-        'txt' => 'docx',
-        'xls' => 'xlsx',
-        'ods' => 'xlsx',
-        'csv' => 'xlsx',
-        'ppt' => 'pptx',
-        'odp' => 'pptx',
-    ];
-    
     public $demoparam = [
         'trial' => 30,
         'header' => 'AuthorizationJWT',
         'secret' => 'sn2puSUF7muF5Jas',
-        'serverUrl' => 'https://onlinedocs.onlyoffice.com'
+        'serverUrl' => 'https://onlinedocs.docs.onlyoffice.com'
     ];
 
-    public function isJwtEnabled() {
-        if($this->isDemoServerEnabled())
+    public function formats()
+    {
+        if (isset($this->formatFields)) {
+            return $this->formatFields;
+        }
+
+        $formatsJsonContent = file_get_contents($this->getAssetPath() . '/formats/onlyoffice-docs-formats.json');
+        $formatsJson = json_decode($formatsJsonContent);
+
+        $this->formats = new stdClass();
+        $this->formats->spreadsheetExtensions = [];
+        $this->formats->presentationExtensions = [];
+        $this->formats->textExtensions = [];
+        $this->formats->pdfExtensions = [];
+        $this->formats->editableExtensions = [];
+        $this->formats->convertableExtensions = [];
+        $this->formats->forceEditableExtensions = [];
+        $this->formats->convertsTo = [];
+        $this->formats->mimes = [];
+
+        foreach ($formatsJson as $formatJson) {
+            if ($formatJson->type === self::DOCUMENT_TYPE_SPREADSHEET) {
+                array_push($this->formats->spreadsheetExtensions, $formatJson->name);
+            }
+            if ($formatJson->type === self::DOCUMENT_TYPE_PRESENTATION) {
+                array_push($this->formats->presentationExtensions, $formatJson->name);
+            }
+            if ($formatJson->type === self::DOCUMENT_TYPE_TEXT) {
+                array_push($this->formats->textExtensions, $formatJson->name);
+            }
+            if ($formatJson->type === self::DOCUMENT_TYPE_PDF) {
+                array_push($this->formats->pdfExtensions, $formatJson->name);
+            }
+
+            if (in_array('edit', $formatJson->actions)) {
+                array_push($this->formats->editableExtensions, $formatJson->name);
+            }
+
+            if (in_array('auto-convert', $formatJson->actions)) {
+                array_push($this->formats->convertableExtensions, $formatJson->name);
+                $this->formats->convertsTo[$formatJson->name] = $formatJson->convert[0];
+            }
+
+            if (in_array('lossy-edit', $formatJson->actions)) {
+                array_push($this->formats->forceEditableExtensions, $formatJson->name);
+            }
+
+            $this->formats->mimes[$formatJson->name] = count($formatJson->mime) > 0
+                ? $formatJson->mime[0]
+                : 'application/octet-stream';
+        }
+
+        return $this->formats;
+    }
+
+    public function isJwtEnabled()
+    {
+        if ($this->isDemoServerEnabled()) {
             return true;
+        }
+
         return !empty($this->getJwtSecret());
     }
 
-    public function getJwtSecret() {
-        if($this->isDemoServerEnabled()) { 
+    public function getJwtSecret()
+    {
+        if ($this->isDemoServerEnabled()) {
             return $this->demoparam['secret'];
         }
+
         return $this->settings->get('jwtSecret');
     }
 
@@ -108,6 +145,8 @@ class Module extends \humhub\components\Module
     public function jwtEncode(array $data): string
     {
         $cryptData = null;
+
+        $data['exp'] = time() + $this->jwtExpiration;
 
         if (class_exists(Key::class)) {
             $cryptData = JWT::encode($data, $this->getJwtSecret(), $this->getJwtAlgorithm());
@@ -133,7 +172,7 @@ class Module extends \humhub\components\Module
 
     public function getServerUrl()
     {
-        if($this->isDemoServerEnabled()) {
+        if ($this->isDemoServerEnabled()) {
             return $this->demoparam['serverUrl'];
         }
 
@@ -166,12 +205,16 @@ class Module extends \humhub\components\Module
         return $this->settings->get('demoServer');
     }
 
-    public function isDemoServerEnabled() {
-        if(boolval($this->getDemoServer())) {
+    public function isDemoServerEnabled()
+    {
+        if (boolval($this->getDemoServer())) {
             $trial = $this->getTrial();
-            if($trial !== false)
+
+            if ($trial !== false) {
                 return true;
+            }
         }
+
         return false;
     }
 
@@ -207,7 +250,7 @@ class Module extends \humhub\components\Module
 
     public function getforceEditTypes()
     {
-        return explode("," , $this->settings->get('forceEditTypes'));
+        return explode(",", $this->settings->get('forceEditTypes'));
     }
 
     public function getServerApiUrl(): string
@@ -229,24 +272,28 @@ class Module extends \humhub\components\Module
     {
         $settings =  Yii::$app->getModule('onlyoffice')->settings;
         $trial = $settings->get('trial');
-        
-        if(empty($trial)) {
+
+        if (empty($trial)) {
             $settings->set('trial', time());
-        } elseif($this->demoparam['trial'] - round( (time() - $trial) / (60*60*24) ) < 0) {
+        } elseif ($this->demoparam['trial'] - round((time() - $trial) / (60 * 60 * 24)) < 0) {
             return false;
         }
-        return $this->demoparam['trial'] - round( (time() - $trial) / (60*60*24) );
+
+        return $this->demoparam['trial'] - round((time() - $trial) / (60 * 60 * 24));
     }
+
     public function getDocumentType($file)
     {
         $fileExtension = strtolower(FileHelper::getExtension($file));
 
-        if (in_array($fileExtension, $this->spreadsheetExtensions)) {
+        if (in_array($fileExtension, $this->formats()->spreadsheetExtensions)) {
             return self::DOCUMENT_TYPE_SPREADSHEET;
-        } elseif (in_array($fileExtension, $this->presentationExtensions)) {
+        } elseif (in_array($fileExtension, $this->formats()->presentationExtensions)) {
             return self::DOCUMENT_TYPE_PRESENTATION;
-        } elseif (in_array($fileExtension, $this->textExtensions)) {
+        } elseif (in_array($fileExtension, $this->formats()->textExtensions)) {
             return self::DOCUMENT_TYPE_TEXT;
+        } elseif (in_array($fileExtension, $this->formats()->pdfExtensions)) {
+            return self::DOCUMENT_TYPE_PDF;
         }
 
         return null;
@@ -255,13 +302,13 @@ class Module extends \humhub\components\Module
     public function canEdit($file)
     {
         $fileExtension = strtolower(FileHelper::getExtension($file));
-        return in_array($fileExtension, array_merge($this->getforceEditTypes(), $this->editableExtensions));
+        return in_array($fileExtension, array_merge($this->getforceEditTypes(), $this->formats()->editableExtensions));
     }
 
     public function canConvert($file)
     {
         $fileExtension = strtolower(FileHelper::getExtension($file));
-        return in_array($fileExtension, $this->convertableExtensions);
+        return in_array($fileExtension, $this->formats()->convertableExtensions);
     }
 
     public function canView($file)
@@ -269,13 +316,10 @@ class Module extends \humhub\components\Module
         return !empty($this->getDocumentType($file));
     }
 
-    /**
-     * @inheritdoc
-     */
     public function getConfigUrl()
     {
         return Url::to([
-                    '/onlyoffice/admin'
+            '/onlyoffice/admin'
         ]);
     }
 
@@ -292,6 +336,7 @@ class Module extends \humhub\components\Module
 
         $key = substr(strtolower(md5(Yii::$app->security->generateRandomString(20))), 0, 20);
         $file->updateAttributes(['onlyoffice_key' => $key]);
+
         return $key;
     }
 
@@ -343,8 +388,9 @@ class Module extends \humhub\components\Module
             $downloadUrl = $this->getStorageUrl() . Url::to(['/onlyoffice/backend/download', 'doc' => $docHash], false);
         }
 
-        if(is_null($toExt))
-            $toExt = $this->convertsTo[$fromExt];
+        if (is_null($toExt)) {
+            $toExt = $this->formats()->convertsTo[$fromExt];
+        }
 
         return $this->convertService($downloadUrl, $fromExt, $toExt, $key . $ts, $async);
     }
@@ -459,6 +505,65 @@ class Module extends \humhub\components\Module
 
         return [$data, null];
     }
+
+    /**
+     * Checking pdf onlyoffice form
+     *
+     * @param File $file object
+     * @return bool
+     */
+    public function isOnlyofficeForm($file)
+    {
+        if ($file === null) {
+            return false;
+        }
+        if ($this->getDocumentType($file) !== self::DOCUMENT_TYPE_PDF) {
+            return false;
+        }
+
+        $limitDetect = 300;
+        $onlyofficeFormMetaTag = 'ONLYOFFICEFORM';
+
+        $path = $file->getStoredFilePath() . 'file';
+        $content = file_get_contents($path, false, null, 0, $limitDetect);
+
+        $indexFirst = strpos($content, "%\xCD\xCA\xD2\xA9\x0D");
+        if ($indexFirst === false) {
+            return false;
+        }
+
+        $pFirst = substr($content, $indexFirst + 6);
+        if (!str_starts_with($pFirst, "1 0 obj\n<<\n")) {
+            return false;
+        }
+
+        $pFirst = substr($pFirst, 11);
+
+        $indexStream = strpos($pFirst, "stream\x0D\x0A");
+        $indexMeta = strpos($pFirst, $onlyofficeFormMetaTag);
+
+        if ($indexStream === false || $indexMeta === false || $indexStream < $indexMeta) {
+            return false;
+        }
+
+        $pMeta = substr($pFirst, $indexMeta);
+        $pMeta = substr($pMeta, strlen($onlyofficeFormMetaTag) + 3);
+
+        $indexMetaLast = strpos($pMeta, " ");
+        if ($indexMetaLast === false) {
+            return false;
+        }
+
+        $pMeta = substr($pMeta, $indexMetaLast + 1);
+
+        $indexMetaLast = strpos($pMeta, " ");
+        if ($indexMetaLast === false) {
+            return false;
+        }
+
+        return true;
+    }
+
     /**
      * Send request by URL with CURL method
      *
@@ -496,38 +601,34 @@ class Module extends \humhub\components\Module
     }
 
     /**
-     * @var string[] mimes dictionary
+     * Replace document server url to internal address
+     *
+     * @param string $url document server url
+     * @return string
      */
-    public $mimes = [
-        'csv' => 'text/csv',
-        'doc' => 'application/msword',
-        'docx' => 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
-        'docxf' => 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
-        'oform' => 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
-        'dotx' => 'application/vnd.openxmlformats-officedocument.wordprocessingml.template',
-        'epub' => 'application/epub+zip',
-        'fb2' => 'text/fb2+xml',
-        'html' => 'text/html',
-        'odp' => 'application/vnd.oasis.opendocument.presentation',
-        'ods' => 'application/vnd.oasis.opendocument.spreadsheet',
-        'odt' => 'application/vnd.oasis.opendocument.text',
-        'otp' => 'application/vnd.oasis.opendocument.presentation-template',
-        'ots' => 'application/vnd.oasis.opendocument.spreadsheet-template',
-        'ott' => 'application/vnd.oasis.opendocument.text-template',
-        'pdf' => 'application/pdf',
-        'potx' => 'application/vnd.openxmlformats-officedocument.presentationml.template',
-        'ppsx' => 'application/vnd.openxmlformats-officedocument.presentationml.slideshow',
-        'ppt' => 'application/vnd.ms-powerpoint',
-        'pptm' => 'application/vnd.ms-powerpoint.presentation.macroEnabled.12',
-        'pptx' => 'application/vnd.openxmlformats-officedocument.presentationml.presentation',
-        'rtf' => 'text/rtf',
-        'txt' => 'text/plain',
-        'xls' => 'application/vnd.ms-excel',
-        'xlsx' => 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
-        'xltx' => 'application/vnd.openxmlformats-officedocument.spreadsheetml.template'
-    ];
+    public function replaceDocumentServerUrlToInternal($url)
+    {
+        $documentServerUrl = $this->getInternalServerUrl();
+        if (!empty($documentServerUrl)) {
+            $from = $this->getServerUrl();
+
+            if (!preg_match("/^https?:\/\//i", $from)) {
+                $parsedUrl = parse_url($url);
+                $from = $parsedUrl["scheme"] . "://" . $parsedUrl["host"] .
+                    (array_key_exists("port", $parsedUrl) ? (":" . $parsedUrl["port"]) : "") . $from;
+            }
+
+            if ($from !== $documentServerUrl) {
+                $url = str_replace($from, $documentServerUrl, $url);
+            }
+        }
+
+        return $url;
+    }
 
     public $languageCodes = [
+        "default" => "default",
+        "ar" => "ar-SA",
         "az" => "az-Latn-AZ",
         "bg" => "bg-BG",
         "cs" => "cs-CZ",
@@ -536,17 +637,23 @@ class Module extends \humhub\components\Module
         "en_GB" => "en-GB",
         "en-US" => "en-US",
         "es" => "es-ES",
+        "eu" => "eu-ES",
+        "fi" => "fi-FI",
         "fr" => "fr-FR",
         "it" => "it-IT",
         "ja" => "ja-JP",
+        "he" => "he-IL",
         "ko" => "ko-KR",
         "lv" => "lv-LV",
+        "nb-NO" => "nb-NO",
         "nl" => "nl-NL",
         "pl" => "pl-PL",
         "pt_BR" => "pt-BR",
         "pt" => "pt-PT",
         "ru" => "ru-RU",
         "sk" => "sk-SK",
+        "sl" => "sl-SI",
+        "sr" => "sr-Cyrl-RS",
         "sv" => "sv-SE",
         "tr" => "tr-TR",
         "uk" => "uk-UA",
@@ -554,7 +661,9 @@ class Module extends \humhub\components\Module
         "zh-CN" => "zh-CN",
         "zh-TW" => "zh-TW"
     ];
-    private function convertResponceError($errorCode) {
+
+    private function convertResponceError($errorCode)
+    {
         $errorMessage = "";
 
         switch ($errorCode) {
@@ -595,7 +704,8 @@ class Module extends \humhub\components\Module
         throw new \Exception($errorMessage);
     }
 
-    private function commandResponceError($errorCode) {
+    private function commandResponceError($errorCode)
+    {
         $errorMessage = "";
 
         switch ($errorCode) {

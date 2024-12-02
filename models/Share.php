@@ -1,7 +1,7 @@
 <?php
 
 /**
- *  Copyright (c) Ascensio System SIA 2023. All rights reserved.
+ *  Copyright (c) Ascensio System SIA 2024. All rights reserved.
  *  http://www.onlyoffice.com
  */
 
@@ -17,13 +17,12 @@ use humhub\modules\file\models\File;
  * @property integer $id
  * @property integer $file_id
  * @property string $secret
- * @property $mode $mode
+ * @property string $mode $mode
  *
  * @property File $file
  */
 class Share extends \yii\db\ActiveRecord
 {
-
     /**
      * @inheritdoc
      */
@@ -40,7 +39,7 @@ class Share extends \yii\db\ActiveRecord
         return $this->hasOne(File::className(), ['id' => 'file_id']);
     }
 
-    public static function getShareLink($file, $generateNew = false, $mode)
+    public static function getShareLink($file, $generateNew, $mode)
     {
         $share = self::findOne(['file_id' => $file->id, 'mode' => $mode]);
         if ($share === null) {
@@ -55,7 +54,7 @@ class Share extends \yii\db\ActiveRecord
 
     public static function generateShareLink($file, $mode)
     {
-        $share = new self;
+        $share = new self();
         $share->file_id = $file->id;
         $share->mode = $mode;
         $share->secret = bin2hex(Yii::$app->security->generateRandomKey(25));
@@ -63,5 +62,4 @@ class Share extends \yii\db\ActiveRecord
 
         return $share;
     }
-
 }

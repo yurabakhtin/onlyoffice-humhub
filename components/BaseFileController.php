@@ -7,7 +7,7 @@
  */
 
 /**
- *  Copyright (c) Ascensio System SIA 2023. All rights reserved.
+ *  Copyright (c) Ascensio System SIA 2024. All rights reserved.
  *  http://www.onlyoffice.com
  */
 
@@ -29,16 +29,20 @@ use humhub\modules\content\components\ContentActiveRecord;
  */
 class BaseFileController extends Controller
 {
-
     /**
      * @var File
      */
     public $file;
 
     /**
-     * @var string the open mode (view, edit) 
+     * @var string the open mode (view, edit)
      */
     public $mode;
+
+    /**
+     * @var string the restricted mode
+     */
+    public $restrict;
 
     /**
      * @var string the secret used to open this document, if provided
@@ -72,10 +76,14 @@ class BaseFileController extends Controller
                 throw new HttpException(403, Yii::t('OnlyofficeModule.base', 'File read access denied!'));
             }
 
+            if (Yii::$app->request->get('restrict') == Module::OPEN_RESTRICT_FILL) {
+                $this->restrict = Module::OPEN_RESTRICT_FILL;
+            }
+
             $this->mode = Module::OPEN_MODE_VIEW;
 
             if (Yii::$app->request->get('mode') == Module::OPEN_MODE_EDIT) {
-                if (!$this->file->canDelete()) {
+                if (!$this->file->canDelete() && empty($this->restrict)) {
                     throw new HttpException(403, Yii::t('OnlyofficeModule.base', 'File write access denied!'));
                 }
                 $this->mode = Module::OPEN_MODE_EDIT;
@@ -87,7 +95,7 @@ class BaseFileController extends Controller
 
     /**
      * Returns the URL for the file content - to redirect to
-     * 
+     *
      * @return string
      */
     protected function determineContentFileUrl()
@@ -99,12 +107,16 @@ class BaseFileController extends Controller
 
         $underlyingObject = $this->file->getPolymorphicRelation();
 
-        if ($underlyingObject !== null && $underlyingObject instanceof ContentActiveRecord && $underlyingObject->content->canView()) {
+        if (
+            $underlyingObject !== null &&
+            $underlyingObject instanceof ContentActiveRecord &&
+            $underlyingObject->content->canView()
+        ) {
+
             /** @var ContentActiveRecord $underlyingObject */
             return $underlyingObject->content->getUrl();
         }
-        
+
         return Url::home();
     }
-
 }

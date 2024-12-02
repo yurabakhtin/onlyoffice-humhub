@@ -7,7 +7,7 @@
  */
 
 /**
- *  Copyright (c) Ascensio System SIA 2023. All rights reserved.
+ *  Copyright (c) Ascensio System SIA 2024. All rights reserved.
  *  http://www.onlyoffice.com
  */
 
@@ -34,10 +34,10 @@ class AdminController extends Controller
         $model->loadSettings();
 
         $trial = $serverApiUrl = null;
-        if($this->module->isDemoServerEnabled()) {
+        if ($this->module->isDemoServerEnabled()) {
             $trial = $this->module->getTrial();
-        } 
-        if(!empty($model->serverUrl) || $this->module->isDemoServerEnabled()) {
+        }
+        if (!empty($model->serverUrl) || $this->module->isDemoServerEnabled()) {
             $serverApiUrl = $this->module->getServerApiUrl();
         }
 
@@ -45,7 +45,7 @@ class AdminController extends Controller
                                         'model' => $model,
                                         'serverApiUrl' => $serverApiUrl,
                                         'trial' => $trial,
-                                        'forceEditExt' => $this->module->forceEditableExtensions
+                                        'forceEditExt' => $this->module->formats()->forceEditableExtensions
                                       ]);
     }
 
@@ -86,7 +86,13 @@ class AdminController extends Controller
         $version = null;
 
         if (!$this->checkValidHttps()) {
-            return [Yii::t('OnlyofficeModule.base', 'Mixed Active Content is not allowed. HTTPS address for ONLYOFFICE Docs is required.'), $version];
+            return [
+                Yii::t(
+                    'OnlyofficeModule.base',
+                    'Mixed Active Content is not allowed. HTTPS address for ONLYOFFICE Docs is required.'
+                ),
+                $version
+            ];
         }
 
         $command = $this->module->commandService(['c' => 'version']);
@@ -131,8 +137,10 @@ class AdminController extends Controller
         $serverUrl = $this->module->getServerUrl();
         $baseUrl = Url::base(true);
 
-        if ((substr($baseUrl, 0, strlen("https:")) === "https:")
-            && (substr($serverUrl, 0, strlen("http:")) === "http:")) {
+        if (
+            (substr($baseUrl, 0, strlen("https:")) === "https:") &&
+            (substr($serverUrl, 0, strlen("http:")) === "http:")
+        ) {
             return false;
         }
 
@@ -151,7 +159,8 @@ class AdminController extends Controller
 
         $downloadUrl = Url::to(['/onlyoffice/backend/empty-file', 'doc' => $docHash], true);
         if (!empty($this->module->getStorageUrl())) {
-            $downloadUrl = $this->module->getStorageUrl() . Url::to(['/onlyoffice/backend/empty-file', 'doc' => $docHash], false);
+            $downloadUrl = $this->module->getStorageUrl() .
+                Url::to(['/onlyoffice/backend/empty-file', 'doc' => $docHash], false);
         }
 
         $key = substr(strtolower(md5(Yii::$app->security->generateRandomString(20))), 0, 20);
@@ -162,7 +171,7 @@ class AdminController extends Controller
         }
 
         try {
-        $this->module->request($result['fileUrl']);
+            $this->module->request($result['fileUrl']);
         } catch (\Exception $ex) {
             Yii::error('CheckConvertFile: ' . $ex->getMessage());
             return ['error' => $ex->getMessage()];

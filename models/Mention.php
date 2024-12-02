@@ -1,7 +1,7 @@
 <?php
 
 /**
- *  Copyright (c) Ascensio System SIA 2023. All rights reserved.
+ *  Copyright (c) Ascensio System SIA 2024. All rights reserved.
  *  http://www.onlyoffice.com
  */
 
@@ -21,7 +21,6 @@ use humhub\modules\file\models\File;
  */
 class Mention extends \yii\db\ActiveRecord
 {
-
     /**
      * @inheritdoc
      */
@@ -40,10 +39,10 @@ class Mention extends \yii\db\ActiveRecord
 
     public static function generateMention($file, $message, $anchor)
     {
-        if(strlen($message) > 255) {
+        if (strlen($message) > 255) {
             $message = mb_strimwidth($message, 0, 255, "...");
         }
-        $mention = new self;
+        $mention = new self();
         $mention->file_id = $file->id;
         $mention->message = $message;
         $mention->anchor = $anchor;

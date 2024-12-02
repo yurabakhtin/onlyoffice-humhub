@@ -1,5 +1,16 @@
 # Change Log
 
+## 3.2.0
+## Added
+- default empty templates
+- ar-SA, eu-ES, fi-FI, he-IL, nb-NO, sl-SL and sr-Cyrl-RS empty file templates
+- jwt expire configuration
+
+## Changed
+- creating and editing pdf form
+- updated list of supported formats
+- demo server address changed
+
 ## 3.1.0
 ## Changed
 - HumHub 1.15 compatibility

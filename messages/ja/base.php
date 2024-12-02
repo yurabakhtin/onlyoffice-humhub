@@ -51,7 +51,6 @@ return [
     'Server address for internal requests from ONLYOFFICE Docs' => 'ONLYOFFICE Docsからの内部リクエストにはサーバーアドレス',
     'Can use ONLYOFFICE' => 'ONLYOFFICEを使用できる',
     'Allows the user to use ONLYOFFICE.' => 'ユーザーがONLYOFFICEを使用できるようにします。',
-    'Form template' => 'フォーム テンプレート',
     'Fill in form in ONLYOFFICE' => 'ONLYOFFICEでフォームを記入する',
     'Please update ONLYOFFICE Docs to version 7.0 to work on fillable forms online' => 'オンラインで入力可能なフォームを作成するには、ONLYOFFICE Docs 7.0版まで更新してください',
     'Disable certificate verification (insecure)' => '証明書の検証を無効にする（安全でない',
