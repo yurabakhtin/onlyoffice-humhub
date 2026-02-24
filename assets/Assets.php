@@ -13,29 +13,26 @@
 
 namespace humhub\modules\onlyoffice\assets;
 
+use humhub\components\assets\AssetBundle;
 use Yii;
-use yii\web\AssetBundle;
 
 class Assets extends AssetBundle
 {
-    public $publishOptions = [
-        'forceCopy' => true
-    ];
-    public $css = [];
+    public $sourcePath = '@onlyoffice/resources';
+
     public $jsOptions = [
-        'position' => \yii\web\View::POS_BEGIN
+        'position' => \yii\web\View::POS_BEGIN,
     ];
 
     public function init()
     {
-
         $this->js = [
             Yii::$app->getModule('onlyoffice')->getServerApiUrl(),
-            'humhub.onlyoffice.js'
+            'humhub.onlyoffice.js',
         ];
 
-
-        $this->sourcePath = dirname(__FILE__) . '/../resources';
         parent::init();
     }
+
+    public $forceCopy = true;
 }
